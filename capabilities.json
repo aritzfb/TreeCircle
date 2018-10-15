@@ -1,0 +1,128 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "Categories",
+            "name": "category",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Value",
+            "name": "measure",
+            "kind": "Measure"
+        }
+        ,
+        {
+            "displayName": "Target",
+            "name": "target",
+            "kind": "Measure"
+        }
+        , {
+            "displayName": "Progress"
+            , "name": "avance"
+            , "kind": "Measure"
+
+        }
+    ],
+    "objects": {
+        "treeOptions" :{
+            "displayName": "Tree Options"
+            , "properties": {
+                "arcBaseColor":{
+                    "displayName": "Arc Base Color"
+                    , "type": {                        
+                        "fill": {
+                            "solid": {
+                                "color":true
+                            }                            
+                        }
+                        
+                    }                    
+                }
+                , "autoExpandTree":{
+                    "displayName": "Auto Expand"
+                    , "type": {
+                        "bool": true
+                    }
+                }
+                , "allMemberName": {
+                    "displayName": "Root Node Name"
+                    , "type": {
+                        "text": true
+                    }
+                }
+                , "arcCumplimientoOK":{
+                    "displayName": "Arc Color Completted"
+                    , "type": {
+                        "fill": {
+                            "solid": {
+                                "color":true
+                            }
+                        }
+                    }
+                }
+                , "arcCumplimientoKO":{
+                    "displayName": "Arc Color Not Completted"
+                    , "type": {
+                        "fill": {
+                            "solid": {
+                                "color":true
+                            }
+                        }
+                    }
+                }
+                , "arcRadius" : {
+                    "displayName": "Arc Radius"
+                    , "type": {
+                        "numeric": true
+                    }
+                }
+                , "expandMode" : {
+                    "displayName": "Expand Single Node"
+                    , "type" : {
+                        "bool": true
+                    }
+                }
+
+            }
+
+        }
+    },
+    "dataViewMappings": [
+        {
+            "categorical": {
+                "categories": {
+                    "for": {
+                        "in": "category"
+                    },
+                    "dataReductionAlgorithm": {
+                        "top": {}
+                    }
+                },
+                "values": {
+                    "select": [
+                        {
+                            "bind": {
+                                "to": "measure"
+                            }
+                        },
+                        {
+                            "bind": {
+                                "to": "target"
+                            }
+                        }
+                        ,{
+                            "bind": {
+                                "to": "avance"
+                            }
+                        }
+                    ]
+                }
+            }
+            , "conditions": [
+                { "measure": { "max": 1 }   , "target": { "max": 1 }   }
+                
+            ]
+            
+        }
+    ]
+}
