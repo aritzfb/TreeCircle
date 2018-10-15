@@ -6,8 +6,8 @@
     "visualClassName": "Visual",
     "version": "1.0.0",
     "description": "Tree with circle graphs in each node.",
-    "supportUrl": "",
-    "gitHubUrl": ""
+    "supportUrl": "https://github.com/aritzfb/TreeCircle",
+    "gitHubUrl": "https://github.com/aritzfb/TreeCircle"
   },
   "apiVersion": "1.11.0",
   "author": {
