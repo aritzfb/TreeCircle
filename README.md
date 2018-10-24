@@ -28,4 +28,4 @@ TO DO
 Aritz Francoy Barreiro: aritzfb@hotmail.com, aritzfb@gmail.com
 
 # License
-Free
+https://visuals.azureedge.net/app-store/Power BI - Default Custom Visual EULA.pdf
