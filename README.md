@@ -1,25 +1,31 @@
 # TreeCircle
 
 # Synopsis
-At the top of the file there should be a short introduction and/ or overview that explains what the project is. This description should match descriptions added for package managers (Gemspec, package.json, etc.)
+This visual component shows a tree of categories with values represented in pie charts in each node.
+It has 4 display modes:
+  - Tree mode It is achieved by adding categories of the model to the field "Categories"
+  - Tree mode with values. It is achieved by adding a measure of the model to the "Values" field.
+  - Tree mode with percentages. It is achieved by adding a measure of the model to the "Target" field.
+  - Tree mode with compliance. It is achieved by adding a percentage measure (between 0 and 1) to the "Progress" field.
 
 # Code Example
-Show what the library does as concisely as possible, developers should be able to figure out how your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
+pbiviz package
 
 # Motivation
-A short description of the motivation behind the creation and maintenance of the project. This should explain why the project exists.
+Our motivation it's to create a new visualization for sales controlling inside an organization. Basicly you want to know your sales, compare it against a target and compare this proportion against the progress in the time.
+This visualization show this information into a tree, where the root node represents your organization, and you can "drill down" navigating over the tree
 
 # Installation
-Provide code examples and explanations of how to get the project.
+TO DO.
 
 # API Reference
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
+TO DO
 
 # Tests
-Describe and show how to run the tests with code examples.
+TO DO
 
 # Contributors
-Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
+Aritz Francoy Barreiro: aritzfb@hotmail.com, aritzfb@gmail.com
 
 # License
-A short snippet describing the license (MIT, Apache, etc.)
+Free
