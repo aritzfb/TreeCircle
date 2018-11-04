@@ -82,6 +82,12 @@
                         "bool": true
                     }
                 }
+                , "weightLinks" : {
+                    "displayName" : "Weight Links"
+                    , "type" : {
+                        "bool" : true
+                    }
+                }
 
             }
 

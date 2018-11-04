@@ -41,7 +41,8 @@ module powerbi.extensibility.visual {
 
     export class Visual implements IVisual {
         
-        //private tooltipServiceWrapper: ITooltipServiceWrapper; 
+        private host: IVisualHost;
+        private tooltipServiceWrapper: ITooltipServiceWrapper; 
         private target: HTMLElement;
         private updateCount: number;
         private settings: VisualSettings;
@@ -52,7 +53,6 @@ module powerbi.extensibility.visual {
         constructor(options: VisualConstructorOptions) {
             
             
-                
             tooltip.createTooltipServiceWrapper(
             options.host.tooltipService,
             options.element);
@@ -130,6 +130,7 @@ module powerbi.extensibility.visual {
 
         private autoExpandTree : boolean;
         private allMemberName : string;
+        private weigthLinks : boolean;
 
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
@@ -171,6 +172,11 @@ module powerbi.extensibility.visual {
                 this.arcExpandMode = options.dataViews[0].metadata.objects["treeOptions"]["expandMode"] == true;                
             } catch(e) {
                 //this.autoExpandTree = true;
+            }
+            try {
+                this.weigthLinks = options.dataViews[0].metadata.objects["treeOptions"]["weightLinks"] == true;                
+            }catch(e){
+
             }
 
             console.log('Visual update', options);
@@ -217,7 +223,10 @@ module powerbi.extensibility.visual {
             
             var expMode = this.arcExpandMode;
             if (expMode== undefined) expMode = true;
-            debugger;
+            //debugger;
+
+            var wLinks = this.weigthLinks;
+            if (wLinks==undefined) wLinks = true;
 
             switch (objectName) {
                 case 'treeOptions':
@@ -230,7 +239,8 @@ module powerbi.extensibility.visual {
                         autoExpandTree: autoexp,
                         allMemberName: allmem,
                         arcRadius : radius,
-                        expandMode : expMode
+                        expandMode : expMode,
+                        weightLinks: wLinks
                         
                     },
                     selector: null
