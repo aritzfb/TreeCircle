@@ -213,7 +213,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
             if (!colorKo) colorKo = "red";
 
             var radius = this.arcRadius;
-            if (!radius) radius = 8;
+            if (!radius) radius = 15;
 
 
             var autoexp = this.autoExpandTree;

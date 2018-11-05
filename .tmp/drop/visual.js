@@ -1047,7 +1047,7 @@ var powerbi;
                             colorKo = "red";
                         var radius = this.arcRadius;
                         if (!radius)
-                            radius = 8;
+                            radius = 15;
                         var autoexp = this.autoExpandTree;
                         if (autoexp == undefined)
                             autoexp = true;
@@ -1312,12 +1312,12 @@ function zoomed() {
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 function inicializarArbol(h, w, source) {
-    var arcRadius = 8;
+    var arcRadius = 15;
     try {
         arcRadius = parseInt(source.dataViews[0].metadata.objects["treeOptions"]["arcRadius"].toString());
     }
     catch (e) {
-        arcRadius = 8;
+        arcRadius = 15;
     }
     //debugger;
     var arcBaseColor = "lightsteelblue";
@@ -1839,20 +1839,18 @@ function inicializarArbol(h, w, source) {
             .attr("d", function (d) {
             var o = { x: source.x0, y: source.y0 };
             return diagonal({ source: o, target: o });
-        }).attr("style", function (d) {
-            var i = 0;
+        })
+            .attr("style", function (d) {
+            var porc = 0;
             if (weightLinks) {
-                if (d.target.parent) {
-                    for (var j = 0; j < d.target.parent.children.length; j++) {
-                        if (d.target.parent.children[j].value < d.target.value)
-                            i = i + 1;
-                    }
-                    i = 40 * i / d.target.parent.children.length;
-                }
+                porc = 2 * arcRadius * Math.abs(d.target.value / d.target.parent.value);
             }
-            var valor = 1.5 + i;
+            var valor = 1.5;
+            if (porc > 1.5)
+                valor = porc;
             return "stroke-width:" + valor + "px";
         });
+        link.append("text").text("lololo");
         // Transition links to their new position.
         link.transition()
             .duration(duration)
@@ -2188,11 +2186,11 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
-                version: '1.0.0',
+                version: '1.0.1',
                 apiVersion: '1.11.0',
                 create: function (options) { return new powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D.Visual(options); },
                 custom: true
