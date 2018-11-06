@@ -1,6 +1,6 @@
 module powerbi.visuals.plugins {
-    export var pieChartsTree4696B540F3494FE5BA002362825DDE7A = {
-        name: 'pieChartsTree4696B540F3494FE5BA002362825DDE7A',
+    export var pieChartsTree4696B540F3494FE5BA002362825DDE7A_DEBUG = {
+        name: 'pieChartsTree4696B540F3494FE5BA002362825DDE7A_DEBUG',
         displayName: 'Pie Charts Tree',
         class: 'Visual',
         version: '1.0.1',

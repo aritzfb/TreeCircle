@@ -125,6 +125,7 @@ module powerbi.extensibility.visual {
         private arcRadius : number;
         private arcBaseColorStr : string;
         private arcColorOK : string;
+        private linkColor : string;
         private arcColorKO : string;
         private arcExpandMode : boolean;
 
@@ -141,6 +142,10 @@ module powerbi.extensibility.visual {
 
             try {
                 this.arcColorOK = options.dataViews[0].metadata.objects.treeOptions.arcCumplimientoOK["solid"]["color"];                 
+            } catch(e) {}
+
+            try {
+                this.linkColor = options.dataViews[0].metadata.objects.treeOptions.linkColor["solid"]["color"];                 
             } catch(e) {}
 
             try {
@@ -209,6 +214,9 @@ module powerbi.extensibility.visual {
             var colorOk = this.arcColorOK;
             if (!colorOk) colorOk = "green";
 
+            var linColor = this.linkColor;
+            if (!linColor) linColor="lightgray"
+
             var colorKo = this.arcColorKO;
             if (!colorKo) colorKo = "red";
 
@@ -240,7 +248,8 @@ module powerbi.extensibility.visual {
                         allMemberName: allmem,
                         arcRadius : radius,
                         expandMode : expMode,
-                        weightLinks: wLinks
+                        weightLinks: wLinks,
+                        linkColor: linColor
                         
                     },
                     selector: null

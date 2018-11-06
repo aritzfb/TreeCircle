@@ -70,6 +70,7 @@
                         }
                     }
                 }
+                
                 , "arcRadius" : {
                     "displayName": "Arc Radius"
                     , "type": {
@@ -86,6 +87,16 @@
                     "displayName" : "Weight Links"
                     , "type" : {
                         "bool" : true
+                    }
+                }
+                , "linkColor":{
+                    "displayName": "Links Color"
+                    , "type": {
+                        "fill": {
+                            "solid": {
+                                "color":true
+                            }
+                        }
                     }
                 }
 
@@ -125,7 +136,7 @@
                 }
             }
             , "conditions": [
-                { "measure": { "max": 1 }   , "target": { "max": 1 }   }
+                { "measure": { "max": 1 }   , "target": { "max": 1 } , "avance":{"max": 1}  }
                 
             ]
             
