@@ -188,12 +188,14 @@ module powerbi.extensibility.visual {
             //debugger;
 
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
-            if (d3.select("svg")){
-                d3.select("svg").remove();
+            if(options.type != 36) {
+                if (d3.select("svg")){
+                    d3.select("svg").remove();
+                }
+                //inicializarArbol(div_height,div_width,options.dataViews[0].table);
+                
+                inicializarArbol(div_height,div_width,options);
             }
-            //inicializarArbol(div_height,div_width,options.dataViews[0].table);
-            //debugger;
-            inicializarArbol(div_height,div_width,options);
         }
 
         private static parseSettings(dataView: DataView): VisualSettings {
@@ -241,14 +243,16 @@ module powerbi.extensibility.visual {
                   objectEnumeration.push({
                     objectName: objectName,
                     properties: {
+                        autoExpandTree: autoexp,
+                        expandMode : expMode,
+                        weightLinks: wLinks,
+                        allMemberName: allmem,
+                        
+                        arcRadius : radius,
+                        
                         arcBaseColor: color,
                         arcCumplimientoOK: colorOk,
                         arcCumplimientoKO: colorKo,
-                        autoExpandTree: autoexp,
-                        allMemberName: allmem,
-                        arcRadius : radius,
-                        expandMode : expMode,
-                        weightLinks: wLinks,
                         linkColor: linColor
                         
                     },

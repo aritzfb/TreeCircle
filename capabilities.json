@@ -27,7 +27,14 @@
         "treeOptions" :{
             "displayName": "Tree Options"
             , "properties": {
-                "arcBaseColor":{
+                "autoExpandTree":{
+                    "displayName": "Auto Expand"
+                    , "type": {
+                        "bool": true
+                    }
+                    
+                }
+                , "arcBaseColor":{
                     "displayName": "Arc Base Color"
                     , "type": {                        
                         "fill": {
@@ -37,12 +44,6 @@
                         }
                         
                     }                    
-                }
-                , "autoExpandTree":{
-                    "displayName": "Auto Expand"
-                    , "type": {
-                        "bool": true
-                    }
                 }
                 , "allMemberName": {
                     "displayName": "Root Node Name"
@@ -103,7 +104,9 @@
             }
 
         }
+        
     },
+    
     "dataViewMappings": [
         {
             "categorical": {
@@ -142,4 +145,5 @@
             
         }
     ]
+    
 }

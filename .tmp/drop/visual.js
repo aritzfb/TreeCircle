@@ -1022,12 +1022,13 @@ var powerbi;
                         console.log('Visual update', options);
                         //debugger;
                         var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
-                        if (d3.select("svg")) {
-                            d3.select("svg").remove();
+                        if (options.type != 36) {
+                            if (d3.select("svg")) {
+                                d3.select("svg").remove();
+                            }
+                            //inicializarArbol(div_height,div_width,options.dataViews[0].table);
+                            inicializarArbol(div_height, div_width, options);
                         }
-                        //inicializarArbol(div_height,div_width,options.dataViews[0].table);
-                        //debugger;
-                        inicializarArbol(div_height, div_width, options);
                     };
                     Visual.parseSettings = function (dataView) {
                         return pieChartsTree9649D4B540F362E7A4BA862FE525D003.VisualSettings.parse(dataView);
@@ -1073,14 +1074,14 @@ var powerbi;
                                 objectEnumeration.push({
                                     objectName: objectName,
                                     properties: {
+                                        autoExpandTree: autoexp,
+                                        expandMode: expMode,
+                                        weightLinks: wLinks,
+                                        allMemberName: allmem,
+                                        arcRadius: radius,
                                         arcBaseColor: color,
                                         arcCumplimientoOK: colorOk,
                                         arcCumplimientoKO: colorKo,
-                                        autoExpandTree: autoexp,
-                                        allMemberName: allmem,
-                                        arcRadius: radius,
-                                        expandMode: expMode,
-                                        weightLinks: wLinks,
                                         linkColor: linColor
                                     },
                                     selector: null
@@ -1649,7 +1650,7 @@ function inicializarArbol(h, w, source) {
                 .duration(500)
                 .style("opacity", .9);
             div_tooltip.html(htmlText)
-                .style("left", (d.y + 130).toString() + "px")
+                .style("left", (d.y + arcRadius * 5).toString() + "px")
                 .style("top", d.x + "px");
             //.attr("transform", translate(d.y , d.x ) )
             //.style("top", (d3.event.pageY - 28) + "px");	
@@ -1724,7 +1725,7 @@ function inicializarArbol(h, w, source) {
             //return 20+len*4+(arcRadius-8); 
             return 20 + len * 4 + (arcRadius);
         })
-            .attr("dy", ".35em")
+            .attr("dy", "0.35em")
             .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
             .text(function (d) {
             var name = "";
