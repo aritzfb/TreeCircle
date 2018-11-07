@@ -1,4 +1,4 @@
-module powerbi.extensibility.visual.pieChartsTree4696B540F3494FE5BA002362825DDE7A  {
+module powerbi.extensibility.visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003  {
 
     export interface TooltipEventArgs<TData> {
         data: TData;
