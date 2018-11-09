@@ -971,7 +971,6 @@ var powerbi;
                     };
                     Visual.prototype.update = function (options) {
                         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-                        //debugger;
                         try {
                             this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor["solid"]["color"];
                         }
@@ -1413,6 +1412,7 @@ function inicializarArbol(h, w, source, hst) {
     catch (e) {
         weightLinks = true;
     }
+    debugger;
     if (source) {
         if (source.dataViews) {
             if (source.dataViews[0]) {
@@ -1430,6 +1430,24 @@ function inicializarArbol(h, w, source, hst) {
     if (source.dataViews[0] != undefined) {
         if (source.dataViews[0].table != undefined) {
             sourceTable = source.dataViews[0].table;
+        }
+        else {
+            //create table from categorical
+            sourceTable = { rows: [] };
+            if (source.dataViews[0].categorical.categories) {
+                for (var i = 0; i < source.dataViews[0].categorical.categories[0].values.length; i++) {
+                    var row = [];
+                    for (var j = 0; j < source.dataViews[0].categorical.categories.length; j++) {
+                        row.push(source.dataViews[0].categorical.categories[j].values[i]);
+                    }
+                    if (source.dataViews[0].categorical.values) {
+                        for (var j = 0; j < source.dataViews[0].categorical.values.length; j++) {
+                            row.push(source.dataViews[0].categorical.values[j].values[i]);
+                        }
+                    }
+                    sourceTable.rows.push(row);
+                }
+            }
         }
         if (source.dataViews[0].metadata != undefined) {
             if (source.dataViews[0].metadata.columns != undefined) {
@@ -2116,12 +2134,12 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
-                version: '1.0.1',
-                apiVersion: '1.11.0',
+                version: '1.0.3',
+                apiVersion: '2.2.0',
                 create: function (options) { return new powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D.Visual(options); },
                 custom: true
             };

@@ -20,6 +20,7 @@
         "/pbiviz.json"
       ],
       "url": "./.api/v1.11.0/schema.pbiviz.json"
+      //"url": "./.api/v1.11.0/schema.pbiviz.json"
     },
     {
       "fileMatch": [

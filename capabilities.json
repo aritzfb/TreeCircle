@@ -106,9 +106,12 @@
         }
         
     },
-    
     "dataViewMappings": [
         {
+            "conditions": [
+                { "measure": { "max": 1 }   , "target": { "max": 1 } , "avance":{"max": 1}  }
+                
+            ],
             "categorical": {
                 "categories": {
                     "for": {
@@ -138,10 +141,7 @@
                     ]
                 }
             }
-            , "conditions": [
-                { "measure": { "max": 1 }   , "target": { "max": 1 } , "avance":{"max": 1}  }
-                
-            ]
+            
             
         }
     ]

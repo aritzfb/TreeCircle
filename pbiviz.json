@@ -4,12 +4,12 @@
     "displayName": "Pie Charts Tree",
     "guid": "testTooltip4696B540F3494FE5BA002362825DDE7D",
     "visualClassName": "Visual",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "description": "Tree with circle graphs in each node.",
     "supportUrl": "https://github.com/aritzfb/TreeCircle",
     "gitHubUrl": "https://github.com/aritzfb/TreeCircle"
   },
-  "apiVersion": "1.11.0",
+  "apiVersion": "2.2.0",
   "author": {
     "name": "Aritz Francoy Barreiro",
     "email": "aritzfb@hotmail.com"

@@ -139,7 +139,6 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
 
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-            //debugger;
             try {
                 this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor["solid"]["color"];                 
             } catch(e) {}
