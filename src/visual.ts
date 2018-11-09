@@ -37,7 +37,9 @@ module powerbi.extensibility.visual {
     import TooltipEnabledDataPoint = powerbi.extensibility.utils.tooltip.TooltipEnabledDataPoint;
     import TooltipEventArgs = powerbi.extensibility.utils.tooltip.TooltipEventArgs;
 
+    import IColorPalette = powerbi.extensibility.IColorPalette;
     
+
 
     export class Visual implements IVisual {
         
@@ -47,12 +49,14 @@ module powerbi.extensibility.visual {
         private updateCount: number;
         private settings: VisualSettings;
         private textNode: Text;
-
+        private colorPalete: IColorPalette;
+        
         
 
         constructor(options: VisualConstructorOptions) {
             
-            
+            this.host = options.host;
+            //debugger;
             tooltip.createTooltipServiceWrapper(
             options.host.tooltipService,
             options.element);
@@ -193,8 +197,8 @@ module powerbi.extensibility.visual {
                     d3.select("svg").remove();
                 }
                 //inicializarArbol(div_height,div_width,options.dataViews[0].table);
-                
-                inicializarArbol(div_height,div_width,options);
+                //debugger;
+                inicializarArbol(div_height,div_width,options,this.host);
             }
         }
 
@@ -252,15 +256,15 @@ module powerbi.extensibility.visual {
                         
                         arcBaseColor: color,
                         arcCumplimientoOK: colorOk,
-                        arcCumplimientoKO: colorKo,
-                        linkColor: linColor
+                        arcCumplimientoKO: colorKo/*,
+                        linkColor: linColor*/
                         
                     },
                     selector: null
                   });
                   break;
               };
-          
+
             return objectEnumeration;
         }
     }

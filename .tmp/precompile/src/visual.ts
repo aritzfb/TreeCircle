@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D  {
     "use strict";
     import tooltip = powerbi.extensibility.utils.tooltip;
 
@@ -37,7 +37,9 @@ module powerbi.extensibility.visual.pieChartsTree9649D4B540F362E7A4BA862FE525D00
     import TooltipEnabledDataPoint = powerbi.extensibility.utils.tooltip.TooltipEnabledDataPoint;
     import TooltipEventArgs = powerbi.extensibility.utils.tooltip.TooltipEventArgs;
 
+    import IColorPalette = powerbi.extensibility.IColorPalette;
     
+
 
     export class Visual implements IVisual {
         
@@ -47,12 +49,14 @@ module powerbi.extensibility.visual.pieChartsTree9649D4B540F362E7A4BA862FE525D00
         private updateCount: number;
         private settings: VisualSettings;
         private textNode: Text;
-
+        private colorPalete: IColorPalette;
+        
         
 
         constructor(options: VisualConstructorOptions) {
             
-            
+            this.host = options.host;
+            //debugger;
             tooltip.createTooltipServiceWrapper(
             options.host.tooltipService,
             options.element);
@@ -193,8 +197,8 @@ module powerbi.extensibility.visual.pieChartsTree9649D4B540F362E7A4BA862FE525D00
                     d3.select("svg").remove();
                 }
                 //inicializarArbol(div_height,div_width,options.dataViews[0].table);
-                
-                inicializarArbol(div_height,div_width,options);
+                //debugger;
+                inicializarArbol(div_height,div_width,options,this.host);
             }
         }
 
@@ -252,15 +256,15 @@ module powerbi.extensibility.visual.pieChartsTree9649D4B540F362E7A4BA862FE525D00
                         
                         arcBaseColor: color,
                         arcCumplimientoOK: colorOk,
-                        arcCumplimientoKO: colorKo,
-                        linkColor: linColor
+                        arcCumplimientoKO: colorKo/*,
+                        linkColor: linColor*/
                         
                     },
                     selector: null
                   });
                   break;
               };
-          
+
             return objectEnumeration;
         }
     }

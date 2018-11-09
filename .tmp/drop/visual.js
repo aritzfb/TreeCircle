@@ -840,8 +840,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var pieChartsTree9649D4B540F362E7A4BA862FE525D003;
-            (function (pieChartsTree9649D4B540F362E7A4BA862FE525D003) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D) {
                 "use strict";
                 var DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
                 var VisualSettings = (function (_super) {
@@ -853,7 +853,7 @@ var powerbi;
                     }
                     return VisualSettings;
                 }(DataViewObjectsParser));
-                pieChartsTree9649D4B540F362E7A4BA862FE525D003.VisualSettings = VisualSettings;
+                testTooltip4696B540F3494FE5BA002362825DDE7D.VisualSettings = VisualSettings;
                 var dataPointSettings = (function () {
                     function dataPointSettings() {
                         // Default color
@@ -869,8 +869,8 @@ var powerbi;
                     }
                     return dataPointSettings;
                 }());
-                pieChartsTree9649D4B540F362E7A4BA862FE525D003.dataPointSettings = dataPointSettings;
-            })(pieChartsTree9649D4B540F362E7A4BA862FE525D003 = visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003 || (visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003 = {}));
+                testTooltip4696B540F3494FE5BA002362825DDE7D.dataPointSettings = dataPointSettings;
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D = visual.testTooltip4696B540F3494FE5BA002362825DDE7D || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -905,12 +905,14 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var pieChartsTree9649D4B540F362E7A4BA862FE525D003;
-            (function (pieChartsTree9649D4B540F362E7A4BA862FE525D003) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D) {
                 "use strict";
                 var tooltip = powerbi.extensibility.utils.tooltip;
                 var Visual = (function () {
                     function Visual(options) {
+                        this.host = options.host;
+                        //debugger;
                         tooltip.createTooltipServiceWrapper(options.host.tooltipService, options.element);
                         var bodyElement = d3.select("body");
                         var element = bodyElement
@@ -1027,11 +1029,12 @@ var powerbi;
                                 d3.select("svg").remove();
                             }
                             //inicializarArbol(div_height,div_width,options.dataViews[0].table);
-                            inicializarArbol(div_height, div_width, options);
+                            //debugger;
+                            inicializarArbol(div_height, div_width, options, this.host);
                         }
                     };
                     Visual.parseSettings = function (dataView) {
-                        return pieChartsTree9649D4B540F362E7A4BA862FE525D003.VisualSettings.parse(dataView);
+                        return testTooltip4696B540F3494FE5BA002362825DDE7D.VisualSettings.parse(dataView);
                     };
                     /**
                      * This function gets called for each of the objects defined in the capabilities files and allows you to select which of the
@@ -1081,8 +1084,8 @@ var powerbi;
                                         arcRadius: radius,
                                         arcBaseColor: color,
                                         arcCumplimientoOK: colorOk,
-                                        arcCumplimientoKO: colorKo,
-                                        linkColor: linColor
+                                        arcCumplimientoKO: colorKo /*,
+                                        linkColor: linColor*/
                                     },
                                     selector: null
                                 });
@@ -1093,8 +1096,8 @@ var powerbi;
                     };
                     return Visual;
                 }());
-                pieChartsTree9649D4B540F362E7A4BA862FE525D003.Visual = Visual;
-            })(pieChartsTree9649D4B540F362E7A4BA862FE525D003 = visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003 || (visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003 = {}));
+                testTooltip4696B540F3494FE5BA002362825DDE7D.Visual = Visual;
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D = visual.testTooltip4696B540F3494FE5BA002362825DDE7D || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -1339,7 +1342,7 @@ function zoomed() {
     debugger;
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
-function inicializarArbol(h, w, source) {
+function inicializarArbol(h, w, source, hst) {
     var arcRadius = 15;
     try {
         arcRadius = parseInt(source.dataViews[0].metadata.objects["treeOptions"]["arcRadius"].toString());
@@ -1773,7 +1776,10 @@ function inicializarArbol(h, w, source) {
             var valor = 1.5;
             if (porc > 1.5)
                 valor = porc;
-            return "stroke-width:" + valor + "px;stroke:" + linkColor;
+            //debugger;
+            return "stroke-width:" + valor + "px;stroke:" + hst.colorPalette.getColor(d.target.name).value;
+            //return "stroke-width:"+valor+"px;stroke:" + linkColor;
+            //options.host.colorPalette.getColor("Spain")
         });
         // Transition links to their new position.
         link.transition()
@@ -1861,14 +1867,14 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var pieChartsTree9649D4B540F362E7A4BA862FE525D003;
-            (function (pieChartsTree9649D4B540F362E7A4BA862FE525D003) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D) {
                 var DefaultHandleTouchDelay = 1000;
                 function createTooltipServiceWrapper(tooltipService, rootElement, handleTouchDelay) {
                     if (handleTouchDelay === void 0) { handleTouchDelay = DefaultHandleTouchDelay; }
                     return new TooltipServiceWrapper(tooltipService, rootElement, handleTouchDelay);
                 }
-                pieChartsTree9649D4B540F362E7A4BA862FE525D003.createTooltipServiceWrapper = createTooltipServiceWrapper;
+                testTooltip4696B540F3494FE5BA002362825DDE7D.createTooltipServiceWrapper = createTooltipServiceWrapper;
                 var TooltipServiceWrapper = (function () {
                     function TooltipServiceWrapper(tooltipService, rootElement, handleTouchDelay) {
                         this.visualHostTooltipService = tooltipService;
@@ -2039,7 +2045,7 @@ var powerbi;
                     };
                     return TooltipServiceWrapper;
                 }());
-            })(pieChartsTree9649D4B540F362E7A4BA862FE525D003 = visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003 || (visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003 = {}));
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D = visual.testTooltip4696B540F3494FE5BA002362825DDE7D || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -2049,8 +2055,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var pieChartsTree9649D4B540F362E7A4BA862FE525D003;
-            (function (pieChartsTree9649D4B540F362E7A4BA862FE525D003) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D) {
                 /**
                  * Gets property value for a particular object.
                  *
@@ -2072,7 +2078,7 @@ var powerbi;
                     }
                     return defaultValue;
                 }
-                pieChartsTree9649D4B540F362E7A4BA862FE525D003.getValue = getValue;
+                testTooltip4696B540F3494FE5BA002362825DDE7D.getValue = getValue;
                 /**
                  * Gets property value for a particular object in a category.
                  *
@@ -2099,8 +2105,8 @@ var powerbi;
                     }
                     return defaultValue;
                 }
-                pieChartsTree9649D4B540F362E7A4BA862FE525D003.getCategoricalObjectValue = getCategoricalObjectValue;
-            })(pieChartsTree9649D4B540F362E7A4BA862FE525D003 = visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003 || (visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003 = {}));
+                testTooltip4696B540F3494FE5BA002362825DDE7D.getCategoricalObjectValue = getCategoricalObjectValue;
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D = visual.testTooltip4696B540F3494FE5BA002362825DDE7D || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -2110,13 +2116,13 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.pieChartsTree9649D4B540F362E7A4BA862FE525D003 = {
-                name: 'pieChartsTree9649D4B540F362E7A4BA862FE525D003',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.2',
                 apiVersion: '1.11.0',
-                create: function (options) { return new powerbi.extensibility.visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003.Visual(options); },
+                create: function (options) { return new powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D.Visual(options); },
                 custom: true
             };
         })(plugins = visuals.plugins || (visuals.plugins = {}));

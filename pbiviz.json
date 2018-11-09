@@ -2,9 +2,9 @@
   "visual": {
     "name": "Pie Charts Tree",
     "displayName": "Pie Charts Tree",
-    "guid": "pieChartsTree9649D4B540F362E7A4BA862FE525D003",
+    "guid": "testTooltip4696B540F3494FE5BA002362825DDE7D",
     "visualClassName": "Visual",
-    "version": "1.0.2",
+    "version": "1.0.1",
     "description": "Tree with circle graphs in each node.",
     "supportUrl": "https://github.com/aritzfb/TreeCircle",
     "gitHubUrl": "https://github.com/aritzfb/TreeCircle"

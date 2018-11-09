@@ -1,4 +1,4 @@
-module powerbi.extensibility.visual.pieChartsTree9649D4B540F362E7A4BA862FE525D003  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D  {
     /**
      * Gets property value for a particular object.
      *
