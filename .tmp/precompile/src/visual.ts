@@ -255,8 +255,8 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
                         
                         arcBaseColor: color,
                         arcCumplimientoOK: colorOk,
-                        arcCumplimientoKO: colorKo/*,
-                        linkColor: linColor*/
+                        arcCumplimientoKO: colorKo,
+                        linkColor: linColor
                         
                     },
                     selector: null

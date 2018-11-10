@@ -85,7 +85,7 @@
                     }
                 }
                 , "weightLinks" : {
-                    "displayName" : "Weight Links"
+                    "displayName" : "Links Color Series"
                     , "type" : {
                         "bool" : true
                     }

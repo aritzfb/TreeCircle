@@ -1083,8 +1083,8 @@ var powerbi;
                                         arcRadius: radius,
                                         arcBaseColor: color,
                                         arcCumplimientoOK: colorOk,
-                                        arcCumplimientoKO: colorKo /*,
-                                        linkColor: linColor*/
+                                        arcCumplimientoKO: colorKo,
+                                        linkColor: linColor
                                     },
                                     selector: null
                                 });
@@ -1108,7 +1108,8 @@ function newNode() {
         "avance": 0.0,
         "category": "",
         "children": [],
-        "_children": []
+        "_children": [],
+        "serieColor": ""
     };
 }
 function getSourceRowAttribute(sourceRow, metadataColumns, attributeId) {
@@ -1222,7 +1223,7 @@ function createSourceRowTree(sourceRow, metadataColumns) {
     //debugger;
     var rowProgress = getSourceRowAttribute(sourceRow, metadataColumns, 0.1);
     //var retorno = { "name":"All", "value": sourceRow[0], "target":0.0, "category":"", "children":[], "_children":[] };
-    var retorno = { "name": allmembername, "value": rowValue, "target": rowTarget, "avance": rowProgress, "category": "Top Level", "children": [], "_children": [] };
+    var retorno = { "name": allmembername, "value": rowValue, "target": rowTarget, "avance": rowProgress, "category": "Top Level", "children": [], "_children": [], serieColor: "" };
     // sourceRow[0] ==> value
     // sourceRow[1] ==> format value
     // sourceRow[2] ==> first level
@@ -1236,6 +1237,7 @@ function createSourceRowTree(sourceRow, metadataColumns) {
         singleNode.value = rowValue;
         //singleNode.name = sourceRow[i];
         singleNode.name = getSourceRowAttribute(sourceRow, metadataColumns, i);
+        singleNode.serieColor = this.varhst.colorPalette.getColor(singleNode.name).value;
         singleNode.category = getSourceRowAttribute(sourceRow, metadataColumns, -i - 1);
         singleNode.target = rowTarget;
         singleNode.avance = rowProgress;
@@ -1337,11 +1339,13 @@ var metadataCategories = {};
 var options;
 var allmembername;
 var container;
+var varhst;
 function zoomed() {
     debugger;
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 function inicializarArbol(h, w, source, hst) {
+    this.varhst = hst;
     var arcRadius = 15;
     try {
         arcRadius = parseInt(source.dataViews[0].metadata.objects["treeOptions"]["arcRadius"].toString());
@@ -1412,7 +1416,7 @@ function inicializarArbol(h, w, source, hst) {
     catch (e) {
         weightLinks = true;
     }
-    debugger;
+    //debugger;
     if (source) {
         if (source.dataViews) {
             if (source.dataViews[0]) {
@@ -1438,16 +1442,25 @@ function inicializarArbol(h, w, source, hst) {
                 for (var i = 0; i < source.dataViews[0].categorical.categories[0].values.length; i++) {
                     var row = [];
                     for (var j = 0; j < source.dataViews[0].categorical.categories.length; j++) {
-                        row.push(source.dataViews[0].categorical.categories[j].values[i]);
+                        try {
+                            row.push(source.dataViews[0].categorical.categories[j].values[i]);
+                        }
+                        catch (e) { }
+                        //row.push(source.dataViews[0].categorical.categories[j].values[i]);
                     }
                     if (source.dataViews[0].categorical.values) {
                         for (var j = 0; j < source.dataViews[0].categorical.values.length; j++) {
-                            row.push(source.dataViews[0].categorical.values[j].values[i]);
+                            try {
+                                row.push(source.dataViews[0].categorical.values[j].values[i]);
+                            }
+                            catch (e) { }
+                            //row.push(source.dataViews[0].categorical.values[j].values[i]);
                         }
                     }
                     sourceTable.rows.push(row);
                 }
             }
+            //debugger;
         }
         if (source.dataViews[0].metadata != undefined) {
             if (source.dataViews[0].metadata.columns != undefined) {
@@ -1457,7 +1470,7 @@ function inicializarArbol(h, w, source, hst) {
         }
     }
     //var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    var margin = { top: 0, right: 0, bottom: 0, left: 50 }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
+    var margin = { top: 10, right: 50, bottom: 10, left: 50 }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
     var i = 0, duration = 750, root;
     var tree = d3.layout.tree()
         .size([height, width]);
@@ -1787,15 +1800,18 @@ function inicializarArbol(h, w, source, hst) {
             return diagonal({ source: o, target: o });
         })
             .attr("style", function (d) {
-            var porc = 0;
+            var porc = 2 * arcRadius * Math.abs(d.target.value / d.target.parent.value);
+            var colorLink = linkColor;
             if (weightLinks) {
-                porc = 2 * arcRadius * Math.abs(d.target.value / d.target.parent.value);
+                //colorLink = hst.colorPalette.getColor(d.target.name).value;
+                if (d.target.serieColor)
+                    colorLink = d.target.serieColor;
             }
             var valor = 1.5;
             if (porc > 1.5)
                 valor = porc;
             //debugger;
-            return "stroke-width:" + valor + "px;stroke:" + hst.colorPalette.getColor(d.target.name).value;
+            return "stroke-width:" + valor + "px;stroke:" + colorLink;
             //return "stroke-width:"+valor+"px;stroke:" + linkColor;
             //options.host.colorPalette.getColor("Spain")
         });

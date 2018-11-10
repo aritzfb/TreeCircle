@@ -255,8 +255,8 @@ module powerbi.extensibility.visual {
                         
                         arcBaseColor: color,
                         arcCumplimientoOK: colorOk,
-                        arcCumplimientoKO: colorKo/*,
-                        linkColor: linColor*/
+                        arcCumplimientoKO: colorKo,
+                        linkColor: linColor
                         
                     },
                     selector: null
