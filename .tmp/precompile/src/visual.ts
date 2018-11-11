@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_  {
     "use strict";
     import tooltip = powerbi.extensibility.utils.tooltip;
 
@@ -54,7 +54,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
         
 
         constructor(options: VisualConstructorOptions) {
-            
+            options.element.style.overflow = 'auto';
             this.host = options.host;
             //debugger;
             tooltip.createTooltipServiceWrapper(

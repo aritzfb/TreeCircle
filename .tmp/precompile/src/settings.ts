@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_  {
     "use strict";
     import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
 

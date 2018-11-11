@@ -54,7 +54,7 @@ module powerbi.extensibility.visual {
         
 
         constructor(options: VisualConstructorOptions) {
-            
+            options.element.style.overflow = 'auto';
             this.host = options.host;
             //debugger;
             tooltip.createTooltipServiceWrapper(
