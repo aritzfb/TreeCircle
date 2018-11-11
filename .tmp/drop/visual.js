@@ -840,8 +840,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var testTooltip4696B540F3494FE5BA002362825DDE7D_;
-            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D_2;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_2) {
                 "use strict";
                 var DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
                 var VisualSettings = (function (_super) {
@@ -853,7 +853,7 @@ var powerbi;
                     }
                     return VisualSettings;
                 }(DataViewObjectsParser));
-                testTooltip4696B540F3494FE5BA002362825DDE7D_.VisualSettings = VisualSettings;
+                testTooltip4696B540F3494FE5BA002362825DDE7D_2.VisualSettings = VisualSettings;
                 var dataPointSettings = (function () {
                     function dataPointSettings() {
                         // Default color
@@ -869,8 +869,8 @@ var powerbi;
                     }
                     return dataPointSettings;
                 }());
-                testTooltip4696B540F3494FE5BA002362825DDE7D_.dataPointSettings = dataPointSettings;
-            })(testTooltip4696B540F3494FE5BA002362825DDE7D_ = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_ || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_ = {}));
+                testTooltip4696B540F3494FE5BA002362825DDE7D_2.dataPointSettings = dataPointSettings;
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D_2 = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -905,8 +905,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var testTooltip4696B540F3494FE5BA002362825DDE7D_;
-            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D_2;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_2) {
                 "use strict";
                 var tooltip = powerbi.extensibility.utils.tooltip;
                 var Visual = (function () {
@@ -1040,7 +1040,7 @@ var powerbi;
                         }
                     };
                     Visual.parseSettings = function (dataView) {
-                        return testTooltip4696B540F3494FE5BA002362825DDE7D_.VisualSettings.parse(dataView);
+                        return testTooltip4696B540F3494FE5BA002362825DDE7D_2.VisualSettings.parse(dataView);
                     };
                     /**
                      * This function gets called for each of the objects defined in the capabilities files and allows you to select which of the
@@ -1106,8 +1106,8 @@ var powerbi;
                     };
                     return Visual;
                 }());
-                testTooltip4696B540F3494FE5BA002362825DDE7D_.Visual = Visual;
-            })(testTooltip4696B540F3494FE5BA002362825DDE7D_ = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_ || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_ = {}));
+                testTooltip4696B540F3494FE5BA002362825DDE7D_2.Visual = Visual;
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D_2 = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -1130,7 +1130,6 @@ function newNode() {
     };
 }
 function createSourceRowTree(sourceRow, metadataSourceTable) {
-    debugger;
     var numCategories = 0, itemValue = 0;
     itemTarget = 0, itemAvance = 0;
     for (var i = 0; i < metadataSourceTable.length; i++) {
@@ -1150,7 +1149,6 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     }
     var rowValue = itemValue;
     var rowTarget = itemTarget;
-    //debugger;
     var rowProgress = itemAvance;
     var retorno = { "name": allmembername, "value": rowValue, "target": rowTarget, "avance": rowProgress, "category": "Top Level", "children": [], "_children": [], serieColor: "" };
     var lastnode = retorno;
@@ -1164,7 +1162,6 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
         else
             singleNode.name = "";
         singleNode.category = metadataSourceTable[i].columnName;
-        //debugger;
         if (!metadataColors[singleNode.category]) {
             metadataColors[singleNode.category] = [];
         }
@@ -1224,17 +1221,11 @@ function fillTrees(sourceRowTree, sourceParsed) {
     return sourceParsed;
 }
 function parseSourceTableRow(sourceRow, sourceParsed, metadataSourceTable) {
-    // sourceRow[0] ==> value
-    // sourceRow[1] ==> format value
-    // sourceRow[2] ==> first level
-    // ...
-    // sourceRow[j] ==> level j
     var sourceRowTree = createSourceRowTree(sourceRow, metadataSourceTable);
     sourceParsed = fillTrees(sourceRowTree, sourceParsed);
     return sourceParsed;
 }
 function parseSource(source, metadataSourceTable) {
-    //debugger;
     // init the return
     var sourceParsed = { "name": allmembername, "value": 0.0, "target": 0.0, "avance": 0.0, "category": "Top Level", "children": [], "_children": [] };
     if (source != undefined) {
@@ -1271,7 +1262,6 @@ function recalculateValues(sourceParsed) {
     return retorno;
 }
 function zoomed() {
-    debugger;
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 function inicializarArbol(h, w, source, hst) {
@@ -1290,7 +1280,6 @@ function inicializarArbol(h, w, source, hst) {
     catch (e) {
         nodeTextSize = 15;
     }
-    //debugger;
     var arcBaseColor = "lightsteelblue";
     try {
         arcBaseColor = source.dataViews[0].metadata.objects.treeOptions.arcBaseColor["solid"]["color"];
@@ -1321,17 +1310,12 @@ function inicializarArbol(h, w, source, hst) {
     }
     var autoexpandtree;
     try {
-        //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-        //autoexpandtree = source.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';         
         autoexpandtree = source.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"];
     }
     catch (e) {
         autoexpandtree = true;
     }
-    //debugger;
     try {
-        //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-        //autoexpandtree = source.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';         
         allmembername = source.dataViews[0].metadata.objects["treeOptions"]["allMemberName"].toString();
     }
     catch (e) {
@@ -1339,8 +1323,6 @@ function inicializarArbol(h, w, source, hst) {
     }
     var expandMode;
     try {
-        //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-        //autoexpandtree = source.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';         
         expandMode = source.dataViews[0].metadata.objects["treeOptions"]["expandMode"];
     }
     catch (e) {
@@ -1353,7 +1335,6 @@ function inicializarArbol(h, w, source, hst) {
     catch (e) {
         weightLinks = true;
     }
-    //debugger;
     if (source) {
         if (source.dataViews) {
             if (source.dataViews[0]) {
@@ -1381,24 +1362,18 @@ function inicializarArbol(h, w, source, hst) {
                 for (var i = 0; i < source.dataViews[0].categorical.categories[0].values.length; i++) {
                     var row = [];
                     for (var j = 0; j < source.dataViews[0].categorical.categories.length; j++) {
-                        //try{row.push(source.dataViews[0].categorical.categories[j].values[i]);}catch(e){}
-                        //debugger;
                         if (!settedMetadataSourceTable) {
                             var columnInfo = { "columnName": "", "metadataType": "" };
                             columnInfo.columnName = source.dataViews[0].categorical.categories[j].source.displayName;
                             columnInfo.metadataType = "Category" + j.toString();
                             metadataSourceTable.push(columnInfo);
-                            //metadataSourceTable.push(source.dataViews[0].categorical.categories[j].source.displayName);
                         }
                         row.push(source.dataViews[0].categorical.categories[j].values[i]);
                     }
                     if (source.dataViews[0].categorical.values) {
                         for (var j = 0; j < source.dataViews[0].categorical.values.length; j++) {
-                            //try{row.push(source.dataViews[0].categorical.values[j].values[i]);}catch(e){}
-                            //debugger;
                             if (!settedMetadataSourceTable) {
                                 var columnInfo = { "columnName": "", "metadataType": "" };
-                                //debugger;
                                 columnInfo.columnName = source.dataViews[0].categorical.values[j].source.displayName;
                                 if (source.dataViews[0].categorical.values[j].source.roles) {
                                     if (source.dataViews[0].categorical.values[j].source.roles.measure)
@@ -1411,7 +1386,6 @@ function inicializarArbol(h, w, source, hst) {
                                         columnInfo.metadataType = "unknown";
                                 }
                                 metadataSourceTable.push(columnInfo);
-                                //metadataSourceTable.push(source.dataViews[0].categorical.values[j].source.displayName);
                             }
                             row.push(source.dataViews[0].categorical.values[j].values[i]);
                         }
@@ -1420,11 +1394,9 @@ function inicializarArbol(h, w, source, hst) {
                     sourceTable.rows.push(row);
                 }
             }
-            //debugger;
         }
         if (source.dataViews[0].metadata != undefined) {
             if (source.dataViews[0].metadata.columns != undefined) {
-                //debugger;
                 metadataColumns = source.dataViews[0].metadata.columns;
             }
         }
@@ -1497,32 +1469,27 @@ function inicializarArbol(h, w, source, hst) {
         var retorno = "";
         switch (textType) {
             case "name":
-                //retorno = d.category + ": " + d.name;
                 retorno = d.name;
                 break;
             case "value":
-                //retorno = "Value: " + d.value.toLocaleString('es-ES');
-                //retorno = "Value: " + formatValue(d.value);
                 retorno = formatValue(d.value);
                 break;
             case "target":
-                //retorno = "Target: " + d.target.toLocaleString('es-ES');
-                //retorno = "Target: " + formatValue(d.target);
-                //retorno = "Completed: " + formatValue(100*d.value/d.target) + "%";
                 retorno = formatPercent(d.value / d.target);
                 break;
             case "avance":
                 retorno = formatPercentDiference(d.value / d.target - d.avance);
+                break;
+            case "avance2":
+                retorno = formatPercent(d.value / d.target);
                 break;
         }
         return retorno;
         //return d.category + ": " + d.name + ", Value: " + d.value.toLocaleString('es-ES');;
     }
     function update(source) {
-        //debugger;
         // Compute the new tree layout.
         function collapse(d) {
-            //debugger;
             if (d.children) {
                 d._children = d.children;
                 d._children.forEach(collapse);
@@ -1591,7 +1558,6 @@ function inicializarArbol(h, w, source, hst) {
             retorno = 1;
         if (objetivo == 0.0 && avance == 0.0)
             retorno = 0;
-        //debugger;
         if (avance == 0 && objetivo == 0 && valorPadre != 0)
             retorno = Math.abs(valor / valorPadre);
         return 2 * Math.PI * retorno;
@@ -1605,31 +1571,27 @@ function inicializarArbol(h, w, source, hst) {
             .data(nodes, function (d) { return d.id || (d.id = ++i); });
         var div_tooltip = d3.select("#div_arbol").append("div").attr("class", "tooltip").style("opacity", 0);
         //PROGRESS BAR
-        if (nodes)
-            if (nodes[0])
-                if (nodes[0].avance) {
-                    function progressCirclePosition(d) {
-                        return "translate(0,50)";
-                    }
-                    var progressArc = d3.svg.arc().innerRadius(0).outerRadius(20).startAngle(0).endAngle(2 * Math.PI * nodes[0].avance);
-                    //progressCircle.transition().duration(1000).attr
-                    svg.append("path").attr("d", progressArc).attr("fill", arcBaseColor)
-                        .attr("transform", progressCirclePosition);
-                    //.duration(750)
-                    //.attrTween("d", 10);
-                    var progressCorona = d3.svg.arc().innerRadius(18).outerRadius(20).startAngle(0).endAngle(2 * Math.PI);
-                    //progressCircle.transition().duration(1000).attr
-                    svg.append("path").attr("d", progressCorona).attr("fill", arcBaseColor)
-                        .attr("transform", progressCirclePosition);
-                    svg.append("text").attr('class', 'text-progress')
-                        .text(formatPercent(nodes[0].avance))
-                        .attr('x', 3)
-                        .attr('y', 80);
-                    svg.append("text").attr('class', 'text-progress')
-                        .text("Progress")
-                        .attr('x', 0)
-                        .attr('y', 25);
-                }
+        /*
+        if (nodes) if (nodes[0]) if (nodes[0].avance) {
+            function progressCirclePosition(d){
+                return "translate(0,50)";
+            }
+            var progressArc = d3.svg.arc().innerRadius(0).outerRadius(20).startAngle(0).endAngle(2*Math.PI*nodes[0].avance);
+            svg.append("path").attr("d",progressArc ).attr("fill",arcBaseColor)
+            .attr("transform", progressCirclePosition);
+            var progressCorona = d3.svg.arc().innerRadius(18).outerRadius(20).startAngle(0).endAngle(2*Math.PI);
+            svg.append("path").attr("d",progressCorona ).attr("fill",arcBaseColor)
+            .attr("transform", progressCirclePosition)
+            svg.append("text").attr('class', 'text-progress')
+                    .text(formatPercent(nodes[0].avance))
+                    .attr('x', 3)
+                    .attr('y', 80);
+            svg.append("text").attr('class', 'text-progress')
+                .text("Progress")
+                .attr('x', 0)
+                .attr('y',25);
+        }
+        */
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
             .attr("class", "node")
@@ -1647,8 +1609,6 @@ function inicializarArbol(h, w, source, hst) {
             div_tooltip.html(htmlText)
                 .style("left", (d.y + arcRadius * 5).toString() + "px")
                 .style("top", d.x + "px");
-            //.attr("transform", translate(d.y , d.x ) )
-            //.style("top", (d3.event.pageY - 28) + "px");	
         })
             .on("mouseout", function (d) {
             div_tooltip.transition()
@@ -1689,7 +1649,6 @@ function inicializarArbol(h, w, source, hst) {
                 else if (valor < 0)
                     retorno = arcColorKO;
             }
-            //return d._children ? "lightsteelblue" : "#fff"; 
             return retorno;
         });
         var arcCorona = d3.svg.arc().innerRadius(arcRadius - 1).outerRadius(arcRadius)
@@ -1698,7 +1657,6 @@ function inicializarArbol(h, w, source, hst) {
         nodeEnter
             .append("path").attr("d", arcCorona)
             .style("fill", arcBaseColor);
-        //debugger;
         //Node text name
         nodeEnter.append("text")
             .attr("x", -10 - (arcRadius - 8))
@@ -1712,7 +1670,7 @@ function inicializarArbol(h, w, source, hst) {
             .attr("x", function (d) {
             var name, len;
             if (d.avance > 0) {
-                name = setText(d, "avance");
+                name = setText(d, "avance2");
             }
             else if (d.target > 0) {
                 name = setText(d, "target");
@@ -1722,14 +1680,14 @@ function inicializarArbol(h, w, source, hst) {
             }
             len = name.length;
             //return 20+len*4+(arcRadius-8); 
-            return 20 + len * 4 + (arcRadius);
+            return 20 + len * 4 + (arcRadius + nodeTextSize);
         })
             .attr("dy", "0.35em")
             .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
             .text(function (d) {
             var name = "";
             if (d.avance > 0) {
-                name = setText(d, "avance");
+                name = setText(d, "avance2");
             }
             else if (d.target > 0) {
                 name = setText(d, "target");
@@ -1754,7 +1712,6 @@ function inicializarArbol(h, w, source, hst) {
             .remove();
         nodeExit.select("text")
             .style("fill-opacity", 1e-6);
-        //  debugger;
         // Update the links…
         var link = svg.selectAll("path.link")
             .data(links, function (d) { return d.target.id; });
@@ -1776,7 +1733,6 @@ function inicializarArbol(h, w, source, hst) {
             var valor = 1.5;
             if (porc > 1.5)
                 valor = porc;
-            //debugger;
             return "stroke-width:" + valor + "px;stroke:" + colorLink;
             //return "stroke-width:"+valor+"px;stroke:" + linkColor;
             //options.host.colorPalette.getColor("Spain")
@@ -1801,7 +1757,6 @@ function inicializarArbol(h, w, source, hst) {
     }
     function updateClient(source) {
         // Compute the new tree layout.
-        //debugger;
         var rootSource = source;
         while (rootSource.parent != undefined) {
             rootSource = rootSource.parent;
@@ -1817,7 +1772,6 @@ function inicializarArbol(h, w, source, hst) {
     }
     // Toggle children on click.
     function click(d) {
-        //debugger;
         if (d.children) {
             //collapse
             d._children = d.children;
@@ -1828,7 +1782,6 @@ function inicializarArbol(h, w, source, hst) {
             d.children = d._children;
             d._children = [];
             //collapse other nodes
-            //debugger;
             if (expandMode) {
                 if (d.parent) {
                     var parent = d.parent;
@@ -1853,7 +1806,6 @@ function inicializarArbol(h, w, source, hst) {
         ;
         var nodes = tree.nodes(rootSource).reverse();
         //var nodes = tree.nodes(d).reverse();
-        //debugger;
         var parent = d;
         if (d.parent)
             parent = d.parent;
@@ -1867,14 +1819,14 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var testTooltip4696B540F3494FE5BA002362825DDE7D_;
-            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D_2;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_2) {
                 var DefaultHandleTouchDelay = 1000;
                 function createTooltipServiceWrapper(tooltipService, rootElement, handleTouchDelay) {
                     if (handleTouchDelay === void 0) { handleTouchDelay = DefaultHandleTouchDelay; }
                     return new TooltipServiceWrapper(tooltipService, rootElement, handleTouchDelay);
                 }
-                testTooltip4696B540F3494FE5BA002362825DDE7D_.createTooltipServiceWrapper = createTooltipServiceWrapper;
+                testTooltip4696B540F3494FE5BA002362825DDE7D_2.createTooltipServiceWrapper = createTooltipServiceWrapper;
                 var TooltipServiceWrapper = (function () {
                     function TooltipServiceWrapper(tooltipService, rootElement, handleTouchDelay) {
                         this.visualHostTooltipService = tooltipService;
@@ -2045,7 +1997,7 @@ var powerbi;
                     };
                     return TooltipServiceWrapper;
                 }());
-            })(testTooltip4696B540F3494FE5BA002362825DDE7D_ = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_ || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_ = {}));
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D_2 = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -2055,8 +2007,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var testTooltip4696B540F3494FE5BA002362825DDE7D_;
-            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D_2;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_2) {
                 /**
                  * Gets property value for a particular object.
                  *
@@ -2078,7 +2030,7 @@ var powerbi;
                     }
                     return defaultValue;
                 }
-                testTooltip4696B540F3494FE5BA002362825DDE7D_.getValue = getValue;
+                testTooltip4696B540F3494FE5BA002362825DDE7D_2.getValue = getValue;
                 /**
                  * Gets property value for a particular object in a category.
                  *
@@ -2105,8 +2057,8 @@ var powerbi;
                     }
                     return defaultValue;
                 }
-                testTooltip4696B540F3494FE5BA002362825DDE7D_.getCategoricalObjectValue = getCategoricalObjectValue;
-            })(testTooltip4696B540F3494FE5BA002362825DDE7D_ = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_ || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_ = {}));
+                testTooltip4696B540F3494FE5BA002362825DDE7D_2.getCategoricalObjectValue = getCategoricalObjectValue;
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D_2 = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -2116,13 +2068,13 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_ = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_2',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
                 apiVersion: '2.2.0',
-                create: function (options) { return new powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_.Visual(options); },
+                create: function (options) { return new powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2.Visual(options); },
                 custom: true
             };
         })(plugins = visuals.plugins || (visuals.plugins = {}));

@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2  {
     "use strict";
     import tooltip = powerbi.extensibility.utils.tooltip;
 
