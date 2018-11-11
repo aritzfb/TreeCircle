@@ -1119,7 +1119,7 @@ function newNode() {
     };
 }
 function createSourceRowTree(sourceRow, metadataSourceTable) {
-    //debugger;
+    debugger;
     var numCategories = 0, itemValue = 0;
     itemTarget = 0, itemAvance = 0;
     for (var i = 0; i < metadataSourceTable.length; i++) {
@@ -1143,16 +1143,27 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     var rowProgress = itemAvance;
     var retorno = { "name": allmembername, "value": rowValue, "target": rowTarget, "avance": rowProgress, "category": "Top Level", "children": [], "_children": [], serieColor: "" };
     var lastnode = retorno;
+    var metadataColors = [];
     for (var i = 0; i < numCategories; i++) {
-        if (sourceRow[i]) {
-            //prevents nodes without sertie name (or null values)
-            var singleNode = newNode();
-            singleNode.value = rowValue;
+        //prevents nodes without sertie name (or null values)
+        var singleNode = newNode();
+        singleNode.value = rowValue;
+        if (sourceRow[i])
             singleNode.name = sourceRow[i];
-            singleNode.serieColor = this.varhst.colorPalette.getColor(singleNode.name).value;
-            singleNode.category = metadataSourceTable[i].columnName;
-            singleNode.target = rowTarget;
-            singleNode.avance = rowProgress;
+        else
+            singleNode.name = "";
+        singleNode.category = metadataSourceTable[i].columnName;
+        //debugger;
+        if (!metadataColors[singleNode.category]) {
+            metadataColors[singleNode.category] = [];
+        }
+        if (!metadataColors[singleNode.category][singleNode.name]) {
+            metadataColors[singleNode.category][singleNode.name] = this.varhst.colorPalette.getColor(singleNode.name).value;
+        }
+        singleNode.serieColor = metadataColors[singleNode.category][singleNode.name];
+        singleNode.target = rowTarget;
+        singleNode.avance = rowProgress;
+        if (sourceRow[i]) {
             lastnode.children.push(singleNode);
             lastnode._children.push(singleNode);
             lastnode = lastnode.children[0];
