@@ -72,7 +72,12 @@
                         }
                     }
                 }
-                
+                ,"nodeTextSize":{
+                    "displayName": "Text Size"
+                    , "type": {
+                        "numeric": true
+                    }
+                }
                 , "arcRadius" : {
                     "displayName": "Arc Radius"
                     , "type": {

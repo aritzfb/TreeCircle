@@ -1020,6 +1020,12 @@ var powerbi;
                         }
                         catch (e) {
                         }
+                        try {
+                            this.nodeTextSize = parseInt(options.dataViews[0].metadata.objects["treeOptions"]["nodeTextSize"].toString());
+                        }
+                        catch (e) {
+                            this.nodeTextSize = 15;
+                        }
                         console.log('Visual update', options);
                         //debugger;
                         var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
@@ -1071,6 +1077,9 @@ var powerbi;
                         var wLinks = this.weigthLinks;
                         if (wLinks == undefined)
                             wLinks = true;
+                        var nTextSize = this.nodeTextSize;
+                        if (nTextSize == undefined)
+                            nTextSize = 15;
                         switch (objectName) {
                             case 'treeOptions':
                                 objectEnumeration.push({
@@ -1080,6 +1089,7 @@ var powerbi;
                                         expandMode: expMode,
                                         weightLinks: wLinks,
                                         allMemberName: allmem,
+                                        nodeTextSize: nTextSize,
                                         arcRadius: radius,
                                         arcBaseColor: color,
                                         arcCumplimientoOK: colorOk,
@@ -1271,6 +1281,13 @@ function inicializarArbol(h, w, source, hst) {
     }
     catch (e) {
         arcRadius = 15;
+    }
+    var nodeTextSize = 15;
+    try {
+        nodeTextSize = parseInt(source.dataViews[0].metadata.objects["treeOptions"]["nodeTextSize"].toString());
+    }
+    catch (e) {
+        nodeTextSize = 15;
     }
     //debugger;
     var arcBaseColor = "lightsteelblue";
@@ -1679,12 +1696,16 @@ function inicializarArbol(h, w, source, hst) {
         nodeEnter
             .append("path").attr("d", arcCorona)
             .style("fill", arcBaseColor);
+        //debugger;
+        //Node text name
         nodeEnter.append("text")
             .attr("x", -10 - (arcRadius - 8))
             .attr("dy", ".35em")
             .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
             .text(function (d) { return setText(d, "name"); })
-            .style("fill-opacity", 1);
+            .style("fill-opacity", 1)
+            .style("font-size", nodeTextSize);
+        //Node text value
         nodeEnter.append("text")
             .attr("x", function (d) {
             var name, len;
@@ -1716,7 +1737,8 @@ function inicializarArbol(h, w, source, hst) {
             }
             return name;
         })
-            .style("fill-opacity", 1);
+            .style("fill-opacity", 1)
+            .style("font-size", nodeTextSize);
         // Transition nodes to their new position.
         var nodeUpdate = node.transition()
             .duration(duration)

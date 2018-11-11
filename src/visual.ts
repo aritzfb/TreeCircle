@@ -136,6 +136,7 @@ module powerbi.extensibility.visual {
         private autoExpandTree : boolean;
         private allMemberName : string;
         private weigthLinks : boolean;
+        private nodeTextSize:number;
 
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
@@ -186,6 +187,14 @@ module powerbi.extensibility.visual {
             }catch(e){
 
             }
+
+            try {
+                this.nodeTextSize = parseInt(options.dataViews[0].metadata.objects["treeOptions"]["nodeTextSize"].toString());                 
+            } catch(e) {
+                this.nodeTextSize=15;
+            }
+
+            
 
             console.log('Visual update', options);
             //debugger;
@@ -241,6 +250,9 @@ module powerbi.extensibility.visual {
             var wLinks = this.weigthLinks;
             if (wLinks==undefined) wLinks = true;
 
+            var nTextSize = this.nodeTextSize;
+            if (nTextSize==undefined) nTextSize=15;
+
             switch (objectName) {
                 case 'treeOptions':
                   objectEnumeration.push({
@@ -250,6 +262,7 @@ module powerbi.extensibility.visual {
                         expandMode : expMode,
                         weightLinks: wLinks,
                         allMemberName: allmem,
+                        nodeTextSize:nTextSize,
                         
                         arcRadius : radius,
                         
