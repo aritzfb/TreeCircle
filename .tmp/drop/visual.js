@@ -840,8 +840,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var testTooltip4696B540F3494FE5BA002362825DDE7D_2;
-            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_2) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D) {
                 "use strict";
                 var DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
                 var VisualSettings = (function (_super) {
@@ -853,7 +853,7 @@ var powerbi;
                     }
                     return VisualSettings;
                 }(DataViewObjectsParser));
-                testTooltip4696B540F3494FE5BA002362825DDE7D_2.VisualSettings = VisualSettings;
+                testTooltip4696B540F3494FE5BA002362825DDE7D.VisualSettings = VisualSettings;
                 var dataPointSettings = (function () {
                     function dataPointSettings() {
                         // Default color
@@ -869,8 +869,8 @@ var powerbi;
                     }
                     return dataPointSettings;
                 }());
-                testTooltip4696B540F3494FE5BA002362825DDE7D_2.dataPointSettings = dataPointSettings;
-            })(testTooltip4696B540F3494FE5BA002362825DDE7D_2 = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {}));
+                testTooltip4696B540F3494FE5BA002362825DDE7D.dataPointSettings = dataPointSettings;
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D = visual.testTooltip4696B540F3494FE5BA002362825DDE7D || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -905,8 +905,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var testTooltip4696B540F3494FE5BA002362825DDE7D_2;
-            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_2) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D) {
                 "use strict";
                 var tooltip = powerbi.extensibility.utils.tooltip;
                 var Visual = (function () {
@@ -1040,7 +1040,7 @@ var powerbi;
                         }
                     };
                     Visual.parseSettings = function (dataView) {
-                        return testTooltip4696B540F3494FE5BA002362825DDE7D_2.VisualSettings.parse(dataView);
+                        return testTooltip4696B540F3494FE5BA002362825DDE7D.VisualSettings.parse(dataView);
                     };
                     /**
                      * This function gets called for each of the objects defined in the capabilities files and allows you to select which of the
@@ -1106,8 +1106,8 @@ var powerbi;
                     };
                     return Visual;
                 }());
-                testTooltip4696B540F3494FE5BA002362825DDE7D_2.Visual = Visual;
-            })(testTooltip4696B540F3494FE5BA002362825DDE7D_2 = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {}));
+                testTooltip4696B540F3494FE5BA002362825DDE7D.Visual = Visual;
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D = visual.testTooltip4696B540F3494FE5BA002362825DDE7D || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -1819,14 +1819,14 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var testTooltip4696B540F3494FE5BA002362825DDE7D_2;
-            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_2) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D) {
                 var DefaultHandleTouchDelay = 1000;
                 function createTooltipServiceWrapper(tooltipService, rootElement, handleTouchDelay) {
                     if (handleTouchDelay === void 0) { handleTouchDelay = DefaultHandleTouchDelay; }
                     return new TooltipServiceWrapper(tooltipService, rootElement, handleTouchDelay);
                 }
-                testTooltip4696B540F3494FE5BA002362825DDE7D_2.createTooltipServiceWrapper = createTooltipServiceWrapper;
+                testTooltip4696B540F3494FE5BA002362825DDE7D.createTooltipServiceWrapper = createTooltipServiceWrapper;
                 var TooltipServiceWrapper = (function () {
                     function TooltipServiceWrapper(tooltipService, rootElement, handleTouchDelay) {
                         this.visualHostTooltipService = tooltipService;
@@ -1997,7 +1997,7 @@ var powerbi;
                     };
                     return TooltipServiceWrapper;
                 }());
-            })(testTooltip4696B540F3494FE5BA002362825DDE7D_2 = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {}));
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D = visual.testTooltip4696B540F3494FE5BA002362825DDE7D || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -2007,8 +2007,8 @@ var powerbi;
     (function (extensibility) {
         var visual;
         (function (visual) {
-            var testTooltip4696B540F3494FE5BA002362825DDE7D_2;
-            (function (testTooltip4696B540F3494FE5BA002362825DDE7D_2) {
+            var testTooltip4696B540F3494FE5BA002362825DDE7D;
+            (function (testTooltip4696B540F3494FE5BA002362825DDE7D) {
                 /**
                  * Gets property value for a particular object.
                  *
@@ -2030,7 +2030,7 @@ var powerbi;
                     }
                     return defaultValue;
                 }
-                testTooltip4696B540F3494FE5BA002362825DDE7D_2.getValue = getValue;
+                testTooltip4696B540F3494FE5BA002362825DDE7D.getValue = getValue;
                 /**
                  * Gets property value for a particular object in a category.
                  *
@@ -2057,8 +2057,8 @@ var powerbi;
                     }
                     return defaultValue;
                 }
-                testTooltip4696B540F3494FE5BA002362825DDE7D_2.getCategoricalObjectValue = getCategoricalObjectValue;
-            })(testTooltip4696B540F3494FE5BA002362825DDE7D_2 = visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {}));
+                testTooltip4696B540F3494FE5BA002362825DDE7D.getCategoricalObjectValue = getCategoricalObjectValue;
+            })(testTooltip4696B540F3494FE5BA002362825DDE7D = visual.testTooltip4696B540F3494FE5BA002362825DDE7D || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
 })(powerbi || (powerbi = {}));
@@ -2068,13 +2068,13 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_2 = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_2',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
                 apiVersion: '2.2.0',
-                create: function (options) { return new powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_2.Visual(options); },
+                create: function (options) { return new powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D.Visual(options); },
                 custom: true
             };
         })(plugins = visuals.plugins || (visuals.plugins = {}));
