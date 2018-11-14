@@ -206,6 +206,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
                 }
                 //inicializarArbol(div_height,div_width,options.dataViews[0].table);
                 //debugger;
+                if(div_height-20>0)div_height=div_height-20
                 inicializarArbol(div_height,div_width,options,this.host);
             }
         }

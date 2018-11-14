@@ -1036,6 +1036,8 @@ var powerbi;
                             }
                             //inicializarArbol(div_height,div_width,options.dataViews[0].table);
                             //debugger;
+                            if (div_height - 20 > 0)
+                                div_height = div_height - 20;
                             inicializarArbol(div_height, div_width, options, this.host);
                         }
                     };
@@ -2068,8 +2070,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
