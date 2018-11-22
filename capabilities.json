@@ -106,6 +106,12 @@
                         }
                     }
                 }
+                , "legend":{
+                    "displayName" : "Magic Legend"
+                    , "type" : {
+                        "bool" : true
+                    }
+                }
 
             }
 

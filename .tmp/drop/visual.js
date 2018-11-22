@@ -1027,6 +1027,14 @@ var powerbi;
                         catch (e) {
                             this.nodeTextSize = 15;
                         }
+                        try {
+                            //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
+                            //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
+                            this.legend = options.dataViews[0].metadata.objects["treeOptions"]["legend"] == true;
+                        }
+                        catch (e) {
+                            this.legend = false;
+                        }
                         console.log('Visual update', options);
                         //debugger;
                         var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
@@ -1083,6 +1091,9 @@ var powerbi;
                         var nTextSize = this.nodeTextSize;
                         if (nTextSize == undefined)
                             nTextSize = 15;
+                        var leg = this.legend;
+                        if (leg == undefined)
+                            leg = false;
                         switch (objectName) {
                             case 'treeOptions':
                                 objectEnumeration.push({
@@ -1091,6 +1102,7 @@ var powerbi;
                                         autoExpandTree: autoexp,
                                         expandMode: expMode,
                                         weightLinks: wLinks,
+                                        legend: leg,
                                         allMemberName: allmem,
                                         nodeTextSize: nTextSize,
                                         arcRadius: radius,
@@ -1337,6 +1349,13 @@ function inicializarArbol(h, w, source, hst) {
     catch (e) {
         weightLinks = true;
     }
+    var legend;
+    try {
+        legend = source.dataViews[0].metadata.objects["treeOptions"]["legend"];
+    }
+    catch (e) {
+        legend = false;
+    }
     if (source) {
         if (source.dataViews) {
             if (source.dataViews[0]) {
@@ -1511,7 +1530,7 @@ function inicializarArbol(h, w, source, hst) {
         else
             collapse(source);
         var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
-        updateGraph(nodes, source);
+        updateGraph(nodes, source, this.varhst);
     }
     function getCumplimiento(d) {
         var retorno = 0;
@@ -1564,7 +1583,7 @@ function inicializarArbol(h, w, source, hst) {
             retorno = Math.abs(valor / valorPadre);
         return 2 * Math.PI * retorno;
     }
-    function updateGraph(nodes, source) {
+    function updateGraph(nodes, source, varhost) {
         var links = tree.links(nodes);
         // Normalize for fixed-depth.
         nodes.forEach(function (d) { d.y = d.depth * 180; });
@@ -1660,13 +1679,15 @@ function inicializarArbol(h, w, source, hst) {
             .append("path").attr("d", arcCorona)
             .style("fill", arcBaseColor);
         //Node text name
-        nodeEnter.append("text")
-            .attr("x", -10 - (arcRadius - 8))
-            .attr("dy", ".35em")
-            .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
-            .text(function (d) { return setText(d, "name"); })
-            .style("fill-opacity", 1)
-            .style("font-size", nodeTextSize);
+        if (!legend) {
+            nodeEnter.append("text")
+                .attr("x", -10 - (arcRadius - 8))
+                .attr("dy", ".35em")
+                .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
+                .text(function (d) { return setText(d, "name"); })
+                .style("fill-opacity", 1)
+                .style("font-size", nodeTextSize);
+        }
         //Node text value
         nodeEnter.append("text")
             .attr("x", function (d) {
@@ -1738,7 +1759,83 @@ function inicializarArbol(h, w, source, hst) {
             return "stroke-width:" + valor + "px;stroke:" + colorLink;
             //return "stroke-width:"+valor+"px;stroke:" + linkColor;
             //options.host.colorPalette.getColor("Spain")
+        })
+            .on("click", function (d) {
+            try {
+                /*
+                var htmlvar = varhost.tooltipService.tooltipService.rootElement.children[0].innerHTML;
+                var mi_tooltip = d3.select("#div_arbol").append("div").attr("class", "tooltip");
+
+                mi_tooltip.html(htmlvar)
+                .style("left", (d.source.y + arcRadius*5).toString() + "px")
+                .style("top", d.source.x + "px")
+                */
+                var basicFilter = {
+                    $schema: "http://powerbi.com/product/schema#basic",
+                    target: {
+                        table: "Datos",
+                        column: "Cowntry"
+                    },
+                    operator: "Equal",
+                    values: ["Spain"],
+                    filterType: "pbi.models.FilterType.BasicFilter"
+                };
+                //debugger;
+                varhost.applyJsonFilter(basicFilter, "general", "filter");
+                var a = 0;
+            }
+            catch (e) {
+                var b = 0;
+            }
+        })
+            .on("mouseover", function (d) {
+            if (legend) {
+                var idlink = d.target.name;
+                var parent = d.target.parent;
+                var cont = false;
+                if (parent)
+                    cont = true;
+                while (cont) {
+                    if (parent) {
+                        idlink = parent.name + "-" + idlink;
+                        parent = parent.parent;
+                    }
+                    else {
+                        cont = false;
+                    }
+                    if (parent)
+                        cont = false;
+                }
+                idlink = "magiclabel-" + idlink;
+                var labellink = d3.select("#" + idlink);
+                if (labellink[0][0] != null) {
+                    labellink.remove();
+                }
+                else {
+                    labellink = d3.select("#div_arbol").append("div").attr("id", idlink).style("position", "absolute");
+                    var htmlText = "<p style='font-size:" + nodeTextSize + "px'>" + d.target.name + "</p>";
+                    labellink.html(htmlText)
+                        .style("left", (event.clientX).toString() + "px")
+                        .style("top", (event.clientY).toString() + "px");
+                }
+            }
         });
+        /*
+        link.append("text")
+            .attr("font-family", "Arial, Helvetica, sans-serif")
+            .attr("fill", "Black")
+            .style("font", "normal 12px Arial")
+            .attr("transform", function(d) {
+                return "translate(" +
+                    ((d.source.y + d.target.y)/2) + "," +
+                    ((d.source.x + d.target.x)/2) + ")";
+            })
+            //.attr("dy", ".35em")
+            .attr("text-anchor", "middle")
+            .text(function(d) {
+                return d.target.name;
+            });
+        */
         // Transition links to their new position.
         link.transition()
             .duration(duration)
@@ -1770,7 +1867,7 @@ function inicializarArbol(h, w, source, hst) {
             if (parent.parent)
                 parent = parent.parent;
         }
-        updateGraph(nodes, source);
+        updateGraph(nodes, source, this.varhst);
     }
     // Toggle children on click.
     function click(d) {
@@ -1811,7 +1908,7 @@ function inicializarArbol(h, w, source, hst) {
         var parent = d;
         if (d.parent)
             parent = d.parent;
-        updateGraph(nodes, d);
+        updateGraph(nodes, d, this.varhst);
         //update(rootSource);
     }
 }

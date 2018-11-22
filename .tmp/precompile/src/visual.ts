@@ -137,6 +137,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
         private allMemberName : string;
         private weigthLinks : boolean;
         private nodeTextSize:number;
+        private legend : boolean;
 
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
@@ -194,6 +195,14 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
                 this.nodeTextSize=15;
             }
 
+            try {
+                //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
+                //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
+                this.legend = options.dataViews[0].metadata.objects["treeOptions"]["legend"] == true;                
+            } catch(e) {
+                this.legend = false;
+            }
+
             
 
             console.log('Visual update', options);
@@ -206,7 +215,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
                 }
                 //inicializarArbol(div_height,div_width,options.dataViews[0].table);
                 //debugger;
-                if(div_height-20>0)div_height=div_height-20
+                if(div_height-20>0)div_height=div_height-20;
                 inicializarArbol(div_height,div_width,options,this.host);
             }
         }
@@ -254,6 +263,9 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
             var nTextSize = this.nodeTextSize;
             if (nTextSize==undefined) nTextSize=15;
 
+            var leg=this.legend;
+            if (leg==undefined) leg=false;
+
             switch (objectName) {
                 case 'treeOptions':
                   objectEnumeration.push({
@@ -262,6 +274,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
                         autoExpandTree: autoexp,
                         expandMode : expMode,
                         weightLinks: wLinks,
+                        legend: leg,
                         allMemberName: allmem,
                         nodeTextSize:nTextSize,
                         
