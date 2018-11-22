@@ -106,8 +106,8 @@
                         }
                     }
                 }
-                , "legend":{
-                    "displayName" : "Magic Legend"
+                , "magiclabels":{
+                    "displayName" : "Magic Labels"
                     , "type" : {
                         "bool" : true
                     }

@@ -137,7 +137,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
         private allMemberName : string;
         private weigthLinks : boolean;
         private nodeTextSize:number;
-        private legend : boolean;
+        private magiclabels : boolean;
 
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
@@ -198,9 +198,9 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
             try {
                 //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
                 //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                this.legend = options.dataViews[0].metadata.objects["treeOptions"]["legend"] == true;                
+                this.magiclabels = options.dataViews[0].metadata.objects["treeOptions"]["magiclabels"] == true;                
             } catch(e) {
-                this.legend = false;
+                this.magiclabels = false;
             }
 
             
@@ -263,7 +263,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
             var nTextSize = this.nodeTextSize;
             if (nTextSize==undefined) nTextSize=15;
 
-            var leg=this.legend;
+            var leg=this.magiclabels;
             if (leg==undefined) leg=false;
 
             switch (objectName) {
@@ -274,7 +274,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
                         autoExpandTree: autoexp,
                         expandMode : expMode,
                         weightLinks: wLinks,
-                        legend: leg,
+                        magiclabels: leg,
                         allMemberName: allmem,
                         nodeTextSize:nTextSize,
                         

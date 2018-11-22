@@ -1,11 +1,3 @@
-.visual-testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG p {
-  font-size: 20px;
-  font-weight: bold;
-}
-.visual-testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG p em {
-  background: yellow;
-  padding: 5px;
-}
 .visual-testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG .node {
   cursor: pointer;
 }
@@ -22,6 +14,11 @@
   /*stroke: lightgray;*/
   stroke-width: 1.5px;
   /*stroke-dasharray: 5;*/
+}
+.visual-testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG .magiclabels {
+  margin: 0;
+  padding: 0;
+  font: sans-serif;
 }
 .visual-testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG div.tooltip {
   position: absolute;

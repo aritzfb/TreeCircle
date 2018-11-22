@@ -1030,10 +1030,10 @@ var powerbi;
                         try {
                             //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
                             //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                            this.legend = options.dataViews[0].metadata.objects["treeOptions"]["legend"] == true;
+                            this.magiclabels = options.dataViews[0].metadata.objects["treeOptions"]["magiclabels"] == true;
                         }
                         catch (e) {
-                            this.legend = false;
+                            this.magiclabels = false;
                         }
                         console.log('Visual update', options);
                         //debugger;
@@ -1091,7 +1091,7 @@ var powerbi;
                         var nTextSize = this.nodeTextSize;
                         if (nTextSize == undefined)
                             nTextSize = 15;
-                        var leg = this.legend;
+                        var leg = this.magiclabels;
                         if (leg == undefined)
                             leg = false;
                         switch (objectName) {
@@ -1102,7 +1102,7 @@ var powerbi;
                                         autoExpandTree: autoexp,
                                         expandMode: expMode,
                                         weightLinks: wLinks,
-                                        legend: leg,
+                                        magiclabels: leg,
                                         allMemberName: allmem,
                                         nodeTextSize: nTextSize,
                                         arcRadius: radius,
@@ -1349,12 +1349,12 @@ function inicializarArbol(h, w, source, hst) {
     catch (e) {
         weightLinks = true;
     }
-    var legend;
+    var magiclabels;
     try {
-        legend = source.dataViews[0].metadata.objects["treeOptions"]["legend"];
+        magiclabels = source.dataViews[0].metadata.objects["treeOptions"]["magiclabels"];
     }
     catch (e) {
-        legend = false;
+        magiclabels = false;
     }
     if (source) {
         if (source.dataViews) {
@@ -1584,6 +1584,14 @@ function inicializarArbol(h, w, source, hst) {
         return 2 * Math.PI * retorno;
     }
     function updateGraph(nodes, source, varhost) {
+        var magiclabelsd = d3.selectAll("div")[0];
+        magiclabelsd.forEach(function (d) {
+            debugger;
+            if (d)
+                if (d.id)
+                    if (d.id.indexOf('magiclabel') > -1)
+                        d.remove();
+        });
         var links = tree.links(nodes);
         // Normalize for fixed-depth.
         nodes.forEach(function (d) { d.y = d.depth * 180; });
@@ -1679,7 +1687,7 @@ function inicializarArbol(h, w, source, hst) {
             .append("path").attr("d", arcCorona)
             .style("fill", arcBaseColor);
         //Node text name
-        if (!legend) {
+        if (!magiclabels) {
             nodeEnter.append("text")
                 .attr("x", -10 - (arcRadius - 8))
                 .attr("dy", ".35em")
@@ -1687,41 +1695,41 @@ function inicializarArbol(h, w, source, hst) {
                 .text(function (d) { return setText(d, "name"); })
                 .style("fill-opacity", 1)
                 .style("font-size", nodeTextSize);
+            //Node text value
+            nodeEnter.append("text")
+                .attr("x", function (d) {
+                var name, len;
+                if (d.avance > 0) {
+                    name = setText(d, "avance2");
+                }
+                else if (d.target > 0) {
+                    name = setText(d, "target");
+                }
+                else {
+                    name = setText(d, "value");
+                }
+                len = name.length;
+                //return 20+len*4+(arcRadius-8); 
+                return 20 + len * 4 + (arcRadius + nodeTextSize);
+            })
+                .attr("dy", "0.35em")
+                .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
+                .text(function (d) {
+                var name = "";
+                if (d.avance > 0) {
+                    name = setText(d, "avance2");
+                }
+                else if (d.target > 0) {
+                    name = setText(d, "target");
+                }
+                else {
+                    name = setText(d, "value");
+                }
+                return name;
+            })
+                .style("fill-opacity", 1)
+                .style("font-size", nodeTextSize);
         }
-        //Node text value
-        nodeEnter.append("text")
-            .attr("x", function (d) {
-            var name, len;
-            if (d.avance > 0) {
-                name = setText(d, "avance2");
-            }
-            else if (d.target > 0) {
-                name = setText(d, "target");
-            }
-            else {
-                name = setText(d, "value");
-            }
-            len = name.length;
-            //return 20+len*4+(arcRadius-8); 
-            return 20 + len * 4 + (arcRadius + nodeTextSize);
-        })
-            .attr("dy", "0.35em")
-            .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
-            .text(function (d) {
-            var name = "";
-            if (d.avance > 0) {
-                name = setText(d, "avance2");
-            }
-            else if (d.target > 0) {
-                name = setText(d, "target");
-            }
-            else {
-                name = setText(d, "value");
-            }
-            return name;
-        })
-            .style("fill-opacity", 1)
-            .style("font-size", nodeTextSize);
         // Transition nodes to their new position.
         var nodeUpdate = node.transition()
             .duration(duration)
@@ -1749,7 +1757,6 @@ function inicializarArbol(h, w, source, hst) {
             var porc = 2 * arcRadius * Math.abs(d.target.value / d.target.parent.value);
             var colorLink = linkColor;
             if (weightLinks) {
-                //colorLink = hst.colorPalette.getColor(d.target.name).value;
                 if (d.target.serieColor)
                     colorLink = d.target.serieColor;
             }
@@ -1757,19 +1764,9 @@ function inicializarArbol(h, w, source, hst) {
             if (porc > 1.5)
                 valor = porc;
             return "stroke-width:" + valor + "px;stroke:" + colorLink;
-            //return "stroke-width:"+valor+"px;stroke:" + linkColor;
-            //options.host.colorPalette.getColor("Spain")
         })
             .on("click", function (d) {
             try {
-                /*
-                var htmlvar = varhost.tooltipService.tooltipService.rootElement.children[0].innerHTML;
-                var mi_tooltip = d3.select("#div_arbol").append("div").attr("class", "tooltip");
-
-                mi_tooltip.html(htmlvar)
-                .style("left", (d.source.y + arcRadius*5).toString() + "px")
-                .style("top", d.source.x + "px")
-                */
                 var basicFilter = {
                     $schema: "http://powerbi.com/product/schema#basic",
                     target: {
@@ -1780,16 +1777,14 @@ function inicializarArbol(h, w, source, hst) {
                     values: ["Spain"],
                     filterType: "pbi.models.FilterType.BasicFilter"
                 };
-                //debugger;
                 varhost.applyJsonFilter(basicFilter, "general", "filter");
-                var a = 0;
             }
             catch (e) {
                 var b = 0;
             }
         })
             .on("mouseover", function (d) {
-            if (legend) {
+            if (magiclabels) {
                 var idlink = d.target.name;
                 var parent = d.target.parent;
                 var cont = false;
@@ -1813,10 +1808,11 @@ function inicializarArbol(h, w, source, hst) {
                 }
                 else {
                     labellink = d3.select("#div_arbol").append("div").attr("id", idlink).style("position", "absolute");
-                    var htmlText = "<p style='font-size:" + nodeTextSize + "px'>" + d.target.name + "</p>";
+                    var htmlText = "<p class='magiclabels' style='font-size:" + nodeTextSize + "px'>" + d.target.name + "</p>";
                     labellink.html(htmlText)
                         .style("left", (event.clientX).toString() + "px")
-                        .style("top", (event.clientY).toString() + "px");
+                        .style("top", (event.clientY).toString() + "px")
+                        .attr("class", "magiclabels");
                 }
             }
         });
