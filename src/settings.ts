@@ -29,20 +29,30 @@ module powerbi.extensibility.visual {
     import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
 
     export class VisualSettings extends DataViewObjectsParser {
-      public dataPoint: dataPointSettings = new dataPointSettings();
-      }
+      public treeColors: treeColors = new treeColors();
+      public treeOptions: treeOptions = new treeOptions();
+      public treeLabels: treeLabels = new treeLabels();
+    }
 
-    export class dataPointSettings {
-     // Default color
-      public defaultColor: string = "";
-     // Show all
-      public showAllDataPoints: boolean = true;
-     // Fill
-      public fill: string = "";
-     // Color saturation
-      public fillRule: string = "";
-     // Text Size
-      public fontSize: number = 12;
-     }
+    export class treeLabels {
+      public allMemberName: string="All";
+      public nodeTextSize: number=15;
+      public magicLabels: boolean=false;
+    }
+
+    export class treeColors {
+      public arcBaseColor: string = "lightsteelblue";
+      public arcCumplimientoOK: string = "green";
+      public arcCumplimientoKO: string = "red";
+      public linkColor: string = "lightgray";
+      public weightLinks:boolean = true;
+    }
+
+    export class treeOptions {
+      public autoExpandTree: boolean=true;
+      public arcRadius: number=15;
+      public expandMode: boolean=true;
+
+    }
 
 }

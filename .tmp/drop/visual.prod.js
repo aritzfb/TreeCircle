@@ -848,28 +848,43 @@ var powerbi;
                     __extends(VisualSettings, _super);
                     function VisualSettings() {
                         var _this = _super !== null && _super.apply(this, arguments) || this;
-                        _this.dataPoint = new dataPointSettings();
+                        _this.treeColors = new treeColors();
+                        _this.treeOptions = new treeOptions();
+                        _this.treeLabels = new treeLabels();
                         return _this;
                     }
                     return VisualSettings;
                 }(DataViewObjectsParser));
                 testTooltip4696B540F3494FE5BA002362825DDE7D.VisualSettings = VisualSettings;
-                var dataPointSettings = (function () {
-                    function dataPointSettings() {
-                        // Default color
-                        this.defaultColor = "";
-                        // Show all
-                        this.showAllDataPoints = true;
-                        // Fill
-                        this.fill = "";
-                        // Color saturation
-                        this.fillRule = "";
-                        // Text Size
-                        this.fontSize = 12;
+                var treeLabels = (function () {
+                    function treeLabels() {
+                        this.allMemberName = "All";
+                        this.nodeTextSize = 15;
+                        this.magicLabels = false;
                     }
-                    return dataPointSettings;
+                    return treeLabels;
                 }());
-                testTooltip4696B540F3494FE5BA002362825DDE7D.dataPointSettings = dataPointSettings;
+                testTooltip4696B540F3494FE5BA002362825DDE7D.treeLabels = treeLabels;
+                var treeColors = (function () {
+                    function treeColors() {
+                        this.arcBaseColor = "lightsteelblue";
+                        this.arcCumplimientoOK = "green";
+                        this.arcCumplimientoKO = "red";
+                        this.linkColor = "lightgray";
+                        this.weightLinks = true;
+                    }
+                    return treeColors;
+                }());
+                testTooltip4696B540F3494FE5BA002362825DDE7D.treeColors = treeColors;
+                var treeOptions = (function () {
+                    function treeOptions() {
+                        this.autoExpandTree = true;
+                        this.arcRadius = 15;
+                        this.expandMode = true;
+                    }
+                    return treeOptions;
+                }());
+                testTooltip4696B540F3494FE5BA002362825DDE7D.treeOptions = treeOptions;
             })(testTooltip4696B540F3494FE5BA002362825DDE7D = visual.testTooltip4696B540F3494FE5BA002362825DDE7D || (visual.testTooltip4696B540F3494FE5BA002362825DDE7D = {}));
         })(visual = extensibility.visual || (extensibility.visual = {}));
     })(extensibility = powerbi.extensibility || (powerbi.extensibility = {}));
@@ -972,81 +987,14 @@ var powerbi;
                     };
                     Visual.prototype.update = function (options) {
                         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-                        try {
-                            this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor["solid"]["color"];
-                        }
-                        catch (e) { }
-                        try {
-                            this.arcColorOK = options.dataViews[0].metadata.objects.treeOptions.arcCumplimientoOK["solid"]["color"];
-                        }
-                        catch (e) { }
-                        try {
-                            this.linkColor = options.dataViews[0].metadata.objects.treeOptions.linkColor["solid"]["color"];
-                        }
-                        catch (e) { }
-                        try {
-                            this.arcColorKO = options.dataViews[0].metadata.objects.treeOptions.arcCumplimientoKO["solid"]["color"];
-                        }
-                        catch (e) { }
-                        try {
-                            //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-                            //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                            this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == true;
-                        }
-                        catch (e) {
-                            //this.autoExpandTree = true;
-                        }
-                        try {
-                            //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-                            //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                            this.allMemberName = options.dataViews[0].metadata.objects["treeOptions"]["allMemberName"].toString();
-                        }
-                        catch (e) {
-                            //this.autoExpandTree = true;
-                        }
-                        try {
-                            this.arcRadius = parseInt(options.dataViews[0].metadata.objects["treeOptions"]["arcRadius"].toString());
-                        }
-                        catch (e) { }
-                        try {
-                            //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-                            //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                            this.arcExpandMode = options.dataViews[0].metadata.objects["treeOptions"]["expandMode"] == true;
-                        }
-                        catch (e) {
-                            //this.autoExpandTree = true;
-                        }
-                        try {
-                            this.weigthLinks = options.dataViews[0].metadata.objects["treeOptions"]["weightLinks"] == true;
-                        }
-                        catch (e) {
-                        }
-                        try {
-                            this.nodeTextSize = parseInt(options.dataViews[0].metadata.objects["treeOptions"]["nodeTextSize"].toString());
-                        }
-                        catch (e) {
-                            this.nodeTextSize = 15;
-                        }
-                        try {
-                            //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-                            //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                            this.magiclabels = options.dataViews[0].metadata.objects["treeOptions"]["magiclabels"] == true;
-                        }
-                        catch (e) {
-                            this.magiclabels = false;
-                        }
-                        console.log('Visual update', options);
-                        //debugger;
                         var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
                         if (options.type != 36) {
                             if (d3.select("svg")) {
                                 d3.select("svg").remove();
                             }
-                            //inicializarArbol(div_height,div_width,options.dataViews[0].table);
-                            //debugger;
                             if (div_height - 20 > 0)
                                 div_height = div_height - 20;
-                            inicializarArbol(div_height, div_width, options, this.host);
+                            inicializarArbol(div_height, div_width, options, this.host, this.settings);
                         }
                     };
                     Visual.parseSettings = function (dataView) {
@@ -1058,65 +1006,72 @@ var powerbi;
                      *
                      */
                     Visual.prototype.enumerateObjectInstances = function (options) {
-                        var objectName = options.objectName;
-                        var objectEnumeration = [];
+                        var vSettings = this.settings || testTooltip4696B540F3494FE5BA002362825DDE7D.VisualSettings.getDefault();
+                        /*
+                        let objectName = options.objectName;
+                        let objectEnumeration: VisualObjectInstance[] = [];
                         var color = this.arcBaseColorStr;
-                        if (!color)
-                            color = "lightsteelblue";
+                        if (!color) color = "lightsteelblue";
+            
                         var colorOk = this.arcColorOK;
-                        if (!colorOk)
-                            colorOk = "green";
+                        if (!colorOk) colorOk = "green";
+            
                         var linColor = this.linkColor;
-                        if (!linColor)
-                            linColor = "lightgray";
+                        if (!linColor) linColor="lightgray"
+            
                         var colorKo = this.arcColorKO;
-                        if (!colorKo)
-                            colorKo = "red";
+                        if (!colorKo) colorKo = "red";
+            
                         var radius = this.arcRadius;
-                        if (!radius)
-                            radius = 15;
+                        if (!radius) radius = 15;
+            
+            
                         var autoexp = this.autoExpandTree;
-                        if (autoexp == undefined)
-                            autoexp = true;
+                        if (autoexp == undefined) autoexp = true;
                         var allmem = this.allMemberName;
-                        if (!allmem)
-                            allmem = "All";
+                        if(!allmem) allmem = "All";
+                        
                         var expMode = this.arcExpandMode;
-                        if (expMode == undefined)
-                            expMode = true;
+                        if (expMode== undefined) expMode = true;
                         //debugger;
+            
                         var wLinks = this.weigthLinks;
-                        if (wLinks == undefined)
-                            wLinks = true;
+                        if (wLinks==undefined) wLinks = true;
+            
                         var nTextSize = this.nodeTextSize;
-                        if (nTextSize == undefined)
-                            nTextSize = 15;
-                        var leg = this.magiclabels;
-                        if (leg == undefined)
-                            leg = false;
+                        if (nTextSize==undefined) nTextSize=15;
+            
+                        var leg=this.magiclabels;
+                        if (leg==undefined) leg=false;
+            
                         switch (objectName) {
                             case 'treeOptions':
-                                objectEnumeration.push({
-                                    objectName: objectName,
-                                    properties: {
-                                        autoExpandTree: autoexp,
-                                        expandMode: expMode,
-                                        weightLinks: wLinks,
-                                        magiclabels: leg,
-                                        allMemberName: allmem,
-                                        nodeTextSize: nTextSize,
-                                        arcRadius: radius,
-                                        arcBaseColor: color,
-                                        arcCumplimientoOK: colorOk,
-                                        arcCumplimientoKO: colorKo,
-                                        linkColor: linColor
-                                    },
-                                    selector: null
-                                });
-                                break;
-                        }
-                        ;
-                        return objectEnumeration;
+                              objectEnumeration.push({
+                                objectName: objectName,
+                                properties: {
+                                    autoExpandTree: autoexp,
+                                    expandMode : expMode,
+                                    weightLinks: wLinks,
+                                    magiclabels: leg,
+                                    allMemberName: allmem,
+                                    nodeTextSize:nTextSize,
+                                    
+                                    arcRadius : radius,
+                                    
+                                    arcBaseColor: color,
+                                    arcCumplimientoOK: colorOk,
+                                    arcCumplimientoKO: colorKo,
+                                    linkColor: linColor
+                                    
+                                },
+                                selector: null
+                              });
+                              break;
+                          };
+            
+                        //return objectEnumeration;
+                        */
+                        return testTooltip4696B540F3494FE5BA002362825DDE7D.VisualSettings.enumerateObjectInstances(vSettings, options);
                     };
                     return Visual;
                 }());
@@ -1164,7 +1119,7 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     var rowValue = itemValue;
     var rowTarget = itemTarget;
     var rowProgress = itemAvance;
-    var retorno = { "name": allmembername, "value": rowValue, "target": rowTarget, "avance": rowProgress, "category": "Top Level", "children": [], "_children": [], serieColor: "" };
+    var retorno = { "name": this.allmembername, "value": rowValue, "target": rowTarget, "avance": rowProgress, "category": "Top Level", "children": [], "_children": [], serieColor: "" };
     var lastnode = retorno;
     var metadataColors = [];
     for (var i = 0; i < numCategories; i++) {
@@ -1241,7 +1196,7 @@ function parseSourceTableRow(sourceRow, sourceParsed, metadataSourceTable) {
 }
 function parseSource(source, metadataSourceTable) {
     // init the return
-    var sourceParsed = { "name": allmembername, "value": 0.0, "target": 0.0, "avance": 0.0, "category": "Top Level", "children": [], "_children": [] };
+    var sourceParsed = { "name": this.allmembername, "value": 0.0, "target": 0.0, "avance": 0.0, "category": "Top Level", "children": [], "_children": [] };
     if (source != undefined) {
         if (source.rows != undefined) {
             for (var i = 0; i < source.rows.length; i++) {
@@ -1278,84 +1233,64 @@ function recalculateValues(sourceParsed) {
 function zoomed() {
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
-function inicializarArbol(h, w, source, hst) {
+function inicializarArbol(h, w, source, hst, settings) {
+    debugger;
     this.varhst = hst;
     var arcRadius = 15;
     try {
-        arcRadius = parseInt(source.dataViews[0].metadata.objects["treeOptions"]["arcRadius"].toString());
+        arcRadius = settings.treeOptions.arcRadius;
     }
-    catch (e) {
-        arcRadius = 15;
-    }
+    catch (e) { }
     var nodeTextSize = 15;
     try {
-        nodeTextSize = parseInt(source.dataViews[0].metadata.objects["treeOptions"]["nodeTextSize"].toString());
+        nodeTextSize = settings.treeLabels.nodeTextSize;
     }
-    catch (e) {
-        nodeTextSize = 15;
-    }
+    catch (e) { }
     var arcBaseColor = "lightsteelblue";
     try {
-        arcBaseColor = source.dataViews[0].metadata.objects.treeOptions.arcBaseColor["solid"]["color"];
+        arcBaseColor = settings.treeColors.arcBaseColor;
     }
-    catch (e) {
-        arcBaseColor = "lightsteelblue";
-    }
+    catch (e) { }
     var linkColor = "lightgray";
     try {
-        linkColor = source.dataViews[0].metadata.objects.treeOptions.linkColor["solid"]["color"];
+        linkColor = settings.treeColors.linkColor;
     }
-    catch (e) {
-        linkColor = "lightgray";
-    }
+    catch (e) { }
     var arcColorOK = "green";
     try {
-        arcColorOK = source.dataViews[0].metadata.objects.treeOptions.arcCumplimientoOK["solid"]["color"];
+        arcColorOK = settings.treeColors.arcCumplimientoOK;
     }
-    catch (e) {
-        arcColorOK = "green";
-    }
+    catch (e) { }
     var arcColorKO = "red";
     try {
-        arcColorKO = source.dataViews[0].metadata.objects.treeOptions.arcCumplimientoKO["solid"]["color"];
+        arcColorKO = settings.treeColors.arcCumplimientoKO;
     }
-    catch (e) {
-        arcColorKO = "red";
-    }
-    var autoexpandtree;
+    catch (e) { }
+    var autoexpandtree = true;
     try {
-        autoexpandtree = source.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"];
+        autoexpandtree = settings.treeOptions.autoExpandTree;
     }
-    catch (e) {
-        autoexpandtree = true;
-    }
+    catch (e) { }
+    this.allmembername = "All";
     try {
-        allmembername = source.dataViews[0].metadata.objects["treeOptions"]["allMemberName"].toString();
+        this.allmembername = settings.treeLabels.allMemberName;
     }
-    catch (e) {
-        allmembername = "All";
-    }
-    var expandMode;
+    catch (e) { }
+    var expandMode = true;
     try {
-        expandMode = source.dataViews[0].metadata.objects["treeOptions"]["expandMode"];
+        expandMode = settings.treeOptions.expandMode;
     }
-    catch (e) {
-        expandMode = true;
-    }
-    var weightLinks;
+    catch (e) { }
+    var weightLinks = true;
     try {
-        weightLinks = source.dataViews[0].metadata.objects["treeOptions"]["weightLinks"];
+        weightLinks = settings.treeColors.weightLinks;
     }
-    catch (e) {
-        weightLinks = true;
-    }
-    var magiclabels;
+    catch (e) { }
+    var magiclabels = false;
     try {
-        magiclabels = source.dataViews[0].metadata.objects["treeOptions"]["magiclabels"];
+        magiclabels = settings.treeLabels.magicLabels;
     }
-    catch (e) {
-        magiclabels = false;
-    }
+    catch (e) { }
     if (source) {
         if (source.dataViews) {
             if (source.dataViews[0]) {
@@ -1586,7 +1521,7 @@ function inicializarArbol(h, w, source, hst) {
     function updateGraph(nodes, source, varhost) {
         var magiclabelsd = d3.selectAll("div")[0];
         magiclabelsd.forEach(function (d) {
-            debugger;
+            //debugger;
             if (d)
                 if (d.id)
                     if (d.id.indexOf('magiclabel') > -1)

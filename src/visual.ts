@@ -126,97 +126,19 @@ module powerbi.extensibility.visual {
             }];
         }
 
-        private arcRadius : number;
-        private arcBaseColorStr : string;
-        private arcColorOK : string;
-        private linkColor : string;
-        private arcColorKO : string;
-        private arcExpandMode : boolean;
-
-        private autoExpandTree : boolean;
-        private allMemberName : string;
-        private weigthLinks : boolean;
-        private nodeTextSize:number;
-        private magiclabels : boolean;
-
+        
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-            try {
-                this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor["solid"]["color"];                 
-            } catch(e) {}
-
-            try {
-                this.arcColorOK = options.dataViews[0].metadata.objects.treeOptions.arcCumplimientoOK["solid"]["color"];                 
-            } catch(e) {}
-
-            try {
-                this.linkColor = options.dataViews[0].metadata.objects.treeOptions.linkColor["solid"]["color"];                 
-            } catch(e) {}
-
-            try {
-                this.arcColorKO = options.dataViews[0].metadata.objects.treeOptions.arcCumplimientoKO["solid"]["color"];                 
-            } catch(e) {}
-
-            try {
-                //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-                //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == true;                
-            } catch(e) {
-                //this.autoExpandTree = true;
-            }
-            try {
-                //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-                //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                this.allMemberName = options.dataViews[0].metadata.objects["treeOptions"]["allMemberName"].toString();                
-            } catch(e) {
-                //this.autoExpandTree = true;
-            }
-
-            try {
-                this.arcRadius = parseInt(options.dataViews[0].metadata.objects["treeOptions"]["arcRadius"].toString());                 
-            } catch(e) {}
-
-            try {
-                //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-                //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                this.arcExpandMode = options.dataViews[0].metadata.objects["treeOptions"]["expandMode"] == true;                
-            } catch(e) {
-                //this.autoExpandTree = true;
-            }
-            try {
-                this.weigthLinks = options.dataViews[0].metadata.objects["treeOptions"]["weightLinks"] == true;                
-            }catch(e){
-
-            }
-
-            try {
-                this.nodeTextSize = parseInt(options.dataViews[0].metadata.objects["treeOptions"]["nodeTextSize"].toString());                 
-            } catch(e) {
-                this.nodeTextSize=15;
-            }
-
-            try {
-                //this.arcBaseColorStr = options.dataViews[0].metadata.objects.treeOptions.arcBaseColor.toString();
-                //this.autoExpandTree = options.dataViews[0].metadata.objects["treeOptions"]["autoExpandTree"] == 'true';                
-                this.magiclabels = options.dataViews[0].metadata.objects["treeOptions"]["magiclabels"] == true;                
-            } catch(e) {
-                this.magiclabels = false;
-            }
-
             
 
-            console.log('Visual update', options);
-            //debugger;
-
+            
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
             if(options.type != 36) {
                 if (d3.select("svg")){
                     d3.select("svg").remove();
                 }
-                //inicializarArbol(div_height,div_width,options.dataViews[0].table);
-                //debugger;
                 if(div_height-20>0)div_height=div_height-20;
-                inicializarArbol(div_height,div_width,options,this.host);
+                inicializarArbol(div_height,div_width,options,this.host,this.settings);
             }
         }
 
@@ -230,6 +152,8 @@ module powerbi.extensibility.visual {
          * 
          */
         public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstance[] | VisualObjectInstanceEnumerationObject {
+            const vSettings:VisualSettings=this.settings || VisualSettings.getDefault() as VisualSettings
+            /*
             let objectName = options.objectName;
             let objectEnumeration: VisualObjectInstance[] = [];
             var color = this.arcBaseColorStr;
@@ -291,7 +215,9 @@ module powerbi.extensibility.visual {
                   break;
               };
 
-            return objectEnumeration;
+            //return objectEnumeration;
+            */
+            return VisualSettings.enumerateObjectInstances(vSettings,options);
         }
     }
 }
