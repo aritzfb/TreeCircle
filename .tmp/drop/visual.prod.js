@@ -1385,13 +1385,14 @@ function inicializarArbol(h, w, source, hst, settings) {
     }
     function formatValue(val) {
         var retorno = "";
+        retorno = parseFloat(val).toLocaleString(hst.locale);
         var currentValue = val;
-        var numDigitos = parseFloat(currentValue.toFixed(2)).toLocaleString('es-ES').length;
+        var numDigitos = parseFloat(currentValue.toFixed(2)).toLocaleString(hst.locale).length;
         var numDivisiones = 0;
         while (numDigitos > 8) {
             numDivisiones++;
             currentValue = currentValue / 1000.00;
-            numDigitos = parseFloat(currentValue.toFixed(2)).toLocaleString('es-ES').length;
+            numDigitos = parseFloat(currentValue.toFixed(2)).toLocaleString(hst.locale).length;
         }
         var escala = "";
         switch (numDivisiones) {
