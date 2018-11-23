@@ -861,6 +861,8 @@ var powerbi;
                         this.allMemberName = "All";
                         this.nodeTextSize = 15;
                         this.magicLabels = false;
+                        this.autoScaleValues = true;
+                        this.numberDecimals = 2;
                     }
                     return treeLabels;
                 }());
@@ -1234,7 +1236,6 @@ function zoomed() {
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 function inicializarArbol(h, w, source, hst, settings) {
-    debugger;
     this.varhst = hst;
     var arcRadius = 15;
     try {
@@ -1289,6 +1290,18 @@ function inicializarArbol(h, w, source, hst, settings) {
     var magiclabels = false;
     try {
         magiclabels = settings.treeLabels.magicLabels;
+    }
+    catch (e) { }
+    var numberDecimals = 2;
+    try {
+        numberDecimals = settings.treeLabels.numberDecimals;
+    }
+    catch (e) { }
+    if (numberDecimals < 0)
+        numberDecimals = 0;
+    var autoScaleValues = true;
+    try {
+        autoScaleValues = settings.treeLabels.autoScaleValues;
     }
     catch (e) { }
     if (source) {
@@ -1378,48 +1391,53 @@ function inicializarArbol(h, w, source, hst, settings) {
     update(root);
     d3.select(self.frameElement).style("height", "800px");
     function formatPercent(val) {
-        return (100 * val).toFixed(2) + "%";
+        return (100 * val).toFixed(numberDecimals) + "%";
     }
     function formatPercentDiference(val) {
-        return (100 * val).toFixed(2);
+        return (100 * val).toFixed(numberDecimals);
     }
     function formatValue(val) {
+        debugger;
         var retorno = "";
-        retorno = parseFloat(val).toLocaleString(hst.locale);
-        var currentValue = val;
-        var numDigitos = parseFloat(currentValue.toFixed(2)).toLocaleString(hst.locale).length;
-        var numDivisiones = 0;
-        while (numDigitos > 8) {
-            numDivisiones++;
-            currentValue = currentValue / 1000.00;
-            numDigitos = parseFloat(currentValue.toFixed(2)).toLocaleString(hst.locale).length;
+        if (autoScaleValues) {
+            var currentValue = val;
+            var numDigitos = parseFloat(currentValue.toFixed(numberDecimals)).toLocaleString(hst.locale).length;
+            var numDivisiones = 0;
+            while (numDigitos > 4) {
+                numDivisiones++;
+                currentValue = currentValue / 1000.00;
+                numDigitos = parseFloat(currentValue.toFixed(numberDecimals)).toLocaleString(hst.locale).length;
+            }
+            var escala = "";
+            switch (numDivisiones) {
+                case 0:
+                    escala = "";
+                    break;
+                case 1:
+                    //miles
+                    escala = "k";
+                    break;
+                case 2:
+                    //millones
+                    escala = "M";
+                    break;
+                case 3:
+                    escala = "kM";
+                    break;
+                case 4:
+                    escala = "B";
+                    break;
+                case 5:
+                    escala = "kB";
+                    break;
+                default:
+                    escala = " * 10e" + 3 * numDivisiones;
+            }
+            retorno = parseFloat(currentValue.toFixed(2)).toLocaleString(hst.locale) + " " + escala;
         }
-        var escala = "";
-        switch (numDivisiones) {
-            case 0:
-                escala = "";
-                break;
-            case 1:
-                //miles
-                escala = "k";
-                break;
-            case 2:
-                //millones
-                escala = "M";
-                break;
-            case 3:
-                escala = "kM";
-                break;
-            case 4:
-                escala = "B";
-                break;
-            case 5:
-                escala = "kB";
-                break;
-            default:
-                escala = " * 10e" + 3 * numDivisiones;
+        else {
+            retorno = parseFloat(val).toFixed(numberDecimals).toLocaleString(hst.locale);
         }
-        retorno = parseFloat(currentValue.toFixed(2)).toLocaleString('es-ES') + " " + escala;
         return retorno;
     }
     function setText(d, textType) {

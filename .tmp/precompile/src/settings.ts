@@ -38,6 +38,8 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
       public allMemberName: string="All";
       public nodeTextSize: number=15;
       public magicLabels: boolean=false;
+      public autoScaleValues: boolean=true;
+      public numberDecimals: number=2;
     }
 
     export class treeColors {

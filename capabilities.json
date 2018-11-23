@@ -44,6 +44,18 @@
                         "bool" : true
                     }
                 }
+                , "autoScaleValues":{
+                    "displayName" : "Auto Scale Values"
+                    , "type" : {
+                        "bool":true
+                    }
+                }
+                , "numberDecimals":{
+                    "displayName" : "Decimal positions"
+                    , "type" :{
+                        "numeric":true
+                    }
+                }
 
             }
         }
