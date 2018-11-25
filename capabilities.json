@@ -134,13 +134,11 @@
                                 "value":"pathbestnode"
                                 , "displayName":"Best leaf expanded"
                             }
+                            , {
+                                "value":"expandrednodes"
+                                , "displayName":"Critical nodes"
+                            }
                         ]
-                    }
-                }
-                , "arcRadius" : {
-                    "displayName": "Arc Radius"
-                    , "type": {
-                        "numeric": true
                     }
                 }
                 , "expandMode" : {
@@ -149,6 +147,13 @@
                         "bool": true
                     }
                 }
+                , "arcRadius" : {
+                    "displayName": "Arc Radius"
+                    , "type": {
+                        "numeric": true
+                    }
+                }
+                
                 
                 
                 

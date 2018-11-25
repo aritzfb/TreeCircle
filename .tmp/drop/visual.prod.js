@@ -883,13 +883,13 @@ var powerbi;
                     initialModeOptions[initialModeOptions["expanded"] = "expanded"] = "expanded";
                     initialModeOptions[initialModeOptions["collapsed"] = "collapsed"] = "collapsed";
                     initialModeOptions[initialModeOptions["pathbestnode"] = "pathbestnode"] = "pathbestnode";
+                    initialModeOptions[initialModeOptions["expandrednodes"] = "expandrednodes"] = "expandrednodes";
                 })(initialModeOptions = testTooltip4696B540F3494FE5BA002362825DDE7D.initialModeOptions || (testTooltip4696B540F3494FE5BA002362825DDE7D.initialModeOptions = {}));
                 var treeOptions = (function () {
                     function treeOptions() {
-                        this.autoExpandTree = true;
-                        this.arcRadius = 15;
-                        this.expandMode = true;
                         this.initialMode = initialModeOptions.expanded;
+                        this.expandMode = false;
+                        this.arcRadius = 15;
                     }
                     return treeOptions;
                 }());
@@ -1215,7 +1215,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         this.allmembername = settings.treeLabels.allMemberName;
     }
     catch (e) { }
-    var expandMode = true;
+    var expandMode = false;
     try {
         expandMode = settings.treeOptions.expandMode;
     }
@@ -1420,45 +1420,68 @@ function inicializarArbol(h, w, source, hst, settings) {
                 d._children = [];
             }
         }
-        function expandBestNodes(d) {
+        function expandBestNode(d) {
             var bestChild = null;
             var restChilds = [];
+            var children = [];
+            //var _children = [];
+            var bestPosition = 0;
             if (d.children)
                 for (var i = 0; i < d.children.length; i++) {
+                    children.push(d.children[i]);
                     if (bestChild == null)
                         bestChild = d.children[i];
                     else if (bestChild.value < d.children[i].value) {
                         restChilds.push(bestChild);
                         bestChild = d.children[i];
+                        bestPosition = i;
                     }
                     else
                         restChilds.push(d.children[i]);
                 }
+            /*
             if (d._children)
-                for (var i = 0; i < d._children.length; i++) {
-                    if (bestChild == null)
-                        bestChild = d._children[i];
-                    else if (bestChild.value < d._children[i].value) {
-                        restChilds.push(bestChild);
-                        bestChild = d._children[i];
-                    }
-                    else
-                        restChilds.push(d._children[i]);
-                }
+            for(var i=0; i<d._children.length;i++){
+                _children.push(d._children[i]);
+                if (bestChild==null)bestChild=d._children[i];
+                else if (bestChild.value<d._children[i].value){
+                    restChilds.push(bestChild);
+                    bestChild=d._children[i];
+                } else restChilds.push(d._children[i]);
+            }
+            */
             if (d.children.length > 0 || d._children.length > 0) {
                 restChilds.forEach(collapse);
                 bestChild.children.forEach(expandBestNodes);
-                restChilds.push(bestChild);
+                //restChilds.push(bestChild);
+                restChilds.splice(bestPosition, 0, bestChild);
                 d.children = restChilds;
                 d._children = [];
             }
         }
+        function expandRedNodes(d) {
+            try {
+                if (Math.abs(d.value / d.target) < d.avance) {
+                    d.children.forEach(expandRedNodes);
+                }
+                else {
+                    //d.children.forEach(collapse);
+                    collapse(d);
+                }
+            }
+            catch (e) {
+                collapse(d);
+            }
+        }
+        debugger;
         if (initialMode == "expanded")
             expandNodes(source);
         else if (initialMode == "collapsed")
             collapse(source);
         else if (initialMode == "pathbestnode")
-            expandBestNodes(source);
+            expandBestNode(source);
+        else if (initialMode == "expandrednodes")
+            expandRedNodes(source);
         else
             expandNodes(source);
         var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
