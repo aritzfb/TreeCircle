@@ -878,11 +878,18 @@ var powerbi;
                     return treeColors;
                 }());
                 testTooltip4696B540F3494FE5BA002362825DDE7D.treeColors = treeColors;
+                var initialModeOptions;
+                (function (initialModeOptions) {
+                    initialModeOptions[initialModeOptions["expanded"] = "expanded"] = "expanded";
+                    initialModeOptions[initialModeOptions["collapsed"] = "collapsed"] = "collapsed";
+                    initialModeOptions[initialModeOptions["pathbestnode"] = "pathbestnode"] = "pathbestnode";
+                })(initialModeOptions = testTooltip4696B540F3494FE5BA002362825DDE7D.initialModeOptions || (testTooltip4696B540F3494FE5BA002362825DDE7D.initialModeOptions = {}));
                 var treeOptions = (function () {
                     function treeOptions() {
                         this.autoExpandTree = true;
                         this.arcRadius = 15;
                         this.expandMode = true;
+                        this.initialMode = initialModeOptions.expanded;
                     }
                     return treeOptions;
                 }());
@@ -1009,70 +1016,6 @@ var powerbi;
                      */
                     Visual.prototype.enumerateObjectInstances = function (options) {
                         var vSettings = this.settings || testTooltip4696B540F3494FE5BA002362825DDE7D.VisualSettings.getDefault();
-                        /*
-                        let objectName = options.objectName;
-                        let objectEnumeration: VisualObjectInstance[] = [];
-                        var color = this.arcBaseColorStr;
-                        if (!color) color = "lightsteelblue";
-            
-                        var colorOk = this.arcColorOK;
-                        if (!colorOk) colorOk = "green";
-            
-                        var linColor = this.linkColor;
-                        if (!linColor) linColor="lightgray"
-            
-                        var colorKo = this.arcColorKO;
-                        if (!colorKo) colorKo = "red";
-            
-                        var radius = this.arcRadius;
-                        if (!radius) radius = 15;
-            
-            
-                        var autoexp = this.autoExpandTree;
-                        if (autoexp == undefined) autoexp = true;
-                        var allmem = this.allMemberName;
-                        if(!allmem) allmem = "All";
-                        
-                        var expMode = this.arcExpandMode;
-                        if (expMode== undefined) expMode = true;
-                        //debugger;
-            
-                        var wLinks = this.weigthLinks;
-                        if (wLinks==undefined) wLinks = true;
-            
-                        var nTextSize = this.nodeTextSize;
-                        if (nTextSize==undefined) nTextSize=15;
-            
-                        var leg=this.magiclabels;
-                        if (leg==undefined) leg=false;
-            
-                        switch (objectName) {
-                            case 'treeOptions':
-                              objectEnumeration.push({
-                                objectName: objectName,
-                                properties: {
-                                    autoExpandTree: autoexp,
-                                    expandMode : expMode,
-                                    weightLinks: wLinks,
-                                    magiclabels: leg,
-                                    allMemberName: allmem,
-                                    nodeTextSize:nTextSize,
-                                    
-                                    arcRadius : radius,
-                                    
-                                    arcBaseColor: color,
-                                    arcCumplimientoOK: colorOk,
-                                    arcCumplimientoKO: colorKo,
-                                    linkColor: linColor
-                                    
-                                },
-                                selector: null
-                              });
-                              break;
-                          };
-            
-                        //return objectEnumeration;
-                        */
                         return testTooltip4696B540F3494FE5BA002362825DDE7D.VisualSettings.enumerateObjectInstances(vSettings, options);
                     };
                     return Visual;
@@ -1267,11 +1210,6 @@ function inicializarArbol(h, w, source, hst, settings) {
         arcColorKO = settings.treeColors.arcCumplimientoKO;
     }
     catch (e) { }
-    var autoexpandtree = true;
-    try {
-        autoexpandtree = settings.treeOptions.autoExpandTree;
-    }
-    catch (e) { }
     this.allmembername = "All";
     try {
         this.allmembername = settings.treeLabels.allMemberName;
@@ -1280,6 +1218,11 @@ function inicializarArbol(h, w, source, hst, settings) {
     var expandMode = true;
     try {
         expandMode = settings.treeOptions.expandMode;
+    }
+    catch (e) { }
+    var initialMode = "expanded";
+    try {
+        initialMode = settings.treeOptions.initialMode;
     }
     catch (e) { }
     var weightLinks = true;
@@ -1397,7 +1340,6 @@ function inicializarArbol(h, w, source, hst, settings) {
         return (100 * val).toFixed(numberDecimals);
     }
     function formatValue(val) {
-        debugger;
         var retorno = "";
         if (autoScaleValues) {
             var currentValue = val;
@@ -1478,11 +1420,47 @@ function inicializarArbol(h, w, source, hst, settings) {
                 d._children = [];
             }
         }
-        if (autoexpandtree)
-            //collapse(source);
+        function expandBestNodes(d) {
+            var bestChild = null;
+            var restChilds = [];
+            if (d.children)
+                for (var i = 0; i < d.children.length; i++) {
+                    if (bestChild == null)
+                        bestChild = d.children[i];
+                    else if (bestChild.value < d.children[i].value) {
+                        restChilds.push(bestChild);
+                        bestChild = d.children[i];
+                    }
+                    else
+                        restChilds.push(d.children[i]);
+                }
+            if (d._children)
+                for (var i = 0; i < d._children.length; i++) {
+                    if (bestChild == null)
+                        bestChild = d._children[i];
+                    else if (bestChild.value < d._children[i].value) {
+                        restChilds.push(bestChild);
+                        bestChild = d._children[i];
+                    }
+                    else
+                        restChilds.push(d._children[i]);
+                }
+            if (d.children.length > 0 || d._children.length > 0) {
+                restChilds.forEach(collapse);
+                bestChild.children.forEach(expandBestNodes);
+                restChilds.push(bestChild);
+                d.children = restChilds;
+                d._children = [];
+            }
+        }
+        if (initialMode == "expanded")
             expandNodes(source);
-        else
+        else if (initialMode == "collapsed")
             collapse(source);
+        else if (initialMode == "pathbestnode")
+            expandBestNodes(source);
+        else
+            expandNodes(source);
         var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
         updateGraph(nodes, source, this.varhst);
     }
@@ -1540,7 +1518,6 @@ function inicializarArbol(h, w, source, hst, settings) {
     function updateGraph(nodes, source, varhost) {
         var magiclabelsd = d3.selectAll("div")[0];
         magiclabelsd.forEach(function (d) {
-            //debugger;
             if (d)
                 if (d.id)
                     if (d.id.indexOf('magiclabel') > -1)
@@ -1598,6 +1575,14 @@ function inicializarArbol(h, w, source, hst, settings) {
                 .duration(100)
                 .style("opacity", 0);
         });
+        /*
+        nodeEnter.data([{
+            "tooltipInfo":[{
+                "displayName":d.name
+                ,"value":d.value
+            }]
+        }]);
+        */
         var arcBlank = d3.svg.arc().innerRadius(0).outerRadius(arcRadius).startAngle(0)
             .endAngle(2 * Math.PI);
         nodeEnter

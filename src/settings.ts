@@ -50,11 +50,19 @@ module powerbi.extensibility.visual {
       public weightLinks:boolean = true;
     }
 
+    export enum initialModeOptions {
+      expanded = "expanded" as any
+      , collapsed = "collapsed" as any
+      , pathbestnode = "pathbestnode" as any
+
+    }
+    
     export class treeOptions {
       public autoExpandTree: boolean=true;
       public arcRadius: number=15;
       public expandMode: boolean=true;
-
+      public initialMode: initialModeOptions = initialModeOptions.expanded;
+      
     }
 
 }

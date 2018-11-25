@@ -153,70 +153,7 @@ module powerbi.extensibility.visual {
          */
         public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstance[] | VisualObjectInstanceEnumerationObject {
             const vSettings:VisualSettings=this.settings || VisualSettings.getDefault() as VisualSettings
-            /*
-            let objectName = options.objectName;
-            let objectEnumeration: VisualObjectInstance[] = [];
-            var color = this.arcBaseColorStr;
-            if (!color) color = "lightsteelblue";
-
-            var colorOk = this.arcColorOK;
-            if (!colorOk) colorOk = "green";
-
-            var linColor = this.linkColor;
-            if (!linColor) linColor="lightgray"
-
-            var colorKo = this.arcColorKO;
-            if (!colorKo) colorKo = "red";
-
-            var radius = this.arcRadius;
-            if (!radius) radius = 15;
-
-
-            var autoexp = this.autoExpandTree;
-            if (autoexp == undefined) autoexp = true;
-            var allmem = this.allMemberName;
-            if(!allmem) allmem = "All";
             
-            var expMode = this.arcExpandMode;
-            if (expMode== undefined) expMode = true;
-            //debugger;
-
-            var wLinks = this.weigthLinks;
-            if (wLinks==undefined) wLinks = true;
-
-            var nTextSize = this.nodeTextSize;
-            if (nTextSize==undefined) nTextSize=15;
-
-            var leg=this.magiclabels;
-            if (leg==undefined) leg=false;
-
-            switch (objectName) {
-                case 'treeOptions':
-                  objectEnumeration.push({
-                    objectName: objectName,
-                    properties: {
-                        autoExpandTree: autoexp,
-                        expandMode : expMode,
-                        weightLinks: wLinks,
-                        magiclabels: leg,
-                        allMemberName: allmem,
-                        nodeTextSize:nTextSize,
-                        
-                        arcRadius : radius,
-                        
-                        arcBaseColor: color,
-                        arcCumplimientoOK: colorOk,
-                        arcCumplimientoKO: colorKo,
-                        linkColor: linColor
-                        
-                    },
-                    selector: null
-                  });
-                  break;
-              };
-
-            //return objectEnumeration;
-            */
             return VisualSettings.enumerateObjectInstances(vSettings,options);
         }
     }

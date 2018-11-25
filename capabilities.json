@@ -23,6 +23,9 @@
 
         }
     ],
+    "sorting": {
+        "default":{}
+    },
     "objects": {
         "treeLabels":{
             "displayName":"Tree Labels"
@@ -115,15 +118,25 @@
         ,"treeOptions" :{
             "displayName": "Tree Options"
             , "properties": {
-                "autoExpandTree":{
-                    "displayName": "Auto Expand"
-                    , "type": {
-                        "bool": true
+                "initialMode" : {
+                    "displayName": "Initial Mode"
+                    , "type":{
+                        "enumeration":[
+                            {
+                                "value":"expanded"
+                                ,"displayName": "Expanded"
+                            }
+                            , {
+                                "value":"collapsed"
+                                ,"displayName":"Collapsed"
+                            }
+                            , {
+                                "value":"pathbestnode"
+                                , "displayName":"Best leaf expanded"
+                            }
+                        ]
                     }
-                    
                 }
-                
-                
                 , "arcRadius" : {
                     "displayName": "Arc Radius"
                     , "type": {
