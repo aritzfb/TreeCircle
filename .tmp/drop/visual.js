@@ -882,7 +882,6 @@ var powerbi;
                 (function (initialModeOptions) {
                     initialModeOptions[initialModeOptions["expanded"] = "expanded"] = "expanded";
                     initialModeOptions[initialModeOptions["collapsed"] = "collapsed"] = "collapsed";
-                    initialModeOptions[initialModeOptions["pathbestnode"] = "pathbestnode"] = "pathbestnode";
                     initialModeOptions[initialModeOptions["expandrednodes"] = "expandrednodes"] = "expandrednodes";
                 })(initialModeOptions = testTooltip4696B540F3494FE5BA002362825DDE7D_test.initialModeOptions || (testTooltip4696B540F3494FE5BA002362825DDE7D_test.initialModeOptions = {}));
                 var treeOptions = (function () {
@@ -890,6 +889,7 @@ var powerbi;
                         this.initialMode = initialModeOptions.expanded;
                         this.expandMode = false;
                         this.weightLinks = true;
+                        this.linksSize = 1.5;
                         this.arcRadius = 15;
                     }
                     return treeOptions;
@@ -1231,6 +1231,11 @@ function inicializarArbol(h, w, source, hst, settings) {
         weightLinks = settings.treeOptions.weightLinks;
     }
     catch (e) { }
+    var linksSize = 1.5;
+    try {
+        linksSize = settings.treeOptions.linksSize;
+    }
+    catch (e) { }
     var linkColorSeries = true;
     try {
         linkColorSeries = settings.treeColors.linkColorSeries;
@@ -1426,45 +1431,6 @@ function inicializarArbol(h, w, source, hst, settings) {
                 d._children = [];
             }
         }
-        function expandBestNode(d) {
-            var bestChild = null;
-            var restChilds = [];
-            var children = [];
-            //var _children = [];
-            var bestPosition = 0;
-            if (d.children)
-                for (var i = 0; i < d.children.length; i++) {
-                    children.push(d.children[i]);
-                    if (bestChild == null)
-                        bestChild = d.children[i];
-                    else if (bestChild.value < d.children[i].value) {
-                        restChilds.push(bestChild);
-                        bestChild = d.children[i];
-                        bestPosition = i;
-                    }
-                    else
-                        restChilds.push(d.children[i]);
-                }
-            /*
-            if (d._children)
-            for(var i=0; i<d._children.length;i++){
-                _children.push(d._children[i]);
-                if (bestChild==null)bestChild=d._children[i];
-                else if (bestChild.value<d._children[i].value){
-                    restChilds.push(bestChild);
-                    bestChild=d._children[i];
-                } else restChilds.push(d._children[i]);
-            }
-            */
-            if (d.children.length > 0 || d._children.length > 0) {
-                restChilds.forEach(collapse);
-                bestChild.children.forEach(expandBestNodes);
-                //restChilds.push(bestChild);
-                restChilds.splice(bestPosition, 0, bestChild);
-                d.children = restChilds;
-                d._children = [];
-            }
-        }
         function expandRedNodes(d) {
             try {
                 if (Math.abs(d.value / d.target) < d.avance) {
@@ -1479,13 +1445,10 @@ function inicializarArbol(h, w, source, hst, settings) {
                 collapse(d);
             }
         }
-        debugger;
         if (initialMode == "expanded")
             expandNodes(source);
         else if (initialMode == "collapsed")
             collapse(source);
-        else if (initialMode == "pathbestnode")
-            expandBestNode(source);
         else if (initialMode == "expandrednodes")
             expandRedNodes(source);
         else
@@ -1729,9 +1692,14 @@ function inicializarArbol(h, w, source, hst, settings) {
                     colorLink = d.target.serieColor;
             }
             var valor = 1.5;
-            if (weightLinks)
+            if (weightLinks) {
                 if (porc > 1.5)
                     valor = porc;
+            }
+            else
+                valor = linksSize;
+            if (valor > 2 * arcRadius)
+                valor = 2 * arcRadius;
             return "stroke-width:" + valor + "px;stroke:" + colorLink;
         })
             .on("click", function (d) {

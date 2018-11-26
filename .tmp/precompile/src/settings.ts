@@ -53,7 +53,6 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
     export enum initialModeOptions {
       expanded = "expanded" as any
       , collapsed = "collapsed" as any
-      , pathbestnode = "pathbestnode" as any
       , expandrednodes = "expandrednodes" as any
 
     }
@@ -62,6 +61,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
       public initialMode: initialModeOptions = initialModeOptions.expanded;
       public expandMode: boolean=false;
       public weightLinks: boolean = true;   
+      public linksSize: number = 1.5;
       public arcRadius: number=15;
       
     }
