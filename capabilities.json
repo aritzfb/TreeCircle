@@ -96,7 +96,8 @@
                         }
                     }
                 }
-                , "weightLinks" : {
+                
+                , "linkColorSeries" : {
                     "displayName" : "Links Color Series"
                     , "type" : {
                         "bool" : true
@@ -139,6 +140,12 @@
                                 , "displayName":"Critical nodes"
                             }
                         ]
+                    }
+                }
+                , "weightLinks" : {
+                    "displayName":"Weighted Links"
+                    , "type":{
+                        "bool":true
                     }
                 }
                 , "expandMode" : {

@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_test  {
     "use strict";
     import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
 
@@ -47,7 +47,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
       public arcCumplimientoOK: string = "green";
       public arcCumplimientoKO: string = "red";
       public linkColor: string = "lightgray";
-      public weightLinks:boolean = true;
+      public linkColorSeries:boolean = true;
     }
 
     export enum initialModeOptions {
@@ -61,6 +61,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
     export class treeOptions {
       public initialMode: initialModeOptions = initialModeOptions.expanded;
       public expandMode: boolean=false;
+      public weightLinks: boolean = true;   
       public arcRadius: number=15;
       
     }

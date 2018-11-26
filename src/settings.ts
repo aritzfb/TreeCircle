@@ -47,7 +47,7 @@ module powerbi.extensibility.visual {
       public arcCumplimientoOK: string = "green";
       public arcCumplimientoKO: string = "red";
       public linkColor: string = "lightgray";
-      public weightLinks:boolean = true;
+      public linkColorSeries:boolean = true;
     }
 
     export enum initialModeOptions {
@@ -61,6 +61,7 @@ module powerbi.extensibility.visual {
     export class treeOptions {
       public initialMode: initialModeOptions = initialModeOptions.expanded;
       public expandMode: boolean=false;
+      public weightLinks: boolean = true;   
       public arcRadius: number=15;
       
     }
