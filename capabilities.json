@@ -83,6 +83,12 @@
                         "numeric":true
                     }
                 }
+                , "backgroundLabels":{
+                    "displayName" : "Background labels"
+                    , "type" : {
+                        "bool":true
+                    }
+                }
 
             }
         }

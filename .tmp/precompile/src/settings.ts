@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG  {
     "use strict";
     import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
 
@@ -44,6 +44,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D 
       public categoryLabelYpos: number=0;
       public valueLabelXpos: number=60;
       public valueLabelYpos: number=0;
+      public backgroundLabels: boolean=true;
     }
 
     export class treeColors {

@@ -44,6 +44,7 @@ module powerbi.extensibility.visual {
       public categoryLabelYpos: number=0;
       public valueLabelXpos: number=60;
       public valueLabelYpos: number=0;
+      public backgroundLabels: boolean=true;
     }
 
     export class treeColors {
