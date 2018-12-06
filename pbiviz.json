@@ -2,7 +2,7 @@
   "visual": {
     "name": "Pie Charts Tree",
     "displayName": "Pie Charts Tree",
-    "guid": "testTooltip4696B540F3494FE5BA002362825DDE7D_test",
+    "guid": "testTooltip4696B540F3494FE5BA002362825DDE7D",
     "visualClassName": "Visual",
     "version": "1.0.3",
     "description": "Tree with circle graphs in each node.",

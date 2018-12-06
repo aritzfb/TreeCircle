@@ -103,9 +103,9 @@ module powerbi.extensibility.visual {
 
                 let tooltipServiceWrapper = tooltip.createTooltipServiceWrapper(options.host.tooltipService, new_div); // tooltipService is from the IVisualHost.
             
-            tooltipServiceWrapper.addTooltip<TooltipEnabledDataPoint>(element, (eventArgs: TooltipEventArgs<TooltipEnabledDataPoint>) => {
-                return eventArgs.data.tooltipInfo;
-            });
+                tooltipServiceWrapper.addTooltip<TooltipEnabledDataPoint>(element, (eventArgs: TooltipEventArgs<TooltipEnabledDataPoint>) => {
+                    return eventArgs.data.tooltipInfo;
+                });
 
 
                 /*
@@ -130,7 +130,7 @@ module powerbi.extensibility.visual {
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
             
-
+            debugger;
             
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
             if(options.type != 36) {

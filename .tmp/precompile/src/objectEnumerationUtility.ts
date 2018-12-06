@@ -1,4 +1,4 @@
-module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_test  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D  {
     /**
      * Gets property value for a particular object.
      *

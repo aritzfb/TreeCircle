@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_test  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D  {
     "use strict";
     import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
 
@@ -40,6 +40,10 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
       public magicLabels: boolean=false;
       public autoScaleValues: boolean=true;
       public numberDecimals: number=2;
+      public categoryLabelXpos: number=-30;
+      public categoryLabelYpos: number=0;
+      public valueLabelXpos: number=60;
+      public valueLabelYpos: number=0;
     }
 
     export class treeColors {

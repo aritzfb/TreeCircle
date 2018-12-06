@@ -40,6 +40,10 @@ module powerbi.extensibility.visual {
       public magicLabels: boolean=false;
       public autoScaleValues: boolean=true;
       public numberDecimals: number=2;
+      public categoryLabelXpos: number=-30;
+      public categoryLabelYpos: number=0;
+      public valueLabelXpos: number=60;
+      public valueLabelYpos: number=0;
     }
 
     export class treeColors {

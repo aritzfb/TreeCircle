@@ -59,6 +59,30 @@
                         "numeric":true
                     }
                 }
+                , "categoryLabelXpos":{
+                    "displayName":"Relative X Position Categorie Label"
+                    , "type":{
+                        "numeric":true
+                    }
+                }
+                , "categoryLabelYpos":{
+                    "displayName":"Relative Y Position Categorie Label"
+                    , "type":{
+                        "numeric":true
+                    }
+                }
+                , "valueLabelXpos":{
+                    "displayName":"Relative X Position Value Label"
+                    , "type":{
+                        "numeric":true
+                    }
+                }
+                , "valueLabelYpos":{
+                    "displayName":"Relative Y Position Value Label"
+                    , "type":{
+                        "numeric":true
+                    }
+                }
 
             }
         }

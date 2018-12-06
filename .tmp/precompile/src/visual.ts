@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_test  {
+module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D  {
     "use strict";
     import tooltip = powerbi.extensibility.utils.tooltip;
 
@@ -103,9 +103,9 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
 
                 let tooltipServiceWrapper = tooltip.createTooltipServiceWrapper(options.host.tooltipService, new_div); // tooltipService is from the IVisualHost.
             
-            tooltipServiceWrapper.addTooltip<TooltipEnabledDataPoint>(element, (eventArgs: TooltipEventArgs<TooltipEnabledDataPoint>) => {
-                return eventArgs.data.tooltipInfo;
-            });
+                tooltipServiceWrapper.addTooltip<TooltipEnabledDataPoint>(element, (eventArgs: TooltipEventArgs<TooltipEnabledDataPoint>) => {
+                    return eventArgs.data.tooltipInfo;
+                });
 
 
                 /*
@@ -130,7 +130,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
             
-
+            debugger;
             
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
             if(options.type != 36) {
