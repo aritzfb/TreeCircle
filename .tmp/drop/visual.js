@@ -1698,7 +1698,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                     else {
                         name = setText(d, "value");
                     }
-                    retorno = -name.length * nodeTextSize * 0.65 + valueLabelXpos + 1;
+                    retorno = -name.length * nodeTextSize * 0.65 + valueLabelXpos + 10;
                     return retorno;
                 })
                     .attr("y", valueLabelYpos - nodeTextSize / 2)
@@ -1714,7 +1714,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                     else {
                         name = setText(d, "value");
                     }
-                    var retorno = name.length * nodeTextSize * 0.65 + 2;
+                    var retorno = name.length * nodeTextSize * 0.65 - 8;
                     return retorno;
                 });
             //Node text value
@@ -1798,6 +1798,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             .on("click", function (d) {
             try {
                 if (!d.selected) {
+                    d3.selectAll("path.link").style("stroke-dasharray", 0);
                     d3.select(this).style("stroke-dasharray", 5);
                     //find categorie position
                     var catPos = 0;
@@ -1820,6 +1821,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                     d.selectionId = selId;
                     d.selected = true;
                     selectionMngr = varhost.createSelectionManager();
+                    selectionMngr.clear();
                     selectionMngr.select(selId);
                 }
                 else {
@@ -2231,8 +2233,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
