@@ -62,6 +62,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
             options.element);
             let bodyElement = d3.select("body");
 
+            
             let element = bodyElement
                 .append("div")
                 .style({
@@ -129,9 +130,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
         
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-            
-            debugger;
-            
+                        
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
             if(options.type != 36) {
                 if (d3.select("svg")){

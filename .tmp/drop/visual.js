@@ -1002,7 +1002,6 @@ var powerbi;
                     };
                     Visual.prototype.update = function (options) {
                         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-                        debugger;
                         var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
                         if (options.type != 36) {
                             if (d3.select("svg")) {
@@ -1038,6 +1037,8 @@ var options;
 var allmembername;
 var container;
 var varhst;
+var selectionMngr;
+var categories;
 function newNode() {
     return {
         "name": "",
@@ -1186,6 +1187,11 @@ function zoomed() {
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 function inicializarArbol(h, w, source, hst, settings) {
+    try {
+        categories = source.dataViews[0].categorical.categories;
+    }
+    catch (e) { }
+    //try{categories = source.dataViews[0].categorical.categories[0];}catch(e){}
     this.varhst = hst;
     var arcRadius = 15;
     try {
@@ -1791,17 +1797,55 @@ function inicializarArbol(h, w, source, hst, settings) {
         })
             .on("click", function (d) {
             try {
+                if (!d.selected) {
+                    d3.select(this).style("stroke-dasharray", 5);
+                    //find categorie position
+                    var catPos = 0;
+                    for (var i = 0; i < categories.length; i++) {
+                        catPos = i;
+                        if (categories[i].source.displayName == d.target.category)
+                            break;
+                    }
+                    var cats = categories[catPos];
+                    //find item in categorie
+                    var itemPos = 0;
+                    for (var i = 0; i < cats.values.length; i++) {
+                        itemPos = i;
+                        if (cats.values[i] == d.target.name)
+                            break;
+                    }
+                    var selId = varhost.createSelectionIdBuilder()
+                        .withCategory(cats, itemPos)
+                        .createSelectionId();
+                    d.selectionId = selId;
+                    d.selected = true;
+                    selectionMngr = varhost.createSelectionManager();
+                    selectionMngr.select(selId);
+                }
+                else {
+                    /*
+                    var colorLink = linkColor;
+                    if(linkColorSeries) {
+                        if (d.target.serieColor) colorLink = d.target.serieColor;
+                    }
+                    */
+                    d3.select(this).style("stroke-dasharray", 0);
+                    selectionMngr = varhost.createSelectionManager();
+                    selectionMngr.clear();
+                }
+                /*
                 var basicFilter = {
                     $schema: "http://powerbi.com/product/schema#basic",
                     target: {
-                        table: "Datos",
-                        column: "Cowntry"
+                    table: "Datos",
+                    column: "Cowntry"
                     },
                     operator: "Equal",
                     values: ["Spain"],
                     filterType: "pbi.models.FilterType.BasicFilter"
-                };
-                varhost.applyJsonFilter(basicFilter, "general", "filter");
+                }
+                varhost.applyJsonFilter(basicFilter,"general","filter");
+                */
             }
             catch (e) {
                 var b = 0;
@@ -2187,8 +2231,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
