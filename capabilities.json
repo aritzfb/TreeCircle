@@ -214,27 +214,38 @@
                         "in": "category"
                     },
                     "dataReductionAlgorithm": {
-                        "top": {}
+                        "window": {
+                            "count":50000
+                        }
                     }
                 },
                 "values": {
-                    "select": [
-                        {
-                            "bind": {
-                                "to": "measure"
+                    "group":{
+                        "by":"series",
+                        "select":[
+                            {
+                                "for": {
+                                    "in": "measure"
+                                }
                             }
-                        },
-                        {
-                            "bind": {
-                                "to": "target"
+                            ,{
+                                "for": {
+                                    "in": "target"
+                                }
                             }
-                        }
-                        ,{
-                            "bind": {
-                                "to": "avance"
+                            ,{
+                                "for": {
+                                    "in": "avance"
+                                }
                             }
-                        }
-                    ]
+                        ]
+                        ,"dataReductionAlgorithm": {
+                            "top": {
+                                "count": 50000
+                            }
+                        }  
+                    }
+                    
                 }
             }
             

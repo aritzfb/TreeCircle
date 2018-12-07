@@ -42,7 +42,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
       public numberDecimals: number=2;
       public categoryLabelXpos: number=-30;
       public categoryLabelYpos: number=0;
-      public valueLabelXpos: number=60;
+      public valueLabelXpos: number=70;
       public valueLabelYpos: number=0;
       public backgroundLabels: boolean=true;
     }

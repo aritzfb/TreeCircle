@@ -865,7 +865,7 @@ var powerbi;
                         this.numberDecimals = 2;
                         this.categoryLabelXpos = -30;
                         this.categoryLabelYpos = 0;
-                        this.valueLabelXpos = 60;
+                        this.valueLabelXpos = 70;
                         this.valueLabelYpos = 0;
                         this.backgroundLabels = true;
                     }
@@ -1039,6 +1039,7 @@ var container;
 var varhst;
 var selectionMngr;
 var categories;
+var categorical;
 function newNode() {
     return {
         "name": "",
@@ -1189,6 +1190,10 @@ function zoomed() {
 function inicializarArbol(h, w, source, hst, settings) {
     try {
         categories = source.dataViews[0].categorical.categories;
+    }
+    catch (e) { }
+    try {
+        categorical = source.dataViews[0].categorical;
     }
     catch (e) { }
     //try{categories = source.dataViews[0].categorical.categories[0];}catch(e){}
@@ -1797,44 +1802,47 @@ function inicializarArbol(h, w, source, hst, settings) {
         })
             .on("click", function (d) {
             try {
-                if (!d.selected) {
-                    d3.selectAll("path.link").style("stroke-dasharray", 0);
-                    d3.select(this).style("stroke-dasharray", 5);
-                    //find categorie position
-                    var catPos = 0;
-                    for (var i = 0; i < categories.length; i++) {
-                        catPos = i;
-                        if (categories[i].source.displayName == d.target.category)
-                            break;
-                    }
-                    var cats = categories[catPos];
-                    //find item in categorie
-                    var itemPos = 0;
-                    for (var i = 0; i < cats.values.length; i++) {
-                        itemPos = i;
-                        if (cats.values[i] == d.target.name)
-                            break;
-                    }
-                    var selId = varhost.createSelectionIdBuilder()
-                        .withCategory(cats, itemPos)
-                        .createSelectionId();
-                    d.selectionId = selId;
-                    d.selected = true;
-                    selectionMngr = varhost.createSelectionManager();
-                    selectionMngr.clear();
-                    selectionMngr.select(selId);
-                }
-                else {
-                    /*
-                    var colorLink = linkColor;
-                    if(linkColorSeries) {
-                        if (d.target.serieColor) colorLink = d.target.serieColor;
-                    }
-                    */
-                    d3.select(this).style("stroke-dasharray", 0);
-                    selectionMngr = varhost.createSelectionManager();
-                    selectionMngr.clear();
-                }
+                if (!d.target.children)
+                    if (d.target._children.length == 0)
+                        if (!d.selected) {
+                            d3.selectAll("path.link").style("stroke-dasharray", 0);
+                            d3.select(this).style("stroke-dasharray", 5);
+                            //find categorie position
+                            var catPos = 0;
+                            for (var i = 0; i < categories.length; i++) {
+                                catPos = i;
+                                if (categories[i].source.displayName == d.target.category)
+                                    break;
+                            }
+                            var cats = categories[catPos];
+                            //find item in categorie
+                            var itemPos = 0;
+                            for (var i = 0; i < cats.values.length; i++) {
+                                itemPos = i;
+                                if (cats.values[i] == d.target.name)
+                                    break;
+                            }
+                            var selId = varhost.createSelectionIdBuilder()
+                                .withCategory(cats, itemPos)
+                                .createSelectionId();
+                            d.selectionId = selId;
+                            d.selected = true;
+                            selectionMngr = varhost.createSelectionManager();
+                            //selectionMngr.clear();
+                            selectionMngr.select(selId);
+                        }
+                        else {
+                            /*
+                            var colorLink = linkColor;
+                            if(linkColorSeries) {
+                                if (d.target.serieColor) colorLink = d.target.serieColor;
+                            }
+                            */
+                            d.selected = false;
+                            d3.select(this).style("stroke-dasharray", 0);
+                            selectionMngr = varhost.createSelectionManager();
+                            selectionMngr.clear();
+                        }
                 /*
                 var basicFilter = {
                     $schema: "http://powerbi.com/product/schema#basic",
@@ -2233,8 +2241,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
