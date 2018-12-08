@@ -56,26 +56,24 @@ module powerbi.extensibility.visual {
         constructor(options: VisualConstructorOptions) {
             options.element.style.overflow = 'auto';
             this.host = options.host;            
-            let bodyElement = d3.select("body");
             this.target = options.element;            
             if (typeof document !== "undefined") {                
                 const new_div: HTMLElement = document.createElement("div");
                 new_div.id="div_arbol";
                 this.target.appendChild(new_div);
+
+                //wellcome page
+                const wellcome_div : HTMLElement = document.createElement("div");
+                wellcome_div.id="wellcome_div";
+                //wellcome_div.innerHTML="HELLO WORLD";
+                this.target.appendChild(wellcome_div);
             }
                 
         }
         
-        private static getTooltipData(value: any): VisualTooltipDataItem[] {
-            return [{
-                displayName: value.category,
-                value: value.value.toString(),
-                color: value.color
-            }];
-        }
-
-        
+                
         public update(options: VisualUpdateOptions) {
+            this.target.removeChild(document.getElementById("wellcome_div"));
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
                         
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;

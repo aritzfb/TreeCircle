@@ -943,22 +943,20 @@ var powerbi;
                     function Visual(options) {
                         options.element.style.overflow = 'auto';
                         this.host = options.host;
-                        var bodyElement = d3.select("body");
                         this.target = options.element;
                         if (typeof document !== "undefined") {
                             var new_div = document.createElement("div");
                             new_div.id = "div_arbol";
                             this.target.appendChild(new_div);
+                            //wellcome page
+                            var wellcome_div = document.createElement("div");
+                            wellcome_div.id = "wellcome_div";
+                            wellcome_div.innerHTML = "HELLO WORLD";
+                            this.target.appendChild(wellcome_div);
                         }
                     }
-                    Visual.getTooltipData = function (value) {
-                        return [{
-                                displayName: value.category,
-                                value: value.value.toString(),
-                                color: value.color
-                            }];
-                    };
                     Visual.prototype.update = function (options) {
+                        this.target.removeChild(document.getElementById("wellcome_div"));
                         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
                         var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
                         if (options.type != 36) {
