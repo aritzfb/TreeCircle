@@ -55,66 +55,13 @@ module powerbi.extensibility.visual {
 
         constructor(options: VisualConstructorOptions) {
             options.element.style.overflow = 'auto';
-            this.host = options.host;
-            //debugger;
-            tooltip.createTooltipServiceWrapper(
-            options.host.tooltipService,
-            options.element);
+            this.host = options.host;            
             let bodyElement = d3.select("body");
-
-            
-            let element = bodyElement
-                .append("div")
-                .style({
-                    "background-color": "green",
-                    "width": "150px",
-                    "height": "150px"
-                })
-                .classed("visual", true)
-                .data([{
-                    tooltipInfo: [{
-                        displayName: "Power BI",
-                        value: 2016
-                    }]
-                }]);
-            
-            /*let tooltipServiceWrapper = tooltip.createTooltipServiceWrapper(options.host.tooltipService, bodyElement.data[0]); // tooltipService is from the IVisualHost.
-            
-            tooltipServiceWrapper.addTooltip<TooltipEnabledDataPoint>(element, (eventArgs: TooltipEventArgs<TooltipEnabledDataPoint>) => {
-                return eventArgs.data.tooltipInfo;
-            });*/
-            
-            console.log('Visual constructor', options);
-            this.target = options.element;
-            //this.updateCount = 0;
-            if (typeof document !== "undefined") {
-                /*
-                const new_p: HTMLElement = document.createElement("p");
-                new_p.appendChild(document.createTextNode("Update count:"));
-                const new_em: HTMLElement = document.createElement("em");
-                this.textNode = document.createTextNode(this.updateCount.toString());
-                new_em.appendChild(this.textNode);
-                new_p.appendChild(new_em);
-                this.target.appendChild(new_p);
-                */
+            this.target = options.element;            
+            if (typeof document !== "undefined") {                
                 const new_div: HTMLElement = document.createElement("div");
                 new_div.id="div_arbol";
                 this.target.appendChild(new_div);
-
-
-                let tooltipServiceWrapper = tooltip.createTooltipServiceWrapper(options.host.tooltipService, new_div); // tooltipService is from the IVisualHost.
-            
-                tooltipServiceWrapper.addTooltip<TooltipEnabledDataPoint>(element, (eventArgs: TooltipEventArgs<TooltipEnabledDataPoint>) => {
-                    return eventArgs.data.tooltipInfo;
-                });
-
-
-                /*
-                this.tooltipServiceWrapper = createTooltipServiceWrapper(options.host.tooltipService, options.element);
-                this.tooltipServiceWrapper.addTooltip(null, 
-                    (tooltipEvent: TooltipEventArgs<number>) => Visual.getTooltipData(tooltipEvent.data),
-                    (tooltipEvent: TooltipEventArgs<number>) => null);
-                */            
             }
                 
         }

@@ -68,6 +68,7 @@ module powerbi.extensibility.visual {
       public weightLinks: boolean = true;   
       public linksSize: number = 1.5;
       public arcRadius: number=15;
+      public progressPie: boolean = true;
       
     }
 

@@ -192,6 +192,12 @@
                         "numeric": true
                     }
                 }
+                , "progressPie":{
+                    "displayName": "Progress Pie"
+                    , "type":{
+                        "bool":true
+                    }
+                }
                 
                 
                 

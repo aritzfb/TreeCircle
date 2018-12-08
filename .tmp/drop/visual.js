@@ -896,6 +896,7 @@ var powerbi;
                         this.weightLinks = true;
                         this.linksSize = 1.5;
                         this.arcRadius = 15;
+                        this.progressPie = true;
                     }
                     return treeOptions;
                 }());
@@ -938,59 +939,16 @@ var powerbi;
             var testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG;
             (function (testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG) {
                 "use strict";
-                var tooltip = powerbi.extensibility.utils.tooltip;
                 var Visual = (function () {
                     function Visual(options) {
                         options.element.style.overflow = 'auto';
                         this.host = options.host;
-                        //debugger;
-                        tooltip.createTooltipServiceWrapper(options.host.tooltipService, options.element);
                         var bodyElement = d3.select("body");
-                        var element = bodyElement
-                            .append("div")
-                            .style({
-                            "background-color": "green",
-                            "width": "150px",
-                            "height": "150px"
-                        })
-                            .classed("visual", true)
-                            .data([{
-                                tooltipInfo: [{
-                                        displayName: "Power BI",
-                                        value: 2016
-                                    }]
-                            }]);
-                        /*let tooltipServiceWrapper = tooltip.createTooltipServiceWrapper(options.host.tooltipService, bodyElement.data[0]); // tooltipService is from the IVisualHost.
-                        
-                        tooltipServiceWrapper.addTooltip<TooltipEnabledDataPoint>(element, (eventArgs: TooltipEventArgs<TooltipEnabledDataPoint>) => {
-                            return eventArgs.data.tooltipInfo;
-                        });*/
-                        console.log('Visual constructor', options);
                         this.target = options.element;
-                        //this.updateCount = 0;
                         if (typeof document !== "undefined") {
-                            /*
-                            const new_p: HTMLElement = document.createElement("p");
-                            new_p.appendChild(document.createTextNode("Update count:"));
-                            const new_em: HTMLElement = document.createElement("em");
-                            this.textNode = document.createTextNode(this.updateCount.toString());
-                            new_em.appendChild(this.textNode);
-                            new_p.appendChild(new_em);
-                            this.target.appendChild(new_p);
-                            */
                             var new_div = document.createElement("div");
                             new_div.id = "div_arbol";
                             this.target.appendChild(new_div);
-                            var tooltipServiceWrapper = tooltip.createTooltipServiceWrapper(options.host.tooltipService, new_div); // tooltipService is from the IVisualHost.
-                            tooltipServiceWrapper.addTooltip(element, function (eventArgs) {
-                                return eventArgs.data.tooltipInfo;
-                            });
-                            /*
-                            this.tooltipServiceWrapper = createTooltipServiceWrapper(options.host.tooltipService, options.element);
-                            this.tooltipServiceWrapper.addTooltip(null,
-                                (tooltipEvent: TooltipEventArgs<number>) => Visual.getTooltipData(tooltipEvent.data),
-                                (tooltipEvent: TooltipEventArgs<number>) => null);
-                            */
                         }
                     }
                     Visual.getTooltipData = function (value) {
@@ -1201,6 +1159,11 @@ function inicializarArbol(h, w, source, hst, settings) {
     var arcRadius = 15;
     try {
         arcRadius = settings.treeOptions.arcRadius;
+    }
+    catch (e) { }
+    var progressPie = true;
+    try {
+        progressPie = settings.treeOptions.progressPie;
     }
     catch (e) { }
     var nodeTextSize = 15;
@@ -1565,27 +1528,28 @@ function inicializarArbol(h, w, source, hst, settings) {
             .data(nodes, function (d) { return d.id || (d.id = ++i); });
         var div_tooltip = d3.select("#div_arbol").append("div").attr("class", "tooltip").style("opacity", 0);
         //PROGRESS BAR
-        /*
-        if (nodes) if (nodes[0]) if (nodes[0].avance) {
-            function progressCirclePosition(d){
-                return "translate(0,50)";
-            }
-            var progressArc = d3.svg.arc().innerRadius(0).outerRadius(20).startAngle(0).endAngle(2*Math.PI*nodes[0].avance);
-            svg.append("path").attr("d",progressArc ).attr("fill",arcBaseColor)
-            .attr("transform", progressCirclePosition);
-            var progressCorona = d3.svg.arc().innerRadius(18).outerRadius(20).startAngle(0).endAngle(2*Math.PI);
-            svg.append("path").attr("d",progressCorona ).attr("fill",arcBaseColor)
-            .attr("transform", progressCirclePosition)
-            svg.append("text").attr('class', 'text-progress')
-                    .text(formatPercent(nodes[0].avance))
-                    .attr('x', 3)
-                    .attr('y', 80);
-            svg.append("text").attr('class', 'text-progress')
-                .text("Progress")
-                .attr('x', 0)
-                .attr('y',25);
-        }
-        */
+        if (progressPie)
+            if (nodes)
+                if (nodes[0])
+                    if (nodes[0].avance) {
+                        function progressCirclePosition(d) {
+                            return "translate(0,50)";
+                        }
+                        var progressArc = d3.svg.arc().innerRadius(0).outerRadius(20).startAngle(0).endAngle(2 * Math.PI * nodes[0].avance);
+                        svg.append("path").attr("d", progressArc).attr("fill", arcBaseColor)
+                            .attr("transform", progressCirclePosition);
+                        var progressCorona = d3.svg.arc().innerRadius(18).outerRadius(20).startAngle(0).endAngle(2 * Math.PI);
+                        svg.append("path").attr("d", progressCorona).attr("fill", arcBaseColor)
+                            .attr("transform", progressCirclePosition);
+                        svg.append("text").attr('class', 'text-progress')
+                            .text(formatPercent(nodes[0].avance))
+                            .attr('x', 3)
+                            .attr('y', 80);
+                        svg.append("text").attr('class', 'text-progress')
+                            .text("Progress")
+                            .attr('x', 0)
+                            .attr('y', 25);
+                    }
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
             .attr("class", "node")
@@ -1609,14 +1573,6 @@ function inicializarArbol(h, w, source, hst, settings) {
                 .duration(100)
                 .style("opacity", 0);
         });
-        /*
-        nodeEnter.data([{
-            "tooltipInfo":[{
-                "displayName":d.name
-                ,"value":d.value
-            }]
-        }]);
-        */
         var arcBlank = d3.svg.arc().innerRadius(0).outerRadius(arcRadius).startAngle(0)
             .endAngle(2 * Math.PI);
         nodeEnter
@@ -1802,60 +1758,43 @@ function inicializarArbol(h, w, source, hst, settings) {
         })
             .on("click", function (d) {
             try {
-                if (!d.target.children)
-                    if (d.target._children.length == 0)
-                        if (!d.selected) {
-                            d3.selectAll("path.link").style("stroke-dasharray", 0);
-                            d3.select(this).style("stroke-dasharray", 5);
-                            //find categorie position
-                            var catPos = 0;
-                            for (var i = 0; i < categories.length; i++) {
-                                catPos = i;
-                                if (categories[i].source.displayName == d.target.category)
-                                    break;
-                            }
-                            var cats = categories[catPos];
-                            //find item in categorie
-                            var itemPos = 0;
-                            for (var i = 0; i < cats.values.length; i++) {
-                                itemPos = i;
-                                if (cats.values[i] == d.target.name)
-                                    break;
-                            }
-                            var selId = varhost.createSelectionIdBuilder()
-                                .withCategory(cats, itemPos)
-                                .createSelectionId();
-                            d.selectionId = selId;
-                            d.selected = true;
-                            selectionMngr = varhost.createSelectionManager();
-                            //selectionMngr.clear();
-                            selectionMngr.select(selId);
+                if (!d.selected) {
+                    d3.selectAll("path.link").style("stroke-dasharray", 0);
+                    d3.select(this).style("stroke-dasharray", 5);
+                    //find categorie position
+                    var catPos = 0;
+                    for (var i = 0; i < categories.length; i++) {
+                        catPos = i;
+                        if (categories[i].source.displayName == d.target.category)
+                            break;
+                    }
+                    var cats = categories[catPos];
+                    //find item in categorie
+                    var itemsPos = [];
+                    for (var i = 0; i < cats.values.length; i++) {
+                        if (cats.values[i] == d.target.name) {
+                            itemsPos.push(i);
                         }
-                        else {
-                            /*
-                            var colorLink = linkColor;
-                            if(linkColorSeries) {
-                                if (d.target.serieColor) colorLink = d.target.serieColor;
-                            }
-                            */
-                            d.selected = false;
-                            d3.select(this).style("stroke-dasharray", 0);
-                            selectionMngr = varhost.createSelectionManager();
-                            selectionMngr.clear();
-                        }
-                /*
-                var basicFilter = {
-                    $schema: "http://powerbi.com/product/schema#basic",
-                    target: {
-                    table: "Datos",
-                    column: "Cowntry"
-                    },
-                    operator: "Equal",
-                    values: ["Spain"],
-                    filterType: "pbi.models.FilterType.BasicFilter"
+                    }
+                    selectionMngr = varhost.createSelectionManager();
+                    selectionMngr.clear();
+                    for (var j = 0; j < itemsPos.length; j++) {
+                        var selId = varhost.createSelectionIdBuilder()
+                            .withCategory(cats, itemsPos[j])
+                            .createSelectionId();
+                        d.selectionId = selId;
+                        d.selected = true;
+                        //selectionMngr = varhost.createSelectionManager();
+                        //selectionMngr.clear();
+                        selectionMngr.select(selId, true);
+                    }
                 }
-                varhost.applyJsonFilter(basicFilter,"general","filter");
-                */
+                else {
+                    d.selected = false;
+                    d3.select(this).style("stroke-dasharray", 0);
+                    selectionMngr = varhost.createSelectionManager();
+                    selectionMngr.clear();
+                }
             }
             catch (e) {
                 var b = 0;
@@ -1894,22 +1833,6 @@ function inicializarArbol(h, w, source, hst, settings) {
                 }
             }
         });
-        /*
-        link.append("text")
-            .attr("font-family", "Arial, Helvetica, sans-serif")
-            .attr("fill", "Black")
-            .style("font", "normal 12px Arial")
-            .attr("transform", function(d) {
-                return "translate(" +
-                    ((d.source.y + d.target.y)/2) + "," +
-                    ((d.source.x + d.target.x)/2) + ")";
-            })
-            //.attr("dy", ".35em")
-            .attr("text-anchor", "middle")
-            .text(function(d) {
-                return d.target.name;
-            });
-        */
         // Transition links to their new position.
         link.transition()
             .duration(duration)
