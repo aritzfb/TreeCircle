@@ -73,7 +73,7 @@ module powerbi.extensibility.visual {
         
                 
         public update(options: VisualUpdateOptions) {
-            this.target.removeChild(document.getElementById("wellcome_div"));
+            if (document.getElementById("wellcome_div")) this.target.removeChild(document.getElementById("wellcome_div"))
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
                         
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;

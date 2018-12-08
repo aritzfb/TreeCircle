@@ -956,7 +956,8 @@ var powerbi;
                         }
                     }
                     Visual.prototype.update = function (options) {
-                        this.target.removeChild(document.getElementById("wellcome_div"));
+                        if (document.getElementById("wellcome_div"))
+                            this.target.removeChild(document.getElementById("wellcome_div"));
                         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
                         var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
                         if (options.type != 36) {
@@ -1345,7 +1346,7 @@ function inicializarArbol(h, w, source, hst, settings) {
     root = sourceParsed;
     root.x0 = height / 2;
     root.y0 = 0;
-    update(root);
+    update(root, hst);
     d3.select(self.frameElement).style("height", "800px");
     function formatPercent(val) {
         return (100 * val).toFixed(numberDecimals) + "%";
@@ -1418,7 +1419,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         return retorno;
         //return d.category + ": " + d.name + ", Value: " + d.value.toLocaleString('es-ES');;
     }
-    function update(source) {
+    function update(source, hst) {
         // Compute the new tree layout.
         function collapse(d) {
             if (d.children) {
@@ -1457,7 +1458,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         else
             expandNodes(source);
         var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
-        updateGraph(nodes, source, this.varhst);
+        updateGraph(nodes, source, hst);
     }
     function getCumplimiento(d) {
         var retorno = 0;
@@ -1510,7 +1511,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             retorno = Math.abs(valor / valorPadre);
         return 2 * Math.PI * retorno;
     }
-    function updateGraph(nodes, source, varhost) {
+    function updateGraph(nodes, source, hst) {
         var magiclabelsd = d3.selectAll("div")[0];
         magiclabelsd.forEach(function (d) {
             if (d)
@@ -1756,6 +1757,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         })
             .on("click", function (d) {
             try {
+                debugger;
                 if (!d.selected) {
                     d3.selectAll("path.link").style("stroke-dasharray", 0);
                     d3.select(this).style("stroke-dasharray", 5);
@@ -1774,15 +1776,14 @@ function inicializarArbol(h, w, source, hst, settings) {
                             itemsPos.push(i);
                         }
                     }
-                    selectionMngr = varhost.createSelectionManager();
+                    selectionMngr = hst.createSelectionManager();
                     selectionMngr.clear();
                     for (var j = 0; j < itemsPos.length; j++) {
-                        var selId = varhost.createSelectionIdBuilder()
+                        var selId = hst.createSelectionIdBuilder()
                             .withCategory(cats, itemsPos[j])
                             .createSelectionId();
                         d.selectionId = selId;
                         d.selected = true;
-                        //selectionMngr = varhost.createSelectionManager();
                         //selectionMngr.clear();
                         selectionMngr.select(selId, true);
                     }
@@ -1790,7 +1791,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                 else {
                     d.selected = false;
                     d3.select(this).style("stroke-dasharray", 0);
-                    selectionMngr = varhost.createSelectionManager();
+                    selectionMngr = hst.createSelectionManager();
                     selectionMngr.clear();
                 }
             }
@@ -1849,21 +1850,6 @@ function inicializarArbol(h, w, source, hst, settings) {
             d.y0 = d.y;
         });
     }
-    function updateClient(source) {
-        // Compute the new tree layout.
-        var rootSource = source;
-        while (rootSource.parent != undefined) {
-            rootSource = rootSource.parent;
-        }
-        var nodes = tree.nodes(rootSource).reverse(), links = tree.links(nodes);
-        var parent = source;
-        if (source.parent) {
-            parent = source.parent;
-            if (parent.parent)
-                parent = parent.parent;
-        }
-        updateGraph(nodes, source, this.varhst);
-    }
     // Toggle children on click.
     function click(d) {
         if (d.children) {
@@ -1903,7 +1889,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         var parent = d;
         if (d.parent)
             parent = d.parent;
-        updateGraph(nodes, d, this.varhst);
+        updateGraph(nodes, d, hst);
         //update(rootSource);
     }
 }
@@ -2162,8 +2148,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
