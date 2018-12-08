@@ -888,6 +888,8 @@ var powerbi;
                     initialModeOptions[initialModeOptions["expanded"] = "expanded"] = "expanded";
                     initialModeOptions[initialModeOptions["collapsed"] = "collapsed"] = "collapsed";
                     initialModeOptions[initialModeOptions["expandrednodes"] = "expandrednodes"] = "expandrednodes";
+                    initialModeOptions[initialModeOptions["expandbestnode"] = "expandbestnode"] = "expandbestnode";
+                    initialModeOptions[initialModeOptions["expandlownode"] = "expandlownode"] = "expandlownode";
                 })(initialModeOptions = testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG.initialModeOptions || (testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG.initialModeOptions = {}));
                 var treeOptions = (function () {
                     function treeOptions() {
@@ -1422,11 +1424,12 @@ function inicializarArbol(h, w, source, hst, settings) {
     function update(source, hst) {
         // Compute the new tree layout.
         function collapse(d) {
-            if (d.children) {
-                d._children = d.children;
-                d._children.forEach(collapse);
-                d.children = [];
-            }
+            if (d.children)
+                if (d.children.length > 0) {
+                    d._children = d.children;
+                    d._children.forEach(collapse);
+                    d.children = [];
+                }
         }
         function expandNodes(d) {
             if (d._children.length > 0) {
@@ -1449,12 +1452,78 @@ function inicializarArbol(h, w, source, hst, settings) {
                 collapse(d);
             }
         }
+        function expandNodeLeaf(d, leafNode) {
+            var retorno = false;
+            if (d == leafNode) {
+                retorno = true;
+            }
+            else if (d.children.length > 0) {
+                for (var i = 0; i < d.children.length; i++) {
+                    var hasBestChild = expandNodeLeaf(d.children[i], leafNode);
+                    if (!hasBestChild)
+                        collapse(d.children[i]);
+                    else
+                        retorno = true;
+                }
+            }
+            return retorno;
+        }
+        function getLeafNodeHighestValue(d, bestNode) {
+            var retorno = bestNode;
+            if (d.children.length > 0) {
+                for (var i = 0; i < d.children.length; i++) {
+                    var bestNodeChild = getLeafNodeHighestValue(d.children[i], retorno);
+                    //if(!retorno) retorno = d.children[i]; else
+                    if (!retorno)
+                        retorno = bestNodeChild;
+                    else if (retorno.value < bestNodeChild.value)
+                        retorno = bestNodeChild;
+                }
+            }
+            else if (bestNode == null) {
+                retorno = d;
+            }
+            else if (bestNode.value < d.value) {
+                retorno = d;
+            }
+            return retorno;
+        }
+        function getLeafNodeLowestValue(d, lowNode) {
+            var retorno = lowNode;
+            if (d.children.length > 0) {
+                for (var i = 0; i < d.children.length; i++) {
+                    var bestNodeChild = getLeafNodeLowestValue(d.children[i], retorno);
+                    //if(!retorno) retorno = d.children[i]; else
+                    if (!retorno)
+                        retorno = bestNodeChild;
+                    else if (retorno.value > bestNodeChild.value)
+                        retorno = bestNodeChild;
+                }
+            }
+            else if (lowNode == null) {
+                retorno = d;
+            }
+            else if (lowNode.value > d.value) {
+                retorno = d;
+            }
+            return retorno;
+        }
         if (initialMode == "expanded")
             expandNodes(source);
         else if (initialMode == "collapsed")
             collapse(source);
         else if (initialMode == "expandrednodes")
             expandRedNodes(source);
+        else if (initialMode == "expandbestnode") {
+            var bestLeafNode = null;
+            bestLeafNode = getLeafNodeHighestValue(source, bestLeafNode);
+            expandNodeLeaf(source, bestLeafNode);
+        }
+        else if (initialMode == "expandlownode") {
+            var lowLeafNode = null;
+            lowLeafNode = getLeafNodeLowestValue(source, lowLeafNode);
+            expandNodeLeaf(source, lowLeafNode);
+        }
         else
             expandNodes(source);
         var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
@@ -2148,8 +2217,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',

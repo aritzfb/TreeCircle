@@ -59,7 +59,8 @@ module powerbi.extensibility.visual {
       expanded = "expanded" as any
       , collapsed = "collapsed" as any
       , expandrednodes = "expandrednodes" as any
-
+      , expandbestnode = "expandbestnode" as any
+      , expandlownode = "expandlownode" as any
     }
     
     export class treeOptions {

@@ -165,6 +165,14 @@
                                 "value":"expandrednodes"
                                 , "displayName":"Critical nodes"
                             }
+                            , {
+                                "value":"expandbestnode"
+                                ,"displayName":"Expand highest"
+                            }
+                            , {
+                                "value":"expandlownode"
+                                ,"displayName":"Expand lowest"
+                            }
                         ]
                     }
                 }
