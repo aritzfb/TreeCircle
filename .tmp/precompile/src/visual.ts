@@ -65,7 +65,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
                 //wellcome page
                 const wellcome_div : HTMLElement = document.createElement("div");
                 wellcome_div.id="wellcome_div";
-                wellcome_div.innerHTML="HELLO WORLD";
+                //wellcome_div.innerHTML="HELLO WORLD";
                 this.target.appendChild(wellcome_div);
             }
                 
