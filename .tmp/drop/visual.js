@@ -953,7 +953,11 @@ var powerbi;
                             //wellcome page
                             var wellcome_div = document.createElement("div");
                             wellcome_div.id = "wellcome_div";
-                            wellcome_div.innerHTML = "<p>TEXT HERE</p>";
+                            wellcome_div.innerHTML = "<p>PIE CHART TREE (1.0.3)</p>";
+                            wellcome_div.innerHTML += "<p>Created by Aritz Francoy</p>";
+                            wellcome_div.innerHTML += "<p>Sponsored by:</p>";
+                            wellcome_div.innerHTML += "<div style='position:relative;height:100px;width:100px;background-color:black;color:white;'><p style='position:absolute;top:40%;transform:translateY(-50%)'>YOUR COMPANY</p></div>";
+                            wellcome_div.innerHTML += "<p>Put an attribute into Categories field for start the tree...</p>";
                             this.target.appendChild(wellcome_div);
                         }
                     }
@@ -1822,7 +1826,10 @@ function inicializarArbol(h, w, source, hst, settings) {
                 valor = linksSize;
             if (valor > 2 * arcRadius)
                 valor = 2 * arcRadius;
-            return "stroke-width:" + valor + "px;stroke:" + colorLink;
+            var strokeDasharray = 0;
+            if (d.selected)
+                strokeDasharray = 5;
+            return "stroke-width:" + valor + "px;stroke:" + colorLink + ";stroke-dasharray:" + strokeDasharray.toString();
         })
             .on("click", function (d) {
             try {
@@ -2237,8 +2244,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',

@@ -228,8 +228,8 @@
                         "in": "category"
                     },
                     "dataReductionAlgorithm": {
-                        "window": {
-                            "count":50000
+                        "top": {
+                            "count":500
                         }
                     }
                 },
@@ -255,7 +255,7 @@
                         ]
                         ,"dataReductionAlgorithm": {
                             "top": {
-                                "count": 50000
+                                "count": 500
                             }
                         }  
                     }

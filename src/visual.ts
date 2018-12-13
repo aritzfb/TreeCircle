@@ -65,7 +65,11 @@ module powerbi.extensibility.visual {
                 //wellcome page
                 const wellcome_div : HTMLElement = document.createElement("div");
                 wellcome_div.id="wellcome_div";
-                wellcome_div.innerHTML="<p>TEXT HERE</p>";
+                wellcome_div.innerHTML="<p>PIE CHART TREE (1.0.3)</p>";
+                wellcome_div.innerHTML+="<p>Created by Aritz Francoy</p>";
+                wellcome_div.innerHTML+="<p>Sponsored by:</p>";
+                wellcome_div.innerHTML+="<div style='position:relative;height:100px;width:100px;background-color:black;color:white;'><p style='position:absolute;top:40%;transform:translateY(-50%)'>YOUR COMPANY</p></div>";
+                wellcome_div.innerHTML+="<p>Put an attribute into Categories field for start the tree...</p>";
                 this.target.appendChild(wellcome_div);
             }
                 
