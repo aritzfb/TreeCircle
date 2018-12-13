@@ -950,16 +950,16 @@ var powerbi;
                             var new_div = document.createElement("div");
                             new_div.id = "div_arbol";
                             this.target.appendChild(new_div);
-                            //wellcome page
-                            var wellcome_div = document.createElement("div");
-                            wellcome_div.id = "wellcome_div";
-                            wellcome_div.innerHTML = "<p>PIE CHART TREE (1.0.3)</p>";
-                            wellcome_div.innerHTML += "<p>Created by Aritz Francoy</p>";
-                            wellcome_div.innerHTML += "<p>Sponsored by:</p>";
-                            wellcome_div.innerHTML += "<div style='position:relative;height:100px;width:100px;background-color:black;color:white;'><p style='position:absolute;top:40%;transform:translateY(-50%)'>YOUR COMPANY</p></div>";
-                            wellcome_div.innerHTML += "<p>Put an attribute into Categories field for start the tree...</p>";
-                            this.target.appendChild(wellcome_div);
                         }
+                        //wellcome page
+                        var wellcome_div = document.createElement("div");
+                        wellcome_div.id = "wellcome_div";
+                        wellcome_div.innerHTML = "<p>PIE CHART TREE (1.0.3)</p>";
+                        wellcome_div.innerHTML += "<p>Created by Aritz Francoy</p>";
+                        wellcome_div.innerHTML += "<p>Sponsored by:</p>";
+                        wellcome_div.innerHTML += "<div style='position:relative;height:100px;width:100px;background-color:black;color:white;'><p style='position:absolute;top:40%;transform:translateY(-50%)'>YOUR COMPANY</p></div>";
+                        wellcome_div.innerHTML += "<p>Put an attribute into Categories field for start the tree...</p>";
+                        this.target.appendChild(wellcome_div);
                     }
                     Visual.prototype.update = function (options) {
                         if (document.getElementById("wellcome_div"))
@@ -1005,18 +1005,22 @@ var categorical;
 function newNode() {
     return {
         "name": "",
-        "value": 0.0,
-        "target": 0.0,
-        "avance": 0.0,
+        "value": null,
+        "target": null,
+        "avance": null,
         "category": "",
         "children": [],
         "_children": [],
-        "serieColor": ""
+        "serieColor": "",
+        "hasValue": false,
+        "hasTarget": false,
+        "hasProgress": false
     };
 }
 function createSourceRowTree(sourceRow, metadataSourceTable) {
-    var numCategories = 0, itemValue = 0;
-    itemTarget = 0, itemAvance = 0;
+    //var numCategories = 0,itemValue=0;itemTarget=0,itemAvance=0;
+    var numCategories = 0, itemValue = null;
+    itemTarget = null, itemAvance = null;
     for (var i = 0; i < metadataSourceTable.length; i++) {
         var columnInfo = metadataSourceTable[i];
         if (columnInfo.metadataType.toString().indexOf("Category") > -1) {
@@ -1035,13 +1039,40 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     var rowValue = itemValue;
     var rowTarget = itemTarget;
     var rowProgress = itemAvance;
-    var retorno = { "name": this.allmembername, "value": rowValue, "target": rowTarget, "avance": rowProgress, "category": "Top Level", "children": [], "_children": [], serieColor: "" };
+    var retorno = newNode();
+    //var retorno = { "name":this.allmembername, "value": rowValue, "target":rowTarget, "avance":rowProgress, "category":"Top Level", "children":[], "_children":[], serieColor:"" };
+    retorno.name = this.allmembername;
+    if (!retorno.name)
+        if (allmembername)
+            retorno.name = allmembername;
+    if (rowValue) {
+        retorno.value = rowValue;
+        retorno.hasValue = true;
+    }
+    else
+        retorno.value = 0;
+    rowValue = retorno.value;
+    if (rowTarget) {
+        retorno.target = rowTarget;
+        retorno.hasTarget = true;
+    }
+    else
+        retorno.target = 0;
+    rowTarget = retorno.target;
+    if (rowProgress) {
+        retorno.avance = rowProgress;
+        retorno.hasProgress = true;
+    }
+    retorno.avance = 0;
+    rowProgress = retorno.avance;
+    retorno.category = "Top Level";
     var lastnode = retorno;
     var metadataColors = [];
     for (var i = 0; i < numCategories; i++) {
         //prevents nodes without sertie name (or null values)
         var singleNode = newNode();
         singleNode.value = rowValue;
+        singleNode.hasValue = retorno.hasValue;
         if (sourceRow[i])
             singleNode.name = sourceRow[i];
         else
@@ -1055,7 +1086,9 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
         }
         singleNode.serieColor = metadataColors[singleNode.category][singleNode.name];
         singleNode.target = rowTarget;
+        singleNode.hasTarget = retorno.hasTarget;
         singleNode.avance = rowProgress;
+        singleNode.hasProgress = retorno.hasProgress;
         if (sourceRow[i]) {
             lastnode.children.push(singleNode);
             lastnode._children.push(singleNode);
@@ -1077,6 +1110,9 @@ function fillTrees(sourceRowTree, sourceParsed) {
             //sourceParsed._children = current.children;
             sourceParsed.value += current.value;
             sourceParsed.target += current.target;
+            sourceParsed.hasValue = current.hasValue;
+            sourceParsed.hasTarget = current.hasTarget;
+            sourceParsed.hasProgress = current.hasProgress;
             //sourceParsed.avance = sourceParsed.avance > current.avance ? sourceParsed.avance : current.avance;
             if (current.avance)
                 sourceParsed.avance = current.avance;
@@ -1096,6 +1132,9 @@ function fillTrees(sourceRowTree, sourceParsed) {
                 sourceParsed.children.push(current.children[0]);
                 sourceParsed.value += current.value;
                 sourceParsed.target += current.target;
+                sourceParsed.hasValue = current.hasValue;
+                sourceParsed.hasTarget = current.hasTarget;
+                sourceParsed.hasProgress = current.hasProgress;
                 if (current.avance)
                     sourceParsed.avance = current.avance;
                 //sourceParsed.avance = sourceParsed.avance > current.avance ? sourceParsed.avance : current.avance;
@@ -1112,7 +1151,9 @@ function parseSourceTableRow(sourceRow, sourceParsed, metadataSourceTable) {
 }
 function parseSource(source, metadataSourceTable) {
     // init the return
-    var sourceParsed = { "name": this.allmembername, "value": 0.0, "target": 0.0, "avance": 0.0, "category": "Top Level", "children": [], "_children": [] };
+    //var sourceParsed = {"name":this.allmembername, "value":0.0, "target":0.0, "avance":0.0, "category":"Top Level", "children":[], "_children":[] };
+    var sourceParsed = newNode();
+    sourceParsed.name = this.allmembername;
     if (source != undefined) {
         if (source.rows != undefined) {
             for (var i = 0; i < source.rows.length; i++) {
@@ -1133,14 +1174,20 @@ function recalculateValues(sourceParsed) {
     var retorno = sourceParsed;
     if (retorno.children) {
         if (retorno.children.length > 0) {
-            retorno.value = 0;
-            retorno.target = 0;
+            //retorno.value=0;
+            //retorno.target=0;
             for (var i = 0; i < retorno.children.length; i++) {
                 var child = recalculateValues(retorno.children[i]);
-                if (child.value)
+                if (child.value) {
+                    if (!retorno.value)
+                        retorno.value = 0;
                     retorno.value += child.value;
-                if (child.target)
+                }
+                if (child.target) {
+                    if (!retorno.target)
+                        retorno.target = 0;
                     retorno.target += child.target;
+                }
             }
         }
     }
@@ -1348,6 +1395,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         .append("g")
         .attr("transform", "translate(" + margin.left + ",0)");
     //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    debugger;
     var sourceParsed = parseSource(sourceTable, metadataSourceTable);
     root = sourceParsed;
     root.x0 = height / 2;
@@ -1714,14 +1762,48 @@ function inicializarArbol(h, w, source, hst, settings) {
                 .text(function (d) { return setText(d, "name"); })
                 .style("fill-opacity", 1)
                 .style("font-size", nodeTextSize);
-            //Background label value
-            if (backgroundLabels)
-                nodeEnter.append("rect")
-                    .attr("fill", "white")
-                    .attr("fill-opacity", 0.5)
-                    .attr("stroke", "none")
+            debugger;
+            if (source.hasValue) {
+                //Background label value
+                if (backgroundLabels)
+                    nodeEnter.append("rect")
+                        .attr("fill", "white")
+                        .attr("fill-opacity", 0.5)
+                        .attr("stroke", "none")
+                        .attr("x", function (d) {
+                        var name = "";
+                        if (d.avance > 0) {
+                            name = setText(d, "avance2");
+                        }
+                        else if (d.target > 0) {
+                            name = setText(d, "target");
+                        }
+                        else {
+                            name = setText(d, "value");
+                        }
+                        retorno = -name.length * nodeTextSize * 0.65 + valueLabelXpos + 10;
+                        return retorno;
+                    })
+                        .attr("y", valueLabelYpos - nodeTextSize / 2)
+                        .attr("height", nodeTextSize)
+                        .attr("width", function (d) {
+                        var name = "";
+                        if (d.avance > 0) {
+                            name = setText(d, "avance2");
+                        }
+                        else if (d.target > 0) {
+                            name = setText(d, "target");
+                        }
+                        else {
+                            name = setText(d, "value");
+                        }
+                        var retorno = name.length * nodeTextSize * 0.65 - 8;
+                        return retorno;
+                    });
+                //Node text value
+                nodeEnter.append("text")
                     .attr("x", function (d) {
-                    var name = "";
+                    var name, len;
                     if (d.avance > 0) {
                         name = setText(d, "avance2");
                     }
@@ -1731,12 +1813,15 @@ function inicializarArbol(h, w, source, hst, settings) {
                     else {
                         name = setText(d, "value");
                     }
-                    retorno = -name.length * nodeTextSize * 0.65 + valueLabelXpos + 10;
-                    return retorno;
+                    len = name.length;
+                    //return 20+len*4+(arcRadius-8); 
+                    //return 20+len*4+(arcRadius+nodeTextSize); 
+                    return valueLabelXpos;
                 })
-                    .attr("y", valueLabelYpos - nodeTextSize / 2)
-                    .attr("height", nodeTextSize)
-                    .attr("width", function (d) {
+                    .attr("y", valueLabelYpos)
+                    .attr("dy", "0.35em")
+                    .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
+                    .text(function (d) {
                     var name = "";
                     if (d.avance > 0) {
                         name = setText(d, "avance2");
@@ -1747,45 +1832,11 @@ function inicializarArbol(h, w, source, hst, settings) {
                     else {
                         name = setText(d, "value");
                     }
-                    var retorno = name.length * nodeTextSize * 0.65 - 8;
-                    return retorno;
-                });
-            //Node text value
-            nodeEnter.append("text")
-                .attr("x", function (d) {
-                var name, len;
-                if (d.avance > 0) {
-                    name = setText(d, "avance2");
-                }
-                else if (d.target > 0) {
-                    name = setText(d, "target");
-                }
-                else {
-                    name = setText(d, "value");
-                }
-                len = name.length;
-                //return 20+len*4+(arcRadius-8); 
-                //return 20+len*4+(arcRadius+nodeTextSize); 
-                return valueLabelXpos;
-            })
-                .attr("y", valueLabelYpos)
-                .attr("dy", "0.35em")
-                .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
-                .text(function (d) {
-                var name = "";
-                if (d.avance > 0) {
-                    name = setText(d, "avance2");
-                }
-                else if (d.target > 0) {
-                    name = setText(d, "target");
-                }
-                else {
-                    name = setText(d, "value");
-                }
-                return name;
-            })
-                .style("fill-opacity", 1)
-                .style("font-size", nodeTextSize);
+                    return name;
+                })
+                    .style("fill-opacity", 1)
+                    .style("font-size", nodeTextSize);
+            }
         }
         // Transition nodes to their new position.
         var nodeUpdate = node.transition()
@@ -1840,7 +1891,6 @@ function inicializarArbol(h, w, source, hst, settings) {
                         for (var i = 0; i < links.length; i++) {
                             var currentLink = links[i];
                             if (currentLink.__data__.source.name == targetSerieName) {
-                                debugger;
                                 currentLink.selected = true;
                                 //currentLink.style("stroke-dasharray", 5);
                                 currentLink.style.strokeDasharray = 5;
