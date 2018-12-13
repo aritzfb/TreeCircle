@@ -65,7 +65,7 @@ module powerbi.extensibility.visual {
                 //wellcome page
                 const wellcome_div : HTMLElement = document.createElement("div");
                 wellcome_div.id="wellcome_div";
-                //wellcome_div.innerHTML="HELLO WORLD";
+                wellcome_div.innerHTML="<p>TEXT HERE</p>";
                 this.target.appendChild(wellcome_div);
             }
                 
@@ -75,7 +75,6 @@ module powerbi.extensibility.visual {
         public update(options: VisualUpdateOptions) {
             if (document.getElementById("wellcome_div")) this.target.removeChild(document.getElementById("wellcome_div"))
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
-                        
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
             if(options.type != 36) {
                 if (d3.select("svg")){

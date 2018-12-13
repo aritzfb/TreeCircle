@@ -953,7 +953,7 @@ var powerbi;
                             //wellcome page
                             var wellcome_div = document.createElement("div");
                             wellcome_div.id = "wellcome_div";
-                            //wellcome_div.innerHTML="HELLO WORLD";
+                            wellcome_div.innerHTML = "<p>TEXT HERE</p>";
                             this.target.appendChild(wellcome_div);
                         }
                     }
@@ -996,7 +996,6 @@ var options;
 var allmembername;
 var container;
 var varhst;
-var selectionMngr;
 var categories;
 var categorical;
 function newNode() {
@@ -1147,6 +1146,7 @@ function zoomed() {
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 function inicializarArbol(h, w, source, hst, settings) {
+    var selectionMngr = hst.createSelectionManager();
     try {
         categories = source.dataViews[0].categorical.categories;
     }
@@ -1527,7 +1527,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         else
             expandNodes(source);
         var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
-        updateGraph(nodes, source, hst);
+        updateGraph(nodes, source, hst, selectionMngr);
     }
     function getCumplimiento(d) {
         var retorno = 0;
@@ -1580,7 +1580,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             retorno = Math.abs(valor / valorPadre);
         return 2 * Math.PI * retorno;
     }
-    function updateGraph(nodes, source, hst) {
+    function updateGraph(nodes, source, hst, selectionMngr) {
         var magiclabelsd = d3.selectAll("div")[0];
         magiclabelsd.forEach(function (d) {
             if (d)
@@ -1826,10 +1826,24 @@ function inicializarArbol(h, w, source, hst, settings) {
         })
             .on("click", function (d) {
             try {
-                debugger;
                 if (!d.selected) {
-                    d3.selectAll("path.link").style("stroke-dasharray", 0);
+                    //d3.selectAll("path.link").style("stroke-dasharray", 0);
                     d3.select(this).style("stroke-dasharray", 5);
+                    function selectChildLinks(links, targetSerieName) {
+                        for (var i = 0; i < links.length; i++) {
+                            var currentLink = links[i];
+                            if (currentLink.__data__.source.name == targetSerieName) {
+                                debugger;
+                                currentLink.selected = true;
+                                //currentLink.style("stroke-dasharray", 5);
+                                currentLink.style.strokeDasharray = 5;
+                                selectChildLinks(links, currentLink.__data__.target.name);
+                            }
+                        }
+                    }
+                    var targetSerieName = d.target.name;
+                    var links = d3.selectAll("path.link")[0];
+                    selectChildLinks(links, targetSerieName);
                     //find categorie position
                     var catPos = 0;
                     for (var i = 0; i < categories.length; i++) {
@@ -1845,8 +1859,8 @@ function inicializarArbol(h, w, source, hst, settings) {
                             itemsPos.push(i);
                         }
                     }
-                    selectionMngr = hst.createSelectionManager();
-                    selectionMngr.clear();
+                    //selectionMngr = hst.createSelectionManager();
+                    //selectionMngr.clear();  
                     for (var j = 0; j < itemsPos.length; j++) {
                         var selId = hst.createSelectionIdBuilder()
                             .withCategory(cats, itemsPos[j])
@@ -1858,14 +1872,20 @@ function inicializarArbol(h, w, source, hst, settings) {
                     }
                 }
                 else {
-                    d.selected = false;
-                    d3.select(this).style("stroke-dasharray", 0);
-                    selectionMngr = hst.createSelectionManager();
+                    //d.selected = false;
+                    d3.selectAll("path.link").selected = false;
+                    d3.selectAll("path.link").style("stroke-dasharray", 0);
+                    //d3.select(this).style("stroke-dasharray", 0);
+                    //selectionMngr = hst.createSelectionManager();
                     selectionMngr.clear();
                 }
             }
             catch (e) {
-                var b = 0;
+                d3.selectAll("path.link").selected = false;
+                d3.selectAll("path.link").style("stroke-dasharray", 0);
+                //d3.select(this).style("stroke-dasharray", 0);
+                //selectionMngr = hst.createSelectionManager();
+                selectionMngr.clear();
             }
         })
             .on("mouseover", function (d) {
@@ -1958,7 +1978,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         var parent = d;
         if (d.parent)
             parent = d.parent;
-        updateGraph(nodes, d, hst);
+        updateGraph(nodes, d, hst, selectionMngr);
         //update(rootSource);
     }
 }
