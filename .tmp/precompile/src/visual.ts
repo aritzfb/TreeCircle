@@ -69,12 +69,12 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
             //wellcome page
             const wellcome_div : HTMLElement = document.createElement("div");
             wellcome_div.id="wellcome_div";
-            wellcome_div.innerHTML="<p>PIE CHART TREE (1.0.3)</p>";
+            wellcome_div.innerHTML="<p style='font-size:25px'>PIE CHARTS TREE (1.0.3)</p>";
+            wellcome_div.innerHTML+="<p>Put an attribute into Categories field for start the tree...<br/></p>";
             wellcome_div.innerHTML+="<p>Created by Aritz Francoy</p>";
-            wellcome_div.innerHTML+="<p>Contributors: Sergio Álvaro Panizo, Eduardo Valladolid, Sohail Ansari</p>";
+            wellcome_div.innerHTML+="<p>Contributors: Sergio Álvaro Panizo, Eduardo Valladolid, Mohammed Suhel</p>";
             wellcome_div.innerHTML+="<p>Sponsored by:</p>";
             wellcome_div.innerHTML+="<div style='position:relative;height:100px;width:100px;background-color:black;color:white;'><p style='position:absolute;top:40%;transform:translateY(-50%)'>YOUR COMPANY</p></div>";
-            wellcome_div.innerHTML+="<p>Put an attribute into Categories field for start the tree...</p>";
             this.target.appendChild(wellcome_div);
                 
         }
@@ -83,7 +83,6 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
-            debugger;
             var hasCategories = false;
             for(var i =0; i< options.dataViews[0].metadata.columns.length; i++){
                 hasCategories = !options.dataViews[0].metadata.columns[i].isMeasure;

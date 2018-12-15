@@ -954,18 +954,17 @@ var powerbi;
                         //wellcome page
                         var wellcome_div = document.createElement("div");
                         wellcome_div.id = "wellcome_div";
-                        wellcome_div.innerHTML = "<p>PIE CHART TREE (1.0.3)</p>";
+                        wellcome_div.innerHTML = "<p style='font-size:25px'>PIE CHARTS TREE (1.0.3)</p>";
+                        wellcome_div.innerHTML += "<p>Put an attribute into Categories field for start the tree...<br/></p>";
                         wellcome_div.innerHTML += "<p>Created by Aritz Francoy</p>";
-                        wellcome_div.innerHTML += "<p>Contributors: Sergio Álvaro Panizo, Eduardo Valladolid, Sohail Ansari</p>";
+                        wellcome_div.innerHTML += "<p>Contributors: Sergio Álvaro Panizo, Eduardo Valladolid, Mohammed Suhel</p>";
                         wellcome_div.innerHTML += "<p>Sponsored by:</p>";
                         wellcome_div.innerHTML += "<div style='position:relative;height:100px;width:100px;background-color:black;color:white;'><p style='position:absolute;top:40%;transform:translateY(-50%)'>YOUR COMPANY</p></div>";
-                        wellcome_div.innerHTML += "<p>Put an attribute into Categories field for start the tree...</p>";
                         this.target.appendChild(wellcome_div);
                     }
                     Visual.prototype.update = function (options) {
                         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
                         var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
-                        debugger;
                         var hasCategories = false;
                         for (var i = 0; i < options.dataViews[0].metadata.columns.length; i++) {
                             hasCategories = !options.dataViews[0].metadata.columns[i].isMeasure;
@@ -1074,11 +1073,13 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     else
         retorno.target = 0;
     rowTarget = retorno.target;
+    debugger;
     if (rowProgress) {
         retorno.avance = rowProgress;
         retorno.hasProgress = true;
     }
-    retorno.avance = 0;
+    else
+        retorno.avance = 0;
     rowProgress = retorno.avance;
     retorno.category = "Top Level";
     var lastnode = retorno;
@@ -1903,7 +1904,6 @@ function inicializarArbol(h, w, source, hst, settings) {
                 if (!d.selected) {
                     //d3.selectAll("path.link").style("stroke-dasharray", 0);
                     function selectChildLinks(links, targetSerie) {
-                        debugger;
                         var serieFound = false;
                         for (var idlink = 0; idlink < links.length; idlink++) {
                             var currentLink = links[idlink];
@@ -1913,9 +1913,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                                 //currentLink.style("stroke-dasharray", 5);
                                 currentLink.style.strokeDasharray = 5;
                                 var childSerieFound = false;
-                                debugger;
                                 childSerieFound = selectChildLinks(links, currentLink.__data__.target);
-                                debugger;
                                 if (!childSerieFound) {
                                     //add child node as filter if not selected
                                     var currentd = currentLink.__data__;
@@ -2377,8 +2375,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
