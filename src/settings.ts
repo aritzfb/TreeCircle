@@ -67,7 +67,7 @@ module powerbi.extensibility.visual {
       public initialMode: initialModeOptions = initialModeOptions.expanded;
       public expandMode: boolean=false;
       public weightLinks: boolean = true;   
-      public linksSize: number = 1.5;
+      public linksSize: number = 20;
       public arcRadius: number=15;
       public progressPie: boolean = true;
       

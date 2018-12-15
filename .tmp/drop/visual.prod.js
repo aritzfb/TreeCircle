@@ -896,7 +896,7 @@ var powerbi;
                         this.initialMode = initialModeOptions.expanded;
                         this.expandMode = false;
                         this.weightLinks = true;
-                        this.linksSize = 1.5;
+                        this.linksSize = 20;
                         this.arcRadius = 15;
                         this.progressPie = true;
                     }
@@ -1874,6 +1874,8 @@ function inicializarArbol(h, w, source, hst, settings) {
                     valor = porc;
             }
             else
+                valor = linksSize;
+            if (!d.target.hasValue)
                 valor = linksSize;
             if (valor > 2 * arcRadius)
                 valor = 2 * arcRadius;
