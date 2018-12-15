@@ -956,6 +956,7 @@ var powerbi;
                         wellcome_div.id = "wellcome_div";
                         wellcome_div.innerHTML = "<p>PIE CHART TREE (1.0.3)</p>";
                         wellcome_div.innerHTML += "<p>Created by Aritz Francoy</p>";
+                        wellcome_div.innerHTML += "<p>Contributors: Sergio Álvaro Panizo, Eduardo Valladolid, Sohail Ansari</p>";
                         wellcome_div.innerHTML += "<p>Sponsored by:</p>";
                         wellcome_div.innerHTML += "<div style='position:relative;height:100px;width:100px;background-color:black;color:white;'><p style='position:absolute;top:40%;transform:translateY(-50%)'>YOUR COMPANY</p></div>";
                         wellcome_div.innerHTML += "<p>Put an attribute into Categories field for start the tree...</p>";
@@ -1198,6 +1199,7 @@ function zoomed() {
 }
 function inicializarArbol(h, w, source, hst, settings) {
     var selectionMngr = hst.createSelectionManager();
+    selectionMngr.clear();
     try {
         categories = source.dataViews[0].categorical.categories;
     }
@@ -1395,12 +1397,11 @@ function inicializarArbol(h, w, source, hst, settings) {
         .append("g")
         .attr("transform", "translate(" + margin.left + ",0)");
     //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    debugger;
     var sourceParsed = parseSource(sourceTable, metadataSourceTable);
     root = sourceParsed;
     root.x0 = height / 2;
     root.y0 = 0;
-    update(root, hst);
+    update(root, hst, selectionMngr);
     d3.select(self.frameElement).style("height", "800px");
     function formatPercent(val) {
         return (100 * val).toFixed(numberDecimals) + "%";
@@ -1473,7 +1474,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         return retorno;
         //return d.category + ": " + d.name + ", Value: " + d.value.toLocaleString('es-ES');;
     }
-    function update(source, hst) {
+    function update(source, hst, selectionMngr) {
         // Compute the new tree layout.
         function collapse(d) {
             if (d.children)
@@ -1762,7 +1763,6 @@ function inicializarArbol(h, w, source, hst, settings) {
                 .text(function (d) { return setText(d, "name"); })
                 .style("fill-opacity", 1)
                 .style("font-size", nodeTextSize);
-            debugger;
             if (source.hasValue) {
                 //Background label value
                 if (backgroundLabels)
@@ -1886,47 +1886,111 @@ function inicializarArbol(h, w, source, hst, settings) {
             try {
                 if (!d.selected) {
                     //d3.selectAll("path.link").style("stroke-dasharray", 0);
-                    d3.select(this).style("stroke-dasharray", 5);
-                    function selectChildLinks(links, targetSerieName) {
-                        for (var i = 0; i < links.length; i++) {
-                            var currentLink = links[i];
-                            if (currentLink.__data__.source.name == targetSerieName) {
+                    function selectChildLinks(links, targetSerie) {
+                        debugger;
+                        var serieFound = false;
+                        for (var idlink = 0; idlink < links.length; idlink++) {
+                            var currentLink = links[idlink];
+                            if (currentLink.__data__.source.name == targetSerie.name && currentLink.__data__.source.category == targetSerie.category) {
+                                serieFound = true;
                                 currentLink.selected = true;
                                 //currentLink.style("stroke-dasharray", 5);
                                 currentLink.style.strokeDasharray = 5;
-                                selectChildLinks(links, currentLink.__data__.target.name);
+                                var childSerieFound = false;
+                                debugger;
+                                childSerieFound = selectChildLinks(links, currentLink.__data__.target);
+                                debugger;
+                                if (!childSerieFound) {
+                                    //add child node as filter if not selected
+                                    var currentd = currentLink.__data__;
+                                    //find categorie position
+                                    var catPos = 0;
+                                    for (var i = 0; i < categories.length; i++) {
+                                        catPos = i;
+                                        if (categories[i].source.displayName == currentd.target.category)
+                                            break;
+                                    }
+                                    var cats = categories[catPos];
+                                    //find item in categorie
+                                    var itemsPos = 0;
+                                    for (var i = 0; i < cats.values.length; i++) {
+                                        if (cats.values[i] == currentd.target.name) {
+                                            itemsPos = i;
+                                            break;
+                                        }
+                                    }
+                                    if (!currentd.selected) {
+                                        var selId = hst.createSelectionIdBuilder()
+                                            .withCategory(cats, itemsPos)
+                                            .createSelectionId();
+                                        currentd.selectionId = selId;
+                                        currentd.selected = true;
+                                        selectionMngr.select(selId, true);
+                                    }
+                                    //end if child serie found
+                                }
                             }
                         }
+                        return serieFound;
                     }
-                    var targetSerieName = d.target.name;
+                    var targetSerie = d.target;
                     var links = d3.selectAll("path.link")[0];
-                    selectChildLinks(links, targetSerieName);
+                    var haschilds = selectChildLinks(links, targetSerie);
+                    if (!haschilds) {
+                        //add child node as filter if not selected
+                        //find categorie position
+                        var catPos = 0;
+                        for (var i = 0; i < categories.length; i++) {
+                            catPos = i;
+                            if (categories[i].source.displayName == d.target.category)
+                                break;
+                        }
+                        var cats = categories[catPos];
+                        //find item in categorie
+                        var itemsPos = 0;
+                        for (var i = 0; i < cats.values.length; i++) {
+                            if (cats.values[i] == d.target.name) {
+                                itemsPos = i;
+                                break;
+                            }
+                        }
+                        if (!d.selected) {
+                            var selId = hst.createSelectionIdBuilder()
+                                .withCategory(cats, itemsPos)
+                                .createSelectionId();
+                            d.selectionId = selId;
+                            d.selected = true;
+                            selectionMngr.select(selId, true);
+                        }
+                        //end if child serie found
+                    }
+                    d3.select(this).style("stroke-dasharray", 5);
+                    d.selected = true;
+                    /*
                     //find categorie position
                     var catPos = 0;
-                    for (var i = 0; i < categories.length; i++) {
-                        catPos = i;
-                        if (categories[i].source.displayName == d.target.category)
-                            break;
+                    for(var i=0;i<categories.length;i++){
+                        catPos=i;
+                        if (categories[i].source.displayName==d.target.category) break;
                     }
                     var cats = categories[catPos];
                     //find item in categorie
                     var itemsPos = [];
-                    for (var i = 0; i < cats.values.length; i++) {
-                        if (cats.values[i] == d.target.name) {
+                    for(var i=0; i< cats.values.length; i++){
+                        if (cats.values[i]==d.target.name) {
                             itemsPos.push(i);
                         }
                     }
-                    //selectionMngr = hst.createSelectionManager();
-                    //selectionMngr.clear();  
-                    for (var j = 0; j < itemsPos.length; j++) {
+                    for(var j=0;j<itemsPos.length;j++){
                         var selId = hst.createSelectionIdBuilder()
                             .withCategory(cats, itemsPos[j])
                             .createSelectionId();
                         d.selectionId = selId;
                         d.selected = true;
-                        //selectionMngr.clear();
-                        selectionMngr.select(selId, true);
+                        selectionMngr.select(selId,true);
+                        
                     }
+                    */
                 }
                 else {
                     //d.selected = false;
@@ -1998,6 +2062,9 @@ function inicializarArbol(h, w, source, hst, settings) {
     }
     // Toggle children on click.
     function click(d) {
+        d3.selectAll("path.link").selected = false;
+        d3.selectAll("path.link").style("stroke-dasharray", 0);
+        selectionMngr.clear();
         if (d.children) {
             //collapse
             d._children = d.children;
@@ -2294,8 +2361,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
