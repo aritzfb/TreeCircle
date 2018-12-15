@@ -963,17 +963,31 @@ var powerbi;
                         this.target.appendChild(wellcome_div);
                     }
                     Visual.prototype.update = function (options) {
-                        if (document.getElementById("wellcome_div"))
-                            this.target.removeChild(document.getElementById("wellcome_div"));
                         this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
                         var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
-                        if (options.type != 36) {
+                        debugger;
+                        var hasCategories = false;
+                        for (var i = 0; i < options.dataViews[0].metadata.columns.length; i++) {
+                            hasCategories = !options.dataViews[0].metadata.columns[i].isMeasure;
+                            if (hasCategories)
+                                break;
+                        }
+                        if (hasCategories) {
+                            if (options.type != 36) {
+                                document.getElementById("wellcome_div").style.display = "none";
+                                if (d3.select("svg")) {
+                                    d3.select("svg").remove();
+                                }
+                                if (div_height - 20 > 0)
+                                    div_height = div_height - 20;
+                                inicializarArbol(div_height, div_width, options, this.host, this.settings);
+                            }
+                        }
+                        else {
                             if (d3.select("svg")) {
                                 d3.select("svg").remove();
                             }
-                            if (div_height - 20 > 0)
-                                div_height = div_height - 20;
-                            inicializarArbol(div_height, div_width, options, this.host, this.settings);
+                            document.getElementById("wellcome_div").style.display = "block";
                         }
                     };
                     Visual.parseSettings = function (dataView) {
