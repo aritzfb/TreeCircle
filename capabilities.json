@@ -188,6 +188,12 @@
                         "numeric":true
                     }
                 }
+                , "levelSize":{
+                    "displayName":"Level Size"
+                    , "type":{
+                        "numeric":true
+                    }
+                }
                 , "expandMode" : {
                     "displayName": "Expand Single Node"
                     , "type" : {

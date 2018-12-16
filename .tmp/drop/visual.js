@@ -897,6 +897,7 @@ var powerbi;
                         this.expandMode = false;
                         this.weightLinks = true;
                         this.linksSize = 20;
+                        this.levelSize = 180;
                         this.arcRadius = 15;
                         this.progressPie = true;
                     }
@@ -1176,7 +1177,6 @@ function parseSource(source, metadataSourceTable) {
             }
         }
     }
-    debugger;
     // source.rows[i][0] ==> value
     // source.rows[i][1] ==> format value
     // source.rows[i][2] ==> first level
@@ -1288,9 +1288,14 @@ function inicializarArbol(h, w, source, hst, settings) {
         weightLinks = settings.treeOptions.weightLinks;
     }
     catch (e) { }
-    var linksSize = 1.5;
+    var linksSize = 20;
     try {
         linksSize = settings.treeOptions.linksSize;
+    }
+    catch (e) { }
+    var levelSize = 180;
+    try {
+        levelSize = settings.treeOptions.levelSize;
     }
     catch (e) { }
     var linkColorSeries = true;
@@ -1666,7 +1671,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         });
         var links = tree.links(nodes);
         // Normalize for fixed-depth.
-        nodes.forEach(function (d) { d.y = d.depth * 180; });
+        nodes.forEach(function (d) { d.y = d.depth * levelSize; });
         // Update the nodes…
         var node = svg.selectAll("g.node")
             .data(nodes, function (d) { return d.id || (d.id = ++i); });
@@ -2084,9 +2089,9 @@ function inicializarArbol(h, w, source, hst, settings) {
     }
     // Toggle children on click.
     function click(d) {
+        selectionMngr.clear();
         d3.selectAll("path.link").selected = false;
         d3.selectAll("path.link").style("stroke-dasharray", 0);
-        selectionMngr.clear();
         if (d.children) {
             //collapse
             d._children = d.children;
@@ -2125,6 +2130,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         if (d.parent)
             parent = d.parent;
         updateGraph(nodes, d, hst, selectionMngr);
+        //updateGraph(nodes,d,hst,selectionMngr);      
         //update(rootSource);
     }
 }
