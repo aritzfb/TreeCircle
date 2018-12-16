@@ -55,7 +55,7 @@ module powerbi.extensibility.visual {
         
 
         constructor(options: VisualConstructorOptions) {
-            options.element.style.overflow = 'auto';
+            options.element.style.overflowX = 'auto';
             this.host = options.host;            
             this.target = options.element;            
             if (typeof document !== "undefined") {                
@@ -95,7 +95,6 @@ module powerbi.extensibility.visual {
                         d3.select("svg").remove();
                     }
                     if(div_height-20>0)div_height=div_height-20;
-                    debugger;
                     inicializarArbol(div_height,div_width,options,this.host,this.settings);
                 }
             } else {

@@ -944,7 +944,7 @@ var powerbi;
                 "use strict";
                 var Visual = (function () {
                     function Visual(options) {
-                        options.element.style.overflow = 'auto';
+                        options.element.style.overflowX = 'auto';
                         this.host = options.host;
                         this.target = options.element;
                         if (typeof document !== "undefined") {
@@ -980,7 +980,6 @@ var powerbi;
                                 }
                                 if (div_height - 20 > 0)
                                     div_height = div_height - 20;
-                                debugger;
                                 inicializarArbol(div_height, div_width, options, this.host, this.settings);
                             }
                         }
@@ -1411,8 +1410,16 @@ function inicializarArbol(h, w, source, hst, settings) {
             }
         }
     }
+    debugger;
+    var countCategories = 0;
+    for (var metadataitem = 0; metadataitem < metadataSourceTable.length; metadataitem++) {
+        var mti = metadataSourceTable[metadataitem];
+        if (mti.metadataType != "measure" && mti.metadataType != "target" && mti.metadataType != "avance")
+            countCategories++;
+    }
+    var deeptree = countCategories * levelSize;
     //var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    var margin = { top: 0, right: 0, bottom: 0, left: 90 }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
+    var margin = { top: 0, right: 100, bottom: 0, left: 90 }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
     var i = 0, duration = 750, root;
     var tree = d3.layout.tree()
         .size([height, width]);
@@ -1420,7 +1427,7 @@ function inicializarArbol(h, w, source, hst, settings) {
     var diagonal = d3.svg.diagonal()
         .projection(function (d) { return [d.y, d.x]; });
     var svg = d3.select("#div_arbol").append("svg")
-        .attr("width", width + margin.right + margin.left + 1000)
+        .attr("width", /*width +*/ margin.right + margin.left + deeptree)
         .attr("height", height /*+ margin.top + margin.bottom*/)
         .append("g")
         .attr("transform", "translate(" + margin.left + ",0)");
@@ -1921,6 +1928,8 @@ function inicializarArbol(h, w, source, hst, settings) {
                         for (var idlink = 0; idlink < links.length; idlink++) {
                             var currentLink = links[idlink];
                             if (currentLink.__data__.source.name == targetSerie.name && currentLink.__data__.source.category == targetSerie.category) {
+                                //if (currentLink.__data__.source.name == linkd.target.name && currentLink.__data__.source.category == linkd.target.category){
+                                //if(currentLink.__data__.source == linkd.target){
                                 serieFound = true;
                                 currentLink.selected = true;
                                 //currentLink.style("stroke-dasharray", 5);
