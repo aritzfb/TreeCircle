@@ -1703,11 +1703,13 @@ function inicializarArbol(h, w, source, hst, settings) {
                         svg.append("text").attr('class', 'text-progress')
                             .text(formatPercent(nodes[0].avance))
                             .attr('x', 3)
-                            .attr('y', 80);
+                            .attr('y', 80)
+                            .style("font-size", nodeTextSize);
                         svg.append("text").attr('class', 'text-progress')
                             .text("Progress")
                             .attr('x', 0)
-                            .attr('y', 25);
+                            .attr('y', 25)
+                            .style("font-size", nodeTextSize);
                     }
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
