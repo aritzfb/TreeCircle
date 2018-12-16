@@ -897,7 +897,6 @@ var powerbi;
                         this.expandMode = false;
                         this.weightLinks = true;
                         this.linksSize = 20;
-                        this.levelSize = 180;
                         this.arcRadius = 15;
                         this.progressPie = true;
                     }
@@ -1292,11 +1291,6 @@ function inicializarArbol(h, w, source, hst, settings) {
         linksSize = settings.treeOptions.linksSize;
     }
     catch (e) { }
-    var levelSize = 180;
-    try {
-        levelSize = settings.treeOptions.levelSize;
-    }
-    catch (e) { }
     var linkColorSeries = true;
     try {
         linkColorSeries = settings.treeColors.linkColorSeries;
@@ -1417,9 +1411,13 @@ function inicializarArbol(h, w, source, hst, settings) {
         if (mti.metadataType != "measure" && mti.metadataType != "target" && mti.metadataType != "avance")
             countCategories++;
     }
-    var deeptree = countCategories * levelSize;
     //var margin = {top: 20, right: 120, bottom: 20, left: 120},
     var margin = { top: 0, right: 100, bottom: 0, left: 90 }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
+    var levelSize = 0;
+    if (countCategories > 0)
+        levelSize = Math.floor((width) / countCategories);
+    //var deeptree = countCategories*levelSize;
+    var deeptree = countCategories * levelSize;
     var i = 0, duration = 750, root;
     var tree = d3.layout.tree()
         .size([height, width]);
@@ -2398,8 +2396,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',

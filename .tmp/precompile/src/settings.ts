@@ -68,7 +68,6 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
       public expandMode: boolean=false;
       public weightLinks: boolean = true;   
       public linksSize: number = 20;
-      public levelSize: number = 180;
       public arcRadius: number=15;
       public progressPie: boolean = true;
       
