@@ -95,6 +95,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
                         d3.select("svg").remove();
                     }
                     if(div_height-20>0)div_height=div_height-20;
+                    debugger;
                     inicializarArbol(div_height,div_width,options,this.host,this.settings);
                 }
             } else {

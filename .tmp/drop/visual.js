@@ -979,6 +979,7 @@ var powerbi;
                                 }
                                 if (div_height - 20 > 0)
                                     div_height = div_height - 20;
+                                debugger;
                                 inicializarArbol(div_height, div_width, options, this.host, this.settings);
                             }
                         }
@@ -1073,7 +1074,6 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     else
         retorno.target = 0;
     rowTarget = retorno.target;
-    debugger;
     if (rowProgress) {
         retorno.avance = rowProgress;
         retorno.hasProgress = true;
@@ -1092,7 +1092,7 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
         if (sourceRow[i])
             singleNode.name = sourceRow[i];
         else
-            singleNode.name = "";
+            singleNode.name = "NULL (" + metadataSourceTable[i].columnName + " - " + i.toString() + ")";
         singleNode.category = metadataSourceTable[i].columnName;
         if (!metadataColors[singleNode.category]) {
             metadataColors[singleNode.category] = [];
@@ -1105,11 +1105,11 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
         singleNode.hasTarget = retorno.hasTarget;
         singleNode.avance = rowProgress;
         singleNode.hasProgress = retorno.hasProgress;
-        if (sourceRow[i]) {
-            lastnode.children.push(singleNode);
-            lastnode._children.push(singleNode);
-            lastnode = lastnode.children[0];
-        }
+        //if (sourceRow[i]) {
+        lastnode.children.push(singleNode);
+        lastnode._children.push(singleNode);
+        lastnode = lastnode.children[0];
+        //}
     }
     return retorno;
 }
@@ -1124,8 +1124,8 @@ function fillTrees(sourceRowTree, sourceParsed) {
         if (sourceParsed.children.length == 0) {
             sourceParsed.children = current.children;
             //sourceParsed._children = current.children;
-            sourceParsed.value += current.value;
-            sourceParsed.target += current.target;
+            //sourceParsed.value += current.value;
+            //sourceParsed.target += current.target;
             sourceParsed.hasValue = current.hasValue;
             sourceParsed.hasTarget = current.hasTarget;
             sourceParsed.hasProgress = current.hasProgress;
@@ -1146,13 +1146,12 @@ function fillTrees(sourceRowTree, sourceParsed) {
             }
             if (!existe) {
                 sourceParsed.children.push(current.children[0]);
-                sourceParsed.value += current.value;
-                sourceParsed.target += current.target;
+                //sourceParsed.value += current.value;
+                //sourceParsed.target += current.target;
                 sourceParsed.hasValue = current.hasValue;
                 sourceParsed.hasTarget = current.hasTarget;
                 sourceParsed.hasProgress = current.hasProgress;
-                if (current.avance)
-                    sourceParsed.avance = current.avance;
+                //if (current.avance) sourceParsed.avance = current.avance;
                 //sourceParsed.avance = sourceParsed.avance > current.avance ? sourceParsed.avance : current.avance;
                 //sourceParsed._children.push(current.children[0]);
             }
@@ -1177,6 +1176,7 @@ function parseSource(source, metadataSourceTable) {
             }
         }
     }
+    debugger;
     // source.rows[i][0] ==> value
     // source.rows[i][1] ==> format value
     // source.rows[i][2] ==> first level
@@ -1192,17 +1192,25 @@ function recalculateValues(sourceParsed) {
         if (retorno.children.length > 0) {
             //retorno.value=0;
             //retorno.target=0;
+            if (retorno.hasValue)
+                retorno.value = 0;
+            if (retorno.hasTarget)
+                retorno.target = 0;
+            if (retorno.hasProgress)
+                retorno.avance = 0;
             for (var i = 0; i < retorno.children.length; i++) {
                 var child = recalculateValues(retorno.children[i]);
-                if (child.value) {
-                    if (!retorno.value)
-                        retorno.value = 0;
+                if (child.hasValue) {
+                    //if(!retorno.value) retorno.value=0;
                     retorno.value += child.value;
                 }
-                if (child.target) {
-                    if (!retorno.target)
-                        retorno.target = 0;
+                if (child.hasTarget) {
+                    //if(!retorno.target) retorno.target=0;
                     retorno.target += child.target;
+                }
+                if (child.hasProgress) {
+                    //if(!retorno.avance) retorno.avance=0;
+                    retorno.avance = child.avance;
                 }
             }
         }
@@ -2375,8 +2383,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',

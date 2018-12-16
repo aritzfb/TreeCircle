@@ -219,7 +219,7 @@
     "dataViewMappings": [
         {
             "conditions": [
-                { "measure": { "max": 1 }   , "target": { "max": 1 } , "avance":{"max": 1}  }
+                { "category":{"max":7}, "measure": { "max": 1 }   , "target": { "max": 1 } , "avance":{"max": 1}  }
                 
             ],
             "categorical": {
