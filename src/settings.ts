@@ -66,6 +66,7 @@ module powerbi.extensibility.visual {
     export class treeOptions {
       public initialMode: initialModeOptions = initialModeOptions.expanded;
       public expandMode: boolean=false;
+      public translationsDuration: number=750;
       public weightLinks: boolean = true;   
       public linksSize: number = 20;
       public arcRadius: number=15;

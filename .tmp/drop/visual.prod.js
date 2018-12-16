@@ -895,6 +895,7 @@ var powerbi;
                     function treeOptions() {
                         this.initialMode = initialModeOptions.expanded;
                         this.expandMode = false;
+                        this.translationsDuration = 750;
                         this.weightLinks = true;
                         this.linksSize = 20;
                         this.arcRadius = 15;
@@ -1276,6 +1277,11 @@ function inicializarArbol(h, w, source, hst, settings) {
         expandMode = settings.treeOptions.expandMode;
     }
     catch (e) { }
+    var translationsDuration = 750;
+    try {
+        translationsDuration = settings.treeOptions.translationsDuration;
+    }
+    catch (e) { }
     var initialMode = "expanded";
     try {
         initialMode = settings.treeOptions.initialMode;
@@ -1404,7 +1410,6 @@ function inicializarArbol(h, w, source, hst, settings) {
             }
         }
     }
-    debugger;
     var countCategories = 0;
     for (var metadataitem = 0; metadataitem < metadataSourceTable.length; metadataitem++) {
         var mti = metadataSourceTable[metadataitem];
@@ -1418,7 +1423,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         levelSize = Math.floor((width) / countCategories);
     //var deeptree = countCategories*levelSize;
     var deeptree = countCategories * levelSize;
-    var i = 0, duration = 750, root;
+    var i = 0, duration = translationsDuration, root;
     var tree = d3.layout.tree()
         .size([height, width]);
     //.on("zoom", zoomed);

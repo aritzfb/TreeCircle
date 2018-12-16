@@ -194,6 +194,12 @@
                         "bool": true
                     }
                 }
+                , "translationsDuration" : {
+                    "displayName": "Animations Time"
+                    , "type" :{
+                        "numeric":true
+                    }
+                }
                 , "arcRadius" : {
                     "displayName": "Arc Radius"
                     , "type": {

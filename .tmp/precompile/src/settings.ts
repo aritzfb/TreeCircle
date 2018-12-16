@@ -66,6 +66,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
     export class treeOptions {
       public initialMode: initialModeOptions = initialModeOptions.expanded;
       public expandMode: boolean=false;
+      public translationsDuration: number=750;
       public weightLinks: boolean = true;   
       public linksSize: number = 20;
       public arcRadius: number=15;
