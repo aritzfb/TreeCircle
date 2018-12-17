@@ -29,9 +29,10 @@ module powerbi.extensibility.visual {
     import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
 
     export class VisualSettings extends DataViewObjectsParser {
+      public treeOptions: treeOptions = new treeOptions();  
+      public treeLabels: treeLabels = new treeLabels();    
       public treeColors: treeColors = new treeColors();
-      public treeOptions: treeOptions = new treeOptions();
-      public treeLabels: treeLabels = new treeLabels();
+      
     }
 
     export class treeLabels {
@@ -65,11 +66,15 @@ module powerbi.extensibility.visual {
     
     export class treeOptions {
       public initialMode: initialModeOptions = initialModeOptions.expanded;
-      public expandMode: boolean=false;
-      public translationsDuration: number=750;
+      
       public weightLinks: boolean = true;   
       public linksSize: number = 20;
+
+      public expandMode: boolean=false;
+      
       public arcRadius: number=15;
+      public translationsDuration: number=750;
+      public leftMarginFirstNode:number=60;
       public progressPie: boolean = true;
       
     }

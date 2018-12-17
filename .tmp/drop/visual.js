@@ -848,9 +848,9 @@ var powerbi;
                     __extends(VisualSettings, _super);
                     function VisualSettings() {
                         var _this = _super !== null && _super.apply(this, arguments) || this;
-                        _this.treeColors = new treeColors();
                         _this.treeOptions = new treeOptions();
                         _this.treeLabels = new treeLabels();
+                        _this.treeColors = new treeColors();
                         return _this;
                     }
                     return VisualSettings;
@@ -894,11 +894,12 @@ var powerbi;
                 var treeOptions = (function () {
                     function treeOptions() {
                         this.initialMode = initialModeOptions.expanded;
-                        this.expandMode = false;
-                        this.translationsDuration = 750;
                         this.weightLinks = true;
                         this.linksSize = 20;
+                        this.expandMode = false;
                         this.arcRadius = 15;
+                        this.translationsDuration = 750;
+                        this.leftMarginFirstNode = 60;
                         this.progressPie = true;
                     }
                     return treeOptions;
@@ -1309,6 +1310,11 @@ function inicializarArbol(h, w, source, hst, settings) {
         translationsDuration = settings.treeOptions.translationsDuration;
     }
     catch (e) { }
+    var leftMarginFirstNode = 60;
+    try {
+        leftMarginFirstNode = settings.treeOptions.leftMarginFirstNode;
+    }
+    catch (e) { }
     var initialMode = "expanded";
     try {
         initialMode = settings.treeOptions.initialMode;
@@ -1446,7 +1452,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             countCategories++;
     }
     //var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    var margin = { top: 0, right: 100, bottom: 0, left: 90 }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
+    var margin = { top: 0, right: 100, bottom: 0, left: leftMarginFirstNode }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
     var levelSize = 0;
     if (countCategories > 0)
         levelSize = Math.floor((width) / countCategories);
@@ -1463,13 +1469,14 @@ function inicializarArbol(h, w, source, hst, settings) {
         .attr("height", height /*+ margin.top + margin.bottom*/)
         .append("g")
         .attr("transform", "translate(" + margin.left + ",0)");
-    //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    //.attr("transform", "translate(" + margin.left + "," + -margin.top + ")");
     var sourceParsed = parseSource(sourceTable, metadataSourceTable);
     root = sourceParsed;
     root.x0 = height / 2;
     root.y0 = 0;
     update(root, hst, selectionMngr);
-    d3.select(self.frameElement).style("height", "800px");
+    //d3.select(self.frameElement).style("height", "800px");
+    //d3.select(self.frameElement).style("height", height);
     function formatPercent(val) {
         return (100 * val).toFixed(numberDecimals) + "%";
     }
@@ -2432,8 +2439,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
