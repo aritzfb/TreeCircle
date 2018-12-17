@@ -1029,13 +1029,17 @@ function newNode() {
         "serieColor": "",
         "hasValue": false,
         "hasTarget": false,
-        "hasProgress": false
+        "hasProgress": false,
+        "formatValue": "",
+        "formatTarget": "",
+        "formatAvance": ""
     };
 }
 function createSourceRowTree(sourceRow, metadataSourceTable) {
+    debugger;
     //var numCategories = 0,itemValue=0;itemTarget=0,itemAvance=0;
     var numCategories = 0, itemValue = null;
-    itemTarget = null, itemAvance = null;
+    itemTarget = null, itemAvance = null, formatValue = "", formatTarget = "", formatAvance = "";
     for (var i = 0; i < metadataSourceTable.length; i++) {
         var columnInfo = metadataSourceTable[i];
         if (columnInfo.metadataType.toString().indexOf("Category") > -1) {
@@ -1043,12 +1047,15 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
         }
         else if (columnInfo.metadataType.toString() == "measure") {
             itemValue = sourceRow[i];
+            formatValue = columnInfo.format;
         }
         else if (columnInfo.metadataType.toString() == "target") {
             itemTarget = sourceRow[i];
+            formatTarget = columnInfo.format;
         }
         else if (columnInfo.metadataType.toString() == "avance") {
             itemAvance = sourceRow[i];
+            formatAvance = columnInfo.format;
         }
     }
     var rowValue = itemValue;
@@ -1063,6 +1070,7 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     if (rowValue) {
         retorno.value = rowValue;
         retorno.hasValue = true;
+        retorno.formatValue = formatValue;
     }
     else
         retorno.value = 0;
@@ -1070,6 +1078,7 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     if (rowTarget) {
         retorno.target = rowTarget;
         retorno.hasTarget = true;
+        retorno.formatTarget = formatTarget;
     }
     else
         retorno.target = 0;
@@ -1077,6 +1086,7 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     if (rowProgress) {
         retorno.avance = rowProgress;
         retorno.hasProgress = true;
+        retorno.formatAvance = formatAvance;
     }
     else
         retorno.avance = 0;
@@ -1105,6 +1115,9 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
         singleNode.hasTarget = retorno.hasTarget;
         singleNode.avance = rowProgress;
         singleNode.hasProgress = retorno.hasProgress;
+        singleNode.formatValue = formatValue;
+        singleNode.formatTarget = formatTarget;
+        singleNode.formatAvance = formatAvance;
         //if (sourceRow[i]) {
         lastnode.children.push(singleNode);
         lastnode._children.push(singleNode);
@@ -1220,6 +1233,7 @@ function zoomed() {
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 function inicializarArbol(h, w, source, hst, settings) {
+    debugger;
     var selectionMngr = hst.createSelectionManager();
     selectionMngr.clear();
     try {
@@ -1382,7 +1396,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                     if (source.dataViews[0].categorical.values) {
                         for (var j = 0; j < source.dataViews[0].categorical.values.length; j++) {
                             if (!settedMetadataSourceTable) {
-                                var columnInfo = { "columnName": "", "metadataType": "" };
+                                var columnInfo = { "columnName": "", "metadataType": "", "format": "" };
                                 columnInfo.columnName = source.dataViews[0].categorical.values[j].source.displayName;
                                 if (source.dataViews[0].categorical.values[j].source.roles) {
                                     if (source.dataViews[0].categorical.values[j].source.roles.measure)
@@ -1393,6 +1407,8 @@ function inicializarArbol(h, w, source, hst, settings) {
                                         columnInfo.metadataType = "avance";
                                     else
                                         columnInfo.metadataType = "unknown";
+                                    if (columnInfo.metadataType != "unknown")
+                                        columnInfo.format = source.dataViews[0].categorical.values[j].source.format;
                                 }
                                 metadataSourceTable.push(columnInfo);
                             }
@@ -1447,7 +1463,7 @@ function inicializarArbol(h, w, source, hst, settings) {
     function formatPercentDiference(val) {
         return (100 * val).toFixed(numberDecimals);
     }
-    function formatValue(val) {
+    function formatValue(val, format) {
         var retorno = "";
         if (autoScaleValues) {
             var currentValue = val;
@@ -1486,6 +1502,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             retorno = parseFloat(currentValue.toFixed(2)).toLocaleString(hst.locale) + " " + escala;
         }
         else {
+            debugger;
             retorno = parseFloat(val).toFixed(numberDecimals).toLocaleString(hst.locale);
         }
         return retorno;
@@ -1497,7 +1514,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                 retorno = d.name;
                 break;
             case "value":
-                retorno = formatValue(d.value);
+                retorno = formatValue(d.value, d.formatValue);
                 break;
             case "target":
                 retorno = formatPercent(d.value / d.target);
@@ -2403,8 +2420,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
