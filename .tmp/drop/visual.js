@@ -944,6 +944,7 @@ var powerbi;
                 "use strict";
                 var Visual = (function () {
                     function Visual(options) {
+                        this.isResizing = false;
                         options.element.style.overflowX = 'auto';
                         this.host = options.host;
                         this.target = options.element;
@@ -973,7 +974,8 @@ var powerbi;
                                 break;
                         }
                         if (hasCategories) {
-                            if (options.type != 36) {
+                            if (this.isResizing && options.type == 36) {
+                                this.isResizing = false;
                                 document.getElementById("wellcome_div").style.display = "none";
                                 if (d3.select("svg")) {
                                     d3.select("svg").remove();
@@ -981,6 +983,19 @@ var powerbi;
                                 if (div_height - 20 > 0)
                                     div_height = div_height - 20;
                                 inicializarArbol(div_height, div_width, options, this.host, this.settings);
+                            }
+                            else if (options.type != 36) {
+                                if (options.type == 4)
+                                    this.isResizing = true;
+                                else {
+                                    document.getElementById("wellcome_div").style.display = "none";
+                                    if (d3.select("svg")) {
+                                        d3.select("svg").remove();
+                                    }
+                                    if (div_height - 20 > 0)
+                                        div_height = div_height - 20;
+                                    inicializarArbol(div_height, div_width, options, this.host, this.settings);
+                                }
                             }
                         }
                         else {
@@ -1036,7 +1051,6 @@ function newNode() {
     };
 }
 function createSourceRowTree(sourceRow, metadataSourceTable) {
-    debugger;
     //var numCategories = 0,itemValue=0;itemTarget=0,itemAvance=0;
     var numCategories = 0, itemValue = null;
     itemTarget = null, itemAvance = null, formatValue = "", formatTarget = "", formatAvance = "";
@@ -1233,7 +1247,6 @@ function zoomed() {
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 function inicializarArbol(h, w, source, hst, settings) {
-    debugger;
     var selectionMngr = hst.createSelectionManager();
     selectionMngr.clear();
     try {
@@ -1502,7 +1515,6 @@ function inicializarArbol(h, w, source, hst, settings) {
             retorno = parseFloat(currentValue.toFixed(2)).toLocaleString(hst.locale) + " " + escala;
         }
         else {
-            debugger;
             retorno = parseFloat(val).toFixed(numberDecimals).toLocaleString(hst.locale);
         }
         return retorno;
@@ -2420,8 +2432,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',

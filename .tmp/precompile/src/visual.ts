@@ -79,7 +79,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
                 
         }
         
-                
+        private isResizing :boolean = false;       
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
@@ -89,7 +89,8 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
                 if(hasCategories)break;
             } 
             if(hasCategories){
-                if(options.type != 36) {
+                if(this.isResizing && options.type==36) {
+                    this.isResizing=false;
                     document.getElementById("wellcome_div").style.display="none";
                     if (d3.select("svg")){
                         d3.select("svg").remove();
@@ -97,6 +98,19 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
                     if(div_height-20>0)div_height=div_height-20;
                     inicializarArbol(div_height,div_width,options,this.host,this.settings);
                 }
+                else  
+                if(options.type != 36) {
+                    if (options.type == 4) this.isResizing=true;
+                    else {
+                        document.getElementById("wellcome_div").style.display="none";
+                        if (d3.select("svg")){
+                            d3.select("svg").remove();
+                        }
+                        if(div_height-20>0)div_height=div_height-20;
+                        inicializarArbol(div_height,div_width,options,this.host,this.settings);
+                    }   
+                }
+                
             } else {
                 if (d3.select("svg")){
                     d3.select("svg").remove();
