@@ -87,6 +87,12 @@
                         "numeric":true
                     }
                 }
+                , "rightMarginFirstNode" : {
+                    "displayName":"Right Margin"
+                    , "type":{
+                        "numeric":true
+                    }
+                }
                 , "arcRadius" : {
                     "displayName": "Arc Radius"
                     , "type": {

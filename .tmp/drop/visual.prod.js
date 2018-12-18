@@ -900,6 +900,7 @@ var powerbi;
                         this.arcRadius = 15;
                         this.translationsDuration = 750;
                         this.leftMarginFirstNode = 60;
+                        this.rightMarginFirstNode = 100;
                         this.progressPie = true;
                     }
                     return treeOptions;
@@ -958,11 +959,11 @@ var powerbi;
                         var wellcome_div = document.createElement("div");
                         wellcome_div.id = "wellcome_div";
                         wellcome_div.innerHTML = "<p style='font-size:25px'>PIE CHARTS TREE (1.0.3)</p>";
-                        wellcome_div.innerHTML += "<p>Put an attribute into Categories field for start the tree...<br/></p>";
+                        //wellcome_div.innerHTML+="<p>Sponsored by:</p>";
+                        //wellcome_div.innerHTML+="<div style='position:relative;left:100px;height:100px;width:100px;background-color:black;color:white;'><div style='text-align:center;position:absolute;top:40px'><p style='height:100px;width:100px;margin:0;padding:0;'>WANTED</p></div></div>";
+                        wellcome_div.innerHTML += "<p style='font-weight: bolder;'>Put an attribute into Categories field for start the tree...<br/></p>";
                         wellcome_div.innerHTML += "<p>Created by Aritz Francoy</p>";
                         wellcome_div.innerHTML += "<p>Contributors: Sergio Álvaro Panizo, Eduardo Valladolid, Mohammed Suhel</p>";
-                        wellcome_div.innerHTML += "<p>Sponsored by:</p>";
-                        wellcome_div.innerHTML += "<div style='position:relative;height:100px;width:100px;background-color:black;color:white;'><p style='position:absolute;top:40%;transform:translateY(-50%)'>YOUR COMPANY</p></div>";
                         this.target.appendChild(wellcome_div);
                     }
                     Visual.prototype.update = function (options) {
@@ -1315,6 +1316,11 @@ function inicializarArbol(h, w, source, hst, settings) {
         leftMarginFirstNode = settings.treeOptions.leftMarginFirstNode;
     }
     catch (e) { }
+    var rightMarginFirstNode = 100;
+    try {
+        rightMarginFirstNode = settings.treeOptions.rightMarginFirstNode;
+    }
+    catch (e) { }
     var initialMode = "expanded";
     try {
         initialMode = settings.treeOptions.initialMode;
@@ -1452,7 +1458,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             countCategories++;
     }
     //var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    var margin = { top: 0, right: 100, bottom: 0, left: leftMarginFirstNode }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
+    var margin = { top: 0, right: rightMarginFirstNode, bottom: 0, left: leftMarginFirstNode }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
     var levelSize = 0;
     if (countCategories > 0)
         levelSize = Math.floor((width) / countCategories);

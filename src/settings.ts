@@ -75,6 +75,7 @@ module powerbi.extensibility.visual {
       public arcRadius: number=15;
       public translationsDuration: number=750;
       public leftMarginFirstNode:number=60;
+      public rightMarginFirstNode:number=100;
       public progressPie: boolean = true;
       
     }

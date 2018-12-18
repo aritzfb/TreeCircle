@@ -75,6 +75,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
       public arcRadius: number=15;
       public translationsDuration: number=750;
       public leftMarginFirstNode:number=60;
+      public rightMarginFirstNode:number=100;
       public progressPie: boolean = true;
       
     }
