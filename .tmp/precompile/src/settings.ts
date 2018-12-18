@@ -54,6 +54,8 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
       public arcCumplimientoKO: string = "red";
       public linkColor: string = "lightgray";
       public linkColorSeries:boolean = true;
+      public nodeColorSeries:boolean = true;
+      public nodeBgColor: string = "white";
     }
 
     export enum initialModeOptions {

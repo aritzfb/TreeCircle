@@ -229,6 +229,23 @@
                         }
                     }
                 }
+                , "nodeColorSeries" : {
+                    "displayName" : "Nodes Background Color Series"
+                    , "type" : {
+                        "bool" : true
+                    }
+                }
+                , "nodeBgColor":{
+                    "displayName": "Nodes Background Color"
+                    , "type": {
+                        "fill": {
+                            "solid": {
+                                "color":true
+                            }
+                        }
+                    }
+                }
+
 
             }
         }

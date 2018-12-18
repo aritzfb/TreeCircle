@@ -879,6 +879,8 @@ var powerbi;
                         this.arcCumplimientoKO = "red";
                         this.linkColor = "lightgray";
                         this.linkColorSeries = true;
+                        this.nodeColorSeries = true;
+                        this.nodeBgColor = "white";
                     }
                     return treeColors;
                 }());
@@ -1134,11 +1136,11 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
         singleNode.formatValue = formatValue;
         singleNode.formatTarget = formatTarget;
         singleNode.formatAvance = formatAvance;
-        //if (sourceRow[i]) {
-        lastnode.children.push(singleNode);
-        lastnode._children.push(singleNode);
-        lastnode = lastnode.children[0];
-        //}
+        if (sourceRow[i]) {
+            lastnode.children.push(singleNode);
+            lastnode._children.push(singleNode);
+            lastnode = lastnode.children[0];
+        }
     }
     return retorno;
 }
@@ -1286,6 +1288,11 @@ function inicializarArbol(h, w, source, hst, settings) {
         linkColor = settings.treeColors.linkColor;
     }
     catch (e) { }
+    var nodeBgColor = "white";
+    try {
+        nodeBgColor = settings.treeColors.nodeBgColor;
+    }
+    catch (e) { }
     var arcColorOK = "green";
     try {
         arcColorOK = settings.treeColors.arcCumplimientoOK;
@@ -1339,6 +1346,11 @@ function inicializarArbol(h, w, source, hst, settings) {
     var linkColorSeries = true;
     try {
         linkColorSeries = settings.treeColors.linkColorSeries;
+    }
+    catch (e) { }
+    var nodeColorSeries = true;
+    try {
+        nodeColorSeries = settings.treeColors.nodeColorSeries;
     }
     catch (e) { }
     var magiclabels = false;
@@ -1780,7 +1792,13 @@ function inicializarArbol(h, w, source, hst, settings) {
             .endAngle(2 * Math.PI);
         nodeEnter
             .append("path").attr("d", arcBlank)
-            .style("fill", "white");
+            .style("fill", function (d) {
+            var retorno = nodeBgColor;
+            if (nodeColorSeries && d.serieColor)
+                retorno = d.serieColor;
+            //return d.serieColor;
+            return retorno;
+        });
         var arcBase = d3.svg.arc().innerRadius(0).outerRadius(arcRadius).startAngle(0)
             .endAngle(getDiffCumplAvance);
         nodeEnter
