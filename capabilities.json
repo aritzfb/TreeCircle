@@ -63,10 +63,17 @@
                         "bool":true
                     }
                 }
+                
                 , "linksSize" : {
                     "displayName":"Links Size"
                     , "type":{
                         "numeric":true
+                    }
+                }
+                , "nodesTooltips":{
+                    "displayName":"Tooltips"
+                    , "type":{
+                        "bool":true
                     }
                 }
                 , "expandMode" : {

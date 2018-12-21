@@ -898,6 +898,7 @@ var powerbi;
                         this.initialMode = initialModeOptions.expanded;
                         this.weightLinks = true;
                         this.linksSize = 20;
+                        this.nodesTooltips = true;
                         this.expandMode = false;
                         this.arcRadius = 15;
                         this.translationsDuration = 750;
@@ -1343,6 +1344,11 @@ function inicializarArbol(h, w, source, hst, settings) {
         linksSize = settings.treeOptions.linksSize;
     }
     catch (e) { }
+    var nodesTooltips = true;
+    try {
+        nodesTooltips = settings.treeOptions.nodesTooltips;
+    }
+    catch (e) { }
     var linkColorSeries = true;
     try {
         linkColorSeries = settings.treeColors.linkColorSeries;
@@ -1771,22 +1777,82 @@ function inicializarArbol(h, w, source, hst, settings) {
             .attr("transform", function (d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
             .on("click", click)
             .on("mouseover", function (d) {
+            if (nodesTooltips) {
+                var myDataItems = [{
+                        displayName: d.name,
+                        color: d.serieColor,
+                        header: d.category
+                    }];
+                if (d.hasValue) {
+                    myDataItems[0].header = d.category + ": " + d.name;
+                    if (d.category == "")
+                        myDataItems[0].header = d.name;
+                    myDataItems[0].displayName = "Value";
+                    myDataItems[0].value = formatValue(d.value);
+                    //myDataItems.push(myItemValue);
+                    //myDataItems[1].value = setText(d.value);
+                    if (d.hasTarget) {
+                        myDataItems.push({
+                            displayName: "Target"
+                        });
+                        myDataItems[1].value = formatValue(d.target);
+                        myDataItems.push({ displayName: "Value/Target" });
+                        myDataItems[2].value = setText(d, "target");
+                        if (d.hasProgress) {
+                            myDataItems.push({ displayName: "Progress" });
+                            myDataItems[3].value = formatPercent(d.avance);
+                            var myItemColor = arcColorOK;
+                            if (d.value / d.target - d.avance < 0)
+                                myItemColor = arcColorKO;
+                            myDataItems[1].color = myItemColor;
+                            myDataItems[2].color = myItemColor;
+                            myDataItems[3].color = myItemColor;
+                            //setText(d,"avance");
+                        }
+                        else {
+                            //d.hasValue true and d.hasTarget true and d.hasProgress false
+                        }
+                    }
+                    else {
+                        //d.hasValue true and d.hasTarget false
+                    }
+                }
+                else {
+                    //d.hasValue false
+                }
+                hst.tooltipService.hostServices.visualHostTooltipService.show({
+                    coordinates: [event.clientX, event.clientY],
+                    isTouchEvent: false,
+                    dataItems: myDataItems,
+                    identities: [],
+                });
+            }
+            /*
             var htmlText = d.category + "<br/>" + d.name;
-            if (d.value)
-                htmlText += "<br/>Value: " + formatValue(d.value);
-            if (d.target)
-                htmlText += "<br/>Target: " + formatValue(d.target);
+            if (d.value) htmlText += "<br/>Value: " + formatValue(d.value);
+            if (d.target) htmlText += "<br/>Target: " + formatValue(d.target);
             div_tooltip.transition()
-                .duration(500)
-                .style("opacity", .9);
+            .duration(500)
+            .style("opacity", .9);
             div_tooltip.html(htmlText)
-                .style("left", (d.y + arcRadius * 5).toString() + "px")
-                .style("top", d.x + "px");
+            .style("left", (d.y + arcRadius*5).toString() + "px")
+            .style("top", d.x + "px")
+            */
         })
             .on("mouseout", function (d) {
+            if (nodesTooltips) {
+                hst.tooltipService.hostServices.visualHostTooltipService.hide({
+                    coordinates: [event.clientX, event.clientY],
+                    isTouchEvent: false,
+                    dataItems: [],
+                    identities: [],
+                });
+            }
+            /*
             div_tooltip.transition()
                 .duration(100)
                 .style("opacity", 0);
+                */
         });
         var arcBlank = d3.svg.arc().innerRadius(0).outerRadius(arcRadius).startAngle(0)
             .endAngle(2 * Math.PI);

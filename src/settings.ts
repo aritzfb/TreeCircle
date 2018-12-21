@@ -71,7 +71,7 @@ module powerbi.extensibility.visual {
       
       public weightLinks: boolean = true;   
       public linksSize: number = 20;
-
+      public nodesTooltips: boolean=true;
       public expandMode: boolean=false;
       
       public arcRadius: number=15;
