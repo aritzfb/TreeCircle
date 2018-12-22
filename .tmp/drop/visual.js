@@ -1789,24 +1789,32 @@ function inicializarArbol(h, w, source, hst, settings) {
                         myDataItems[0].header = d.name;
                     myDataItems[0].displayName = "Value";
                     myDataItems[0].value = formatValue(d.value);
+                    if (d.parent)
+                        if (d.parent != d) {
+                            var percOverParent = formatPercent(d.value / d.parent.value);
+                            //myDataItems[0].value+= " (" + percOverParent + " over parent)"
+                            myDataItems.push({
+                                displayName: "Value/Parent",
+                                value: percOverParent
+                            });
+                        }
                     //myDataItems.push(myItemValue);
                     //myDataItems[1].value = setText(d.value);
                     if (d.hasTarget) {
                         myDataItems.push({
                             displayName: "Target"
                         });
-                        myDataItems[1].value = formatValue(d.target);
+                        myDataItems[myDataItems.length - 1].value = formatValue(d.target);
                         myDataItems.push({ displayName: "Value/Target" });
-                        myDataItems[2].value = setText(d, "target");
+                        myDataItems[myDataItems.length - 1].value = setText(d, "target");
                         if (d.hasProgress) {
                             myDataItems.push({ displayName: "Progress" });
-                            myDataItems[3].value = formatPercent(d.avance);
+                            myDataItems[myDataItems.length - 1].value = formatPercent(d.avance);
                             var myItemColor = arcColorOK;
                             if (d.value / d.target - d.avance < 0)
                                 myItemColor = arcColorKO;
-                            myDataItems[1].color = myItemColor;
-                            myDataItems[2].color = myItemColor;
-                            myDataItems[3].color = myItemColor;
+                            for (var di = 1; di < myDataItems.length; di++)
+                                myDataItems[di].color = myItemColor;
                             //setText(d,"avance");
                         }
                         else {
@@ -2529,8 +2537,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
