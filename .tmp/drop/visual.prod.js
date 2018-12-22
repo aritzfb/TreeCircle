@@ -2060,6 +2060,13 @@ function inicializarArbol(h, w, source, hst, settings) {
         })
             .on("click", function (d) {
             try {
+                function openChildren(d) {
+                    if (!d.children && d._children.length > 0)
+                        click(d);
+                    if (d.children)
+                        d.children.forEach(openChildren);
+                }
+                openChildren(d.target);
                 if (!d.selected) {
                     //d3.selectAll("path.link").style("stroke-dasharray", 0);
                     function selectChildLinks(links, targetSerie) {
