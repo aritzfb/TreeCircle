@@ -964,7 +964,7 @@ var powerbi;
                         wellcome_div.innerHTML = "<p style='font-size:25px'>PIE CHARTS TREE (1.0.3)</p>";
                         //wellcome_div.innerHTML+="<p>Sponsored by:</p>";
                         //wellcome_div.innerHTML+="<div style='position:relative;left:100px;height:100px;width:100px;background-color:black;color:white;'><div style='text-align:center;position:absolute;top:40px'><p style='height:100px;width:100px;margin:0;padding:0;'>WANTED</p></div></div>";
-                        wellcome_div.innerHTML += "<p style='font-weight: bolder;'>Put an attribute into Categories field for start the tree...<br/></p>";
+                        wellcome_div.innerHTML += "<p style='font-weight: bolder;'>Put an attribute in the Categories field to start the tree...<br/></p>";
                         wellcome_div.innerHTML += "<p>Created by Aritz Francoy</p>";
                         wellcome_div.innerHTML += "<p>Contributors: Sergio Álvaro Panizo, Eduardo Valladolid, Mohammed Suhel</p>";
                         this.target.appendChild(wellcome_div);
@@ -2544,8 +2544,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
