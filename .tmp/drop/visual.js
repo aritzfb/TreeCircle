@@ -1091,8 +1091,12 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
         retorno.hasValue = true;
         retorno.formatValue = formatValue;
     }
-    else
+    else {
+        // show 0 when no value (or when value is actually 0)
         retorno.value = 0;
+        retorno.hasValue = true;
+        retorno.formatValue = formatValue;
+    }
     rowValue = retorno.value;
     if (rowTarget) {
         retorno.target = rowTarget;
@@ -1253,7 +1257,8 @@ function zoomed() {
 }
 function inicializarArbol(h, w, source, hst, settings) {
     var selectionMngr = hst.createSelectionManager();
-    selectionMngr.clear();
+    //clear filters if refresh type is filter by other visual (type 2)
+    //if (source.type != 2) selectionMngr.clear();
     try {
         categories = source.dataViews[0].categorical.categories;
     }
@@ -1264,6 +1269,7 @@ function inicializarArbol(h, w, source, hst, settings) {
     catch (e) { }
     //try{categories = source.dataViews[0].categorical.categories[0];}catch(e){}
     this.varhst = hst;
+    this.options = source;
     var arcRadius = 15;
     try {
         arcRadius = settings.treeOptions.arcRadius;
@@ -1476,8 +1482,19 @@ function inicializarArbol(h, w, source, hst, settings) {
             countCategories++;
     }
     //var margin = {top: 20, right: 120, bottom: 20, left: 120},
+    //VERTICAL
+    /*
+    var margin = {top: rightMarginFirstNode, right: 0, bottom: leftMarginFirstNode, left: 0},
+        width = w - margin.right - margin.left,
+        height = h - margin.top - margin.bottom + 500;
+    var levelSize = 0;
+    */
+    //HORIZONTAL    
     var margin = { top: 0, right: rightMarginFirstNode, bottom: 0, left: leftMarginFirstNode }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
     var levelSize = 0;
+    //VERTICAL
+    //if(countCategories>0) levelSize=Math.floor((height) / countCategories);
+    //HORIZONTAL
     if (countCategories > 0)
         levelSize = Math.floor((width) / countCategories);
     //var deeptree = countCategories*levelSize;
@@ -1486,16 +1503,30 @@ function inicializarArbol(h, w, source, hst, settings) {
     var tree = d3.layout.tree()
         .size([height, width]);
     //.on("zoom", zoomed);
-    var diagonal = d3.svg.diagonal()
-        .projection(function (d) { return [d.y, d.x]; });
+    //VERTICAL
+    //var diagonal = d3.svg.diagonal().projection(function(d) { return [d.x, d.y]; });
+    //HORIZONTAL
+    var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
+    //VERTICAL
+    /*
     var svg = d3.select("#div_arbol").append("svg")
-        .attr("width", /*width +*/ margin.right + margin.left + deeptree)
-        .attr("height", height /*+ margin.top + margin.bottom*/)
+        .attr("width",  width)
+        .attr("height", height + margin.top + margin.bottom+deeptree  )
+        .append("g")
+        .attr("transform", "translate(0," + margin.left + ")");
+    */
+    //HORIZONTAL    
+    var svg = d3.select("#div_arbol").append("svg")
+        .attr("width", margin.right + margin.left + deeptree)
+        .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + margin.left + ",0)");
-    //.attr("transform", "translate(" + margin.left + "," + -margin.top + ")");
     var sourceParsed = parseSource(sourceTable, metadataSourceTable);
     root = sourceParsed;
+    //VERTICAL
+    /*root.x0 = 0;
+    root.y0 = width / 2;*/
+    //HORIZONTAL    
     root.x0 = height / 2;
     root.y0 = 0;
     update(root, hst, selectionMngr);
@@ -1741,6 +1772,10 @@ function inicializarArbol(h, w, source, hst, settings) {
         });
         var links = tree.links(nodes);
         // Normalize for fixed-depth.
+        //VERTICAL
+        //nodes.forEach(function(d) { d.y = d.depth * levelSize/2; });
+        //nodes.forEach(function(d) { d.x = d.depth * levelSize; d.y = Math.pow(-1,i++) * d.depth * levelSize });
+        //HORIZONTAL
         nodes.forEach(function (d) { d.y = d.depth * levelSize; });
         // Update the nodes…
         var node = svg.selectAll("g.node")
@@ -2188,7 +2223,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                 d3.selectAll("path.link").style("stroke-dasharray", 0);
                 //d3.select(this).style("stroke-dasharray", 0);
                 //selectionMngr = hst.createSelectionManager();
-                selectionMngr.clear();
+                //selectionMngr.clear();
             }
         })
             .on("mouseover", function (d) {

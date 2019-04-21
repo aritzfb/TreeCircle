@@ -89,6 +89,7 @@ module powerbi.extensibility.visual {
                 hasCategories = !options.dataViews[0].metadata.columns[i].isMeasure;
                 if(hasCategories)break;
             } 
+            
             if(hasCategories){
                 if(this.isResizing && options.type==36) {
                     this.isResizing=false;
