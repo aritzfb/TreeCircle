@@ -58,6 +58,11 @@ module powerbi.extensibility.visual {
       public nodeBgColor: string = "white";
     }
 
+    export enum treeStileOptions {
+      horizontal = "horizontal" as any
+      , vertical = vertical as any
+    }
+
     export enum initialModeOptions {
       expanded = "expanded" as any
       , collapsed = "collapsed" as any
@@ -67,6 +72,7 @@ module powerbi.extensibility.visual {
     }
     
     export class treeOptions {
+      public treeStyle : treeStileOptions = treeStileOptions.horizontal;
       public initialMode: initialModeOptions = initialModeOptions.expanded;
       
       public weightLinks: boolean = true;   

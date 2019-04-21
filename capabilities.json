@@ -30,6 +30,21 @@
         "treeOptions" :{
             "displayName": "Tree Options"
             , "properties": {
+                "treeStyle":{
+                    "displayName":"Tree Style"
+                    ,"type":{
+                        "enumeration":[
+                            {
+                                "value":"horizontal"
+                                , "displayName":"Horizontal"
+                            }
+                            ,{
+                                "value":"vertical"
+                                , "displayName":"Vertical"
+                            }
+                        ]
+                    }
+                },
                 "initialMode" : {
                     "displayName": "Expand Mode"
                     , "type":{

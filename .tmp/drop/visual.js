@@ -885,6 +885,11 @@ var powerbi;
                     return treeColors;
                 }());
                 testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG.treeColors = treeColors;
+                var treeStileOptions;
+                (function (treeStileOptions) {
+                    treeStileOptions[treeStileOptions["horizontal"] = "horizontal"] = "horizontal";
+                    treeStileOptions[treeStileOptions["vertical"] = treeStileOptions.vertical] = "vertical";
+                })(treeStileOptions = testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG.treeStileOptions || (testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG.treeStileOptions = {}));
                 var initialModeOptions;
                 (function (initialModeOptions) {
                     initialModeOptions[initialModeOptions["expanded"] = "expanded"] = "expanded";
@@ -895,6 +900,7 @@ var powerbi;
                 })(initialModeOptions = testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG.initialModeOptions || (testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG.initialModeOptions = {}));
                 var treeOptions = (function () {
                     function treeOptions() {
+                        this.treeStyle = treeStileOptions.horizontal;
                         this.initialMode = initialModeOptions.expanded;
                         this.weightLinks = true;
                         this.linksSize = 20;
@@ -1255,6 +1261,7 @@ function recalculateValues(sourceParsed) {
 function zoomed() {
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
+//var treeStyle = "";
 function inicializarArbol(h, w, source, hst, settings) {
     var selectionMngr = hst.createSelectionManager();
     //clear filters if refresh type is filter by other visual (type 2)
@@ -1270,6 +1277,13 @@ function inicializarArbol(h, w, source, hst, settings) {
     //try{categories = source.dataViews[0].categorical.categories[0];}catch(e){}
     this.varhst = hst;
     this.options = source;
+    //var treeStyle = "vertical";
+    //try {treeStyle = settings.treeOptions.treeStyle;}catch(e){ treeStyle = "vertical";}
+    var treeStyle = "horizontal";
+    try {
+        treeStyle = settings.treeOptions.treeStyle;
+    }
+    catch (e) { }
     var arcRadius = 15;
     try {
         arcRadius = settings.treeOptions.arcRadius;
@@ -1481,54 +1495,59 @@ function inicializarArbol(h, w, source, hst, settings) {
         if (mti.metadataType != "measure" && mti.metadataType != "target" && mti.metadataType != "avance")
             countCategories++;
     }
+    var levelSize = 0;
     //var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    //VERTICAL
-    /*
-    var margin = {top: rightMarginFirstNode, right: 0, bottom: leftMarginFirstNode, left: 0},
-        width = w - margin.right - margin.left,
-        height = h - margin.top - margin.bottom + 500;
-    var levelSize = 0;
-    */
-    //HORIZONTAL    
-    var margin = { top: 0, right: rightMarginFirstNode, bottom: 0, left: leftMarginFirstNode }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
-    var levelSize = 0;
-    //VERTICAL
-    //if(countCategories>0) levelSize=Math.floor((height) / countCategories);
-    //HORIZONTAL
-    if (countCategories > 0)
-        levelSize = Math.floor((width) / countCategories);
+    debugger;
+    if (treeStyle == "vertical") {
+        //VERTICAL        
+        var margin = { top: rightMarginFirstNode, right: 0, bottom: leftMarginFirstNode, left: 0 }, width = w, height = h - margin.top - margin.bottom;
+        if (countCategories > 0)
+            levelSize = Math.floor((height) / countCategories);
+    }
+    else {
+        //HORIZONTAL    
+        var margin = { top: 0, right: rightMarginFirstNode, bottom: 0, left: leftMarginFirstNode }, width = w - margin.right - margin.left, height = h - margin.top - margin.bottom;
+        if (countCategories > 0)
+            levelSize = Math.floor((width) / countCategories);
+    }
     //var deeptree = countCategories*levelSize;
     var deeptree = countCategories * levelSize;
     var i = 0, duration = translationsDuration, root;
     var tree = d3.layout.tree()
         .size([height, width]);
     //.on("zoom", zoomed);
-    //VERTICAL
-    //var diagonal = d3.svg.diagonal().projection(function(d) { return [d.x, d.y]; });
-    //HORIZONTAL
-    var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
-    //VERTICAL
-    /*
-    var svg = d3.select("#div_arbol").append("svg")
-        .attr("width",  width)
-        .attr("height", height + margin.top + margin.bottom+deeptree  )
-        .append("g")
-        .attr("transform", "translate(0," + margin.left + ")");
-    */
-    //HORIZONTAL    
-    var svg = d3.select("#div_arbol").append("svg")
-        .attr("width", margin.right + margin.left + deeptree)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + ",0)");
+    debugger;
+    if (treeStyle == "vertical") {
+        //VERTICAL
+        var diagonal = d3.svg.diagonal().projection(function (d) { return [d.x, d.y]; });
+        var svg = d3.select("#div_arbol").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", margin.top + margin.bottom + deeptree)
+            .append("g")
+            .attr("transform", "translate(0," + margin.top + ")");
+    }
+    else {
+        //HORIZONTAL
+        var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
+        var svg = d3.select("#div_arbol").append("svg")
+            .attr("width", margin.right + margin.left + deeptree)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + ",0)");
+    }
     var sourceParsed = parseSource(sourceTable, metadataSourceTable);
     root = sourceParsed;
-    //VERTICAL
-    /*root.x0 = 0;
-    root.y0 = width / 2;*/
-    //HORIZONTAL    
-    root.x0 = height / 2;
-    root.y0 = 0;
+    debugger;
+    if (treeStyle == "vertical") {
+        //VERTICAL
+        root.x0 = height / 2;
+        root.y0 = 0;
+    }
+    else {
+        //HORIZONTAL    
+        root.x0 = height / 2;
+        root.y0 = 0;
+    }
     update(root, hst, selectionMngr);
     //d3.select(self.frameElement).style("height", "800px");
     //d3.select(self.frameElement).style("height", height);
@@ -1772,11 +1791,16 @@ function inicializarArbol(h, w, source, hst, settings) {
         });
         var links = tree.links(nodes);
         // Normalize for fixed-depth.
-        //VERTICAL
-        //nodes.forEach(function(d) { d.y = d.depth * levelSize/2; });
-        //nodes.forEach(function(d) { d.x = d.depth * levelSize; d.y = Math.pow(-1,i++) * d.depth * levelSize });
-        //HORIZONTAL
-        nodes.forEach(function (d) { d.y = d.depth * levelSize; });
+        debugger;
+        if (treeStyle == "vertical") {
+            //VERTICAL
+            nodes.forEach(function (d) { d.y = d.depth * levelSize; });
+            //nodes.forEach(function(d) { d.x = d.depth * levelSize; d.y = Math.pow(-1,i++) * d.depth * levelSize });
+        }
+        else {
+            //HORIZONTAL
+            nodes.forEach(function (d) { d.y = d.depth * levelSize; });
+        }
         // Update the nodes…
         var node = svg.selectAll("g.node")
             .data(nodes, function (d) { return d.id || (d.id = ++i); });
@@ -1809,7 +1833,19 @@ function inicializarArbol(h, w, source, hst, settings) {
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
             .attr("class", "node")
-            .attr("transform", function (d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+            .attr("transform", function (d) {
+            debugger;
+            var returnStr = "";
+            if (treeStyle == "vertical") {
+                //VERTICAL
+                returnStr = "translate(" + source.x0 + "," + source.y0 + ")";
+            }
+            else {
+                //HORIZONTAL
+                returnStr = "translate(" + source.y0 + "," + source.x0 + ")";
+            }
+            return returnStr;
+        })
             .on("click", click)
             .on("mouseover", function (d) {
             if (nodesTooltips) {
@@ -2050,13 +2086,37 @@ function inicializarArbol(h, w, source, hst, settings) {
         // Transition nodes to their new position.
         var nodeUpdate = node.transition()
             .duration(duration)
-            .attr("transform", function (d) { return "translate(" + d.y + "," + d.x + ")"; });
+            .attr("transform", function (d) {
+            debugger;
+            var returnStr = "";
+            if (treeStyle == "vertical") {
+                //VERTICAL
+                returnStr = "translate(" + d.x + "," + d.y + ")";
+            }
+            else {
+                //HORIZONTAL
+                returnStr = "translate(" + d.y + "," + d.x + ")";
+            }
+            return returnStr;
+        });
         nodeUpdate.select("text")
             .style("fill-opacity", 1);
         // Transition exiting nodes to the parent's new position.
         var nodeExit = node.exit().transition()
             .duration(duration)
-            .attr("transform", function (d) { return "translate(" + source.y + "," + source.x + ")"; })
+            .attr("transform", function (d) {
+            debugger;
+            var returnStr = "";
+            if (treeStyle == "vertical") {
+                //VERTICAL
+                returnStr = "translate(" + source.x + "," + source.y + ")";
+            }
+            else {
+                //HORIZONTAL
+                returnStr = "translate(" + source.y + "," + source.x + ")";
+            }
+            return returnStr;
+        })
             .remove();
         nodeExit.select("text")
             .style("fill-opacity", 1e-6);
@@ -2183,46 +2243,17 @@ function inicializarArbol(h, w, source, hst, settings) {
                     }
                     d3.select(this).style("stroke-dasharray", 5);
                     d.selected = true;
-                    /*
-                    //find categorie position
-                    var catPos = 0;
-                    for(var i=0;i<categories.length;i++){
-                        catPos=i;
-                        if (categories[i].source.displayName==d.target.category) break;
-                    }
-                    var cats = categories[catPos];
-                    //find item in categorie
-                    var itemsPos = [];
-                    for(var i=0; i< cats.values.length; i++){
-                        if (cats.values[i]==d.target.name) {
-                            itemsPos.push(i);
-                        }
-                    }
-                    for(var j=0;j<itemsPos.length;j++){
-                        var selId = hst.createSelectionIdBuilder()
-                            .withCategory(cats, itemsPos[j])
-                            .createSelectionId();
-                        d.selectionId = selId;
-                        d.selected = true;
-                        selectionMngr.select(selId,true);
-                        
-                    }
-                    */
                 }
                 else {
                     //d.selected = false;
                     d3.selectAll("path.link").selected = false;
                     d3.selectAll("path.link").style("stroke-dasharray", 0);
-                    //d3.select(this).style("stroke-dasharray", 0);
-                    //selectionMngr = hst.createSelectionManager();
                     selectionMngr.clear();
                 }
             }
             catch (e) {
                 d3.selectAll("path.link").selected = false;
                 d3.selectAll("path.link").style("stroke-dasharray", 0);
-                //d3.select(this).style("stroke-dasharray", 0);
-                //selectionMngr = hst.createSelectionManager();
                 //selectionMngr.clear();
             }
         })
@@ -2579,8 +2610,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
