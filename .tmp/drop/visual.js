@@ -908,8 +908,18 @@ var powerbi;
                         this.expandMode = false;
                         this.arcRadius = 15;
                         this.translationsDuration = 750;
+                        //public leftMarginFirstNode:number=60;
+                        //public rightMarginFirstNode:number=100;
                         this.leftMarginFirstNode = 60;
-                        this.rightMarginFirstNode = 100;
+                        this.rightMarginFirstNode = 80;
+                        this.topMarginFirstNode = 20;
+                        this.bottomMarginFirstNode = 60;
+                        /*
+                        public leftMarginFirstNode:number=0;
+                        public rightMarginFirstNode:number=0;
+                        public topMarginFirstNode:number=0;
+                        public bottomMarginFirstNode:number=0;
+                        */
                         this.progressPie = true;
                     }
                     return treeOptions;
@@ -1349,6 +1359,16 @@ function inicializarArbol(h, w, source, hst, settings) {
         rightMarginFirstNode = settings.treeOptions.rightMarginFirstNode;
     }
     catch (e) { }
+    var topMarginFirstNode = 0;
+    try {
+        topMarginFirstNode = settings.treeOptions.topMarginFirstNode;
+    }
+    catch (e) { }
+    var bottomMarginFirstNode = 0;
+    try {
+        bottomMarginFirstNode = settings.treeOptions.bottomMarginFirstNode;
+    }
+    catch (e) { }
     var initialMode = "expanded";
     try {
         initialMode = settings.treeOptions.initialMode;
@@ -1500,7 +1520,7 @@ function inicializarArbol(h, w, source, hst, settings) {
     debugger;
     if (treeStyle == "vertical") {
         //VERTICAL        
-        var margin = { top: rightMarginFirstNode, right: 0, bottom: leftMarginFirstNode, left: 0 }, width = w, height = h - margin.top - margin.bottom;
+        var margin = { top: topMarginFirstNode, right: rightMarginFirstNode, bottom: bottomMarginFirstNode, left: leftMarginFirstNode }, width = w /*- margin.left - margin.right*/, height = h - margin.top - margin.bottom;
         if (countCategories > 0)
             levelSize = Math.floor((height) / countCategories);
     }
@@ -1513,21 +1533,48 @@ function inicializarArbol(h, w, source, hst, settings) {
     //var deeptree = countCategories*levelSize;
     var deeptree = countCategories * levelSize;
     var i = 0, duration = translationsDuration, root;
-    var tree = d3.layout.tree()
-        .size([height, width]);
     //.on("zoom", zoomed);
     debugger;
     if (treeStyle == "vertical") {
         //VERTICAL
-        var diagonal = d3.svg.diagonal().projection(function (d) { return [d.x, d.y]; });
-        var svg = d3.select("#div_arbol").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", margin.top + margin.bottom + deeptree)
+        var orientations = {
+            "toptobottom": {
+                size: [width, height],
+                x: function (d) { return d.x; },
+                y: function (d) { return d.y; }
+            },
+            "righttoleft": {
+                size: [height, width],
+                x: function (d) { return width - d.y; },
+                y: function (d) { return d.x; }
+            },
+            "bottomtotop": {
+                size: [width, height],
+                x: function (d) { return d.x; },
+                y: function (d) { return height - d.y; }
+            },
+            "lefttoright": {
+                size: [height, width],
+                x: function (d) { return d.y; },
+                y: function (d) { return d.x; }
+            }
+        };
+        var o = orientations.toptobottom;
+        var tree = d3.layout.tree()
+            .size(o.size);
+        //var diagonal = d3.svg.diagonal().projection(function(d) { return [d.x, d.y]; });
+        var diagonal = d3.svg.diagonal().projection(function (d) { return [o.x(d), o.y(d)]; });
+        var svg = d3.select("#div_arbol")
+            .append("svg")
+            .attr("width", width /*+ margin.left + margin.right*/)
+            .attr("height", deeptree - margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(0," + margin.top + ")");
     }
     else {
         //HORIZONTAL
+        var tree = d3.layout.tree()
+            .size([height, width]);
         var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
         var svg = d3.select("#div_arbol").append("svg")
             .attr("width", margin.right + margin.left + deeptree)
@@ -1540,8 +1587,8 @@ function inicializarArbol(h, w, source, hst, settings) {
     debugger;
     if (treeStyle == "vertical") {
         //VERTICAL
-        root.x0 = height / 2;
-        root.y0 = 0;
+        root.x0 = (width) / 2;
+        root.y0 = arcRadius;
     }
     else {
         //HORIZONTAL    
@@ -1791,9 +1838,9 @@ function inicializarArbol(h, w, source, hst, settings) {
         });
         var links = tree.links(nodes);
         // Normalize for fixed-depth.
-        debugger;
         if (treeStyle == "vertical") {
             //VERTICAL
+            //nodes.forEach(function(d) { d.y = d.depth * levelSize;  if(d.depth==0)d.x=d.x0;  });
             nodes.forEach(function (d) { d.y = d.depth * levelSize; });
             //nodes.forEach(function(d) { d.x = d.depth * levelSize; d.y = Math.pow(-1,i++) * d.depth * levelSize });
         }
@@ -1839,6 +1886,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             if (treeStyle == "vertical") {
                 //VERTICAL
                 returnStr = "translate(" + source.x0 + "," + source.y0 + ")";
+                //returnStr="translate(0,0)";
             }
             else {
                 //HORIZONTAL
@@ -2092,6 +2140,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             if (treeStyle == "vertical") {
                 //VERTICAL
                 returnStr = "translate(" + d.x + "," + d.y + ")";
+                //returnStr="translate(0,0)";
             }
             else {
                 //HORIZONTAL
@@ -2610,8 +2659,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',
