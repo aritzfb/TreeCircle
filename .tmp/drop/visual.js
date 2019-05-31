@@ -995,6 +995,8 @@ var powerbi;
                                 break;
                         }
                         if (hasCategories) {
+                            debugger;
+                            var hasExternalFilter = options.dataViews[0].categorical.categories[0] == options.dataViews[0].categorical.categories[1];
                             if (this.isResizing && options.type == 36) {
                                 this.isResizing = false;
                                 document.getElementById("wellcome_div").style.display = "none";
@@ -1005,7 +1007,7 @@ var powerbi;
                                     div_height = div_height - 20;
                                 inicializarArbol(div_height, div_width, options, this.host, this.settings);
                             }
-                            else if (options.type != 36) {
+                            else if ((options.type != 36 && options.type != 2) || (options.type == 2 && !hasExternalFilter)) {
                                 if (options.type == 4)
                                     this.isResizing = true;
                                 else {
@@ -1275,7 +1277,8 @@ function zoomed() {
 function inicializarArbol(h, w, source, hst, settings) {
     var selectionMngr = hst.createSelectionManager();
     //clear filters if refresh type is filter by other visual (type 2)
-    //if (source.type != 2) selectionMngr.clear();
+    if (source.type != 2)
+        selectionMngr.clear();
     try {
         categories = source.dataViews[0].categorical.categories;
     }
@@ -1517,7 +1520,6 @@ function inicializarArbol(h, w, source, hst, settings) {
     }
     var levelSize = 0;
     //var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    debugger;
     if (treeStyle == "vertical") {
         //VERTICAL        
         var margin = { top: topMarginFirstNode, right: rightMarginFirstNode, bottom: bottomMarginFirstNode, left: leftMarginFirstNode }, width = w /*- margin.left - margin.right*/, height = h - margin.top - margin.bottom;
@@ -1534,7 +1536,6 @@ function inicializarArbol(h, w, source, hst, settings) {
     var deeptree = countCategories * levelSize;
     var i = 0, duration = translationsDuration, root;
     //.on("zoom", zoomed);
-    debugger;
     if (treeStyle == "vertical") {
         //VERTICAL
         var orientations = {
@@ -1584,7 +1585,6 @@ function inicializarArbol(h, w, source, hst, settings) {
     }
     var sourceParsed = parseSource(sourceTable, metadataSourceTable);
     root = sourceParsed;
-    debugger;
     if (treeStyle == "vertical") {
         //VERTICAL
         root.x0 = (width) / 2;
@@ -1881,7 +1881,6 @@ function inicializarArbol(h, w, source, hst, settings) {
         var nodeEnter = node.enter().append("g")
             .attr("class", "node")
             .attr("transform", function (d) {
-            debugger;
             var returnStr = "";
             if (treeStyle == "vertical") {
                 //VERTICAL
@@ -2135,7 +2134,6 @@ function inicializarArbol(h, w, source, hst, settings) {
         var nodeUpdate = node.transition()
             .duration(duration)
             .attr("transform", function (d) {
-            debugger;
             var returnStr = "";
             if (treeStyle == "vertical") {
                 //VERTICAL
@@ -2154,7 +2152,6 @@ function inicializarArbol(h, w, source, hst, settings) {
         var nodeExit = node.exit().transition()
             .duration(duration)
             .attr("transform", function (d) {
-            debugger;
             var returnStr = "";
             if (treeStyle == "vertical") {
                 //VERTICAL
