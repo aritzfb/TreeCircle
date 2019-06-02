@@ -77,6 +77,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
       
       public weightLinks: boolean = true;   
       public linksSize: number = 20;
+      public linksOpacity: number = 0.5;
       public nodesTooltips: boolean=true;
       public expandMode: boolean=false;
       

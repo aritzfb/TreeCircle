@@ -85,6 +85,12 @@
                         "numeric":true
                     }
                 }
+                , "linksOpacity" : {
+                    "displayName":"Links Opacity"
+                    , "type":{
+                        "numeric":true
+                    }
+                }
                 , "nodesTooltips":{
                     "displayName":"Tooltips"
                     , "type":{

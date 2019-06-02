@@ -904,6 +904,7 @@ var powerbi;
                         this.initialMode = initialModeOptions.expanded;
                         this.weightLinks = true;
                         this.linksSize = 20;
+                        this.linksOpacity = 0.5;
                         this.nodesTooltips = true;
                         this.expandMode = false;
                         this.arcRadius = 15;
@@ -1319,6 +1320,11 @@ function inicializarArbol(h, w, source, hst, settings) {
     var linkColor = "lightgray";
     try {
         linkColor = settings.treeColors.linkColor;
+    }
+    catch (e) { }
+    var linksOpacity = 0.5;
+    try {
+        linksOpacity = settings.treeOptions.linksOpacity;
     }
     catch (e) { }
     var nodeBgColor = "white";
@@ -2215,7 +2221,9 @@ function inicializarArbol(h, w, source, hst, settings) {
             var strokeDasharray = 0;
             if (d.selected)
                 strokeDasharray = 5;
-            return "stroke-width:" + valor + "px;stroke-opacity:0.5;stroke:" + colorLink + ";stroke-dasharray:" + strokeDasharray.toString();
+            if (linksOpacity < 0 || linksOpacity > 1)
+                linksOpacity = 0.5;
+            return "stroke-width:" + valor + "px;stroke-opacity:" + linksOpacity.toString() + ";stroke:" + colorLink + ";stroke-dasharray:" + strokeDasharray.toString();
         })
             .on("click", function (d) {
             try {
