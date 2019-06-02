@@ -995,7 +995,6 @@ var powerbi;
                                 break;
                         }
                         if (hasCategories) {
-                            debugger;
                             var hasExternalFilter = options.dataViews[0].categorical.categories[0] == options.dataViews[0].categorical.categories[1];
                             if (this.isResizing && options.type == 36) {
                                 this.isResizing = false;
@@ -1007,7 +1006,7 @@ var powerbi;
                                     div_height = div_height - 20;
                                 inicializarArbol(div_height, div_width, options, this.host, this.settings);
                             }
-                            else if ((options.type != 36 && options.type != 2) || (options.type == 2 && !hasExternalFilter)) {
+                            else if ((options.type != 36 /*&& options.type != 2*/) /*|| (options.type==2 && !hasExternalFilter)*/) {
                                 if (options.type == 4)
                                     this.isResizing = true;
                                 else {
@@ -1112,7 +1111,7 @@ function createSourceRowTree(sourceRow, metadataSourceTable) {
     else {
         // show 0 when no value (or when value is actually 0)
         retorno.value = 0;
-        retorno.hasValue = true;
+        retorno.hasValue = false;
         retorno.formatValue = formatValue;
     }
     rowValue = retorno.value;
@@ -1786,6 +1785,20 @@ function inicializarArbol(h, w, source, hst, settings) {
             cumplimiento = valor / objetivo;
         return retorno;
     }
+    function getWeightArcRadius(d) {
+        var retorno = arcRadius;
+        if (d.hasValue && weightLinks) {
+            var myNode = d;
+            while (myNode.parent) {
+                myNode = myNode.parent;
+            }
+            retorno = arcRadius * Math.abs(d.value / myNode.value);
+        }
+        retorno = Math.abs(retorno);
+        if (retorno < 2)
+            retorno = 2;
+        return retorno;
+    }
     function getDiffCumplAvance(d) {
         var valor = isNaN(parseFloat(d.value)) ? 0.0 : parseFloat(d.value);
         var objetivo = isNaN(parseFloat(d.target)) ? 0.0 : parseFloat(d.target);
@@ -1980,7 +1993,8 @@ function inicializarArbol(h, w, source, hst, settings) {
                 .style("opacity", 0);
                 */
         });
-        var arcBlank = d3.svg.arc().innerRadius(0).outerRadius(arcRadius).startAngle(0)
+        //var arcBlank = d3.svg.arc().innerRadius(0).outerRadius(arcRadius).startAngle(0)
+        var arcBlank = d3.svg.arc().innerRadius(0).outerRadius(getWeightArcRadius).startAngle(0)
             .endAngle(2 * Math.PI);
         nodeEnter
             .append("path").attr("d", arcBlank)
@@ -1991,14 +2005,16 @@ function inicializarArbol(h, w, source, hst, settings) {
             //return d.serieColor;
             return retorno;
         });
-        var arcBase = d3.svg.arc().innerRadius(0).outerRadius(arcRadius).startAngle(0)
+        //var arcBase = d3.svg.arc().innerRadius(0).outerRadius(arcRadius).startAngle(0)
+        var arcBase = d3.svg.arc().innerRadius(0).outerRadius(getWeightArcRadius).startAngle(0)
             .endAngle(getDiffCumplAvance);
         nodeEnter
             .append("path").attr("d", arcBase)
             .style("fill", function (d, i) {
             return d._children ? arcBaseColor : "#fff";
         });
-        var arc = d3.svg.arc().innerRadius(0).outerRadius(arcRadius)
+        //var arc = d3.svg.arc().innerRadius(0).outerRadius(arcRadius)
+        var arc = d3.svg.arc().innerRadius(0).outerRadius(getWeightArcRadius)
             .startAngle(getDiffCumplAvance)
             .endAngle(getDiffCumplAvanceEnd);
         nodeEnter
@@ -2022,7 +2038,8 @@ function inicializarArbol(h, w, source, hst, settings) {
             }
             return retorno;
         });
-        var arcCorona = d3.svg.arc().innerRadius(arcRadius - 1).outerRadius(arcRadius)
+        //var arcCorona = d3.svg.arc().innerRadius(arcRadius-1).outerRadius(arcRadius)
+        var arcCorona = d3.svg.arc().innerRadius(function (d) { return (getWeightArcRadius(d)) - 1; }).outerRadius(getWeightArcRadius)
             .startAngle(0)
             .endAngle(2 * Math.PI);
         nodeEnter
@@ -2177,7 +2194,8 @@ function inicializarArbol(h, w, source, hst, settings) {
             return diagonal({ source: o, target: o });
         })
             .attr("style", function (d) {
-            var porc = 2 * arcRadius * Math.abs(d.target.value / d.target.parent.value);
+            //var porc=2*arcRadius*Math.abs(d.target.value/d.target.parent.value);
+            var porc = 2 * (getWeightArcRadius(d.target));
             var colorLink = linkColor;
             if (linkColorSeries) {
                 if (d.target.serieColor)
@@ -2197,7 +2215,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             var strokeDasharray = 0;
             if (d.selected)
                 strokeDasharray = 5;
-            return "stroke-width:" + valor + "px;stroke:" + colorLink + ";stroke-dasharray:" + strokeDasharray.toString();
+            return "stroke-width:" + valor + "px;stroke-opacity:0.5;stroke:" + colorLink + ";stroke-dasharray:" + strokeDasharray.toString();
         })
             .on("click", function (d) {
             try {
@@ -2300,7 +2318,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             catch (e) {
                 d3.selectAll("path.link").selected = false;
                 d3.selectAll("path.link").style("stroke-dasharray", 0);
-                //selectionMngr.clear();
+                selectionMngr.clear();
             }
         })
             .on("mouseover", function (d) {

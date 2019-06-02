@@ -91,7 +91,6 @@ module powerbi.extensibility.visual {
             } 
             
             if(hasCategories){
-                debugger;
                 var hasExternalFilter = options.dataViews[0].categorical.categories[0]==options.dataViews[0].categorical.categories[1];
                 if(this.isResizing && options.type==36) {
                     this.isResizing=false;
@@ -103,7 +102,7 @@ module powerbi.extensibility.visual {
                     inicializarArbol(div_height,div_width,options,this.host,this.settings);
                 }
                 else  
-                if((options.type != 36 && options.type != 2) || (options.type==2 && !hasExternalFilter)) {
+                if((options.type != 36 /*&& options.type != 2*/) /*|| (options.type==2 && !hasExternalFilter)*/) {
                     if (options.type == 4) this.isResizing=true;
                     else {
                         document.getElementById("wellcome_div").style.display="none";
