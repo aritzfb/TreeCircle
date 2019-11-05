@@ -972,7 +972,6 @@ var powerbi;
                         this.target = options.element;
                         if (typeof document !== "undefined") {
                             var new_div = document.createElement("div");
-                            debugger;
                             new_div.id = "div_arbol";
                             this.target.appendChild(new_div);
                         }
@@ -996,7 +995,6 @@ var powerbi;
                             if (hasCategories)
                                 break;
                         }
-                        debugger;
                         if (hasCategories) {
                             var hasExternalFilter = options.dataViews[0].categorical.categories[0] == options.dataViews[0].categorical.categories[1];
                             if (this.isResizing && options.type == 36) {
@@ -1277,7 +1275,7 @@ function zoomed() {
 }
 //var treeStyle = "";
 function inicializarArbol(h, w, source, hst, settings) {
-    debugger;
+    //debugger;   
     var selectionMngr = hst.createSelectionManager();
     //clear filters if refresh type is filter by other visual (type 2)
     //if (source.type != 2) selectionMngr.clear();
@@ -1636,12 +1634,9 @@ function inicializarArbol(h, w, source, hst, settings) {
                     escala = "M";
                     break;
                 case 3:
-                    escala = "kM";
-                    break;
-                case 4:
                     escala = "B";
                     break;
-                case 5:
+                case 4:
                     escala = "kB";
                     break;
                 default:
@@ -2323,14 +2318,14 @@ function inicializarArbol(h, w, source, hst, settings) {
                 }
                 else {
                     //d.selected = false;
-                    debugger;
+                    //debugger;
                     d3.selectAll("path.link").selected = false;
                     d3.selectAll("path.link").style("stroke-dasharray", 0);
                     selectionMngr.clear();
                 }
             }
             catch (e) {
-                debugger;
+                //debugger;
                 d3.selectAll("path.link").selected = false;
                 d3.selectAll("path.link").style("stroke-dasharray", 0);
                 selectionMngr.clear();
@@ -2389,7 +2384,7 @@ function inicializarArbol(h, w, source, hst, settings) {
     }
     // Toggle children on click.
     function click(d) {
-        //selectionMngr.clear();
+        selectionMngr.clear();
         //d3.selectAll("path.link").selected = false;
         //d3.selectAll("path.link").style("stroke-dasharray", 0);
         if (d.children) {
