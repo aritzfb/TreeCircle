@@ -73,7 +73,7 @@
                     }
                 }
                 , "weightLinks" : {
-                    "displayName":"Weighted Links"
+                    "displayName":"Weighted Links & Nodes"
                     , "type":{
                         "bool":true
                     }

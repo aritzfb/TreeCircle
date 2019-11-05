@@ -972,6 +972,7 @@ var powerbi;
                         this.target = options.element;
                         if (typeof document !== "undefined") {
                             var new_div = document.createElement("div");
+                            debugger;
                             new_div.id = "div_arbol";
                             this.target.appendChild(new_div);
                         }
@@ -995,6 +996,7 @@ var powerbi;
                             if (hasCategories)
                                 break;
                         }
+                        debugger;
                         if (hasCategories) {
                             var hasExternalFilter = options.dataViews[0].categorical.categories[0] == options.dataViews[0].categorical.categories[1];
                             if (this.isResizing && options.type == 36) {
@@ -1275,10 +1277,10 @@ function zoomed() {
 }
 //var treeStyle = "";
 function inicializarArbol(h, w, source, hst, settings) {
+    debugger;
     var selectionMngr = hst.createSelectionManager();
     //clear filters if refresh type is filter by other visual (type 2)
-    if (source.type != 2)
-        selectionMngr.clear();
+    //if (source.type != 2) selectionMngr.clear();
     try {
         categories = source.dataViews[0].categorical.categories;
     }
@@ -1798,7 +1800,10 @@ function inicializarArbol(h, w, source, hst, settings) {
             while (myNode.parent) {
                 myNode = myNode.parent;
             }
-            retorno = arcRadius * Math.abs(d.value / myNode.value);
+            if (weightLinks)
+                retorno = arcRadius * Math.abs(d.value / myNode.value);
+            else
+                retorno = arcRadius;
         }
         retorno = Math.abs(retorno);
         if (retorno < 2)
@@ -2233,55 +2238,55 @@ function inicializarArbol(h, w, source, hst, settings) {
                     if (d.children)
                         d.children.forEach(openChildren);
                 }
+                function selectChildLinks(links, targetSerie) {
+                    var serieFound = false;
+                    for (var idlink = 0; idlink < links.length; idlink++) {
+                        var currentLink = links[idlink];
+                        if (currentLink.__data__.source.name == targetSerie.name && currentLink.__data__.source.category == targetSerie.category) {
+                            //if (currentLink.__data__.source.name == linkd.target.name && currentLink.__data__.source.category == linkd.target.category){
+                            //if(currentLink.__data__.source == linkd.target){
+                            serieFound = true;
+                            currentLink.selected = true;
+                            //currentLink.style("stroke-dasharray", 5);
+                            currentLink.style.strokeDasharray = 5;
+                            var childSerieFound = false;
+                            childSerieFound = selectChildLinks(links, currentLink.__data__.target);
+                            if (!childSerieFound) {
+                                //add child node as filter if not selected
+                                var currentd = currentLink.__data__;
+                                //find categorie position
+                                var catPos = 0;
+                                for (var i = 0; i < categories.length; i++) {
+                                    catPos = i;
+                                    if (categories[i].source.displayName == currentd.target.category)
+                                        break;
+                                }
+                                var cats = categories[catPos];
+                                //find item in categorie
+                                var itemsPos = 0;
+                                for (var i = 0; i < cats.values.length; i++) {
+                                    if (cats.values[i] == currentd.target.name) {
+                                        itemsPos = i;
+                                        break;
+                                    }
+                                }
+                                if (!currentd.selected) {
+                                    var selId = hst.createSelectionIdBuilder()
+                                        .withCategory(cats, itemsPos)
+                                        .createSelectionId();
+                                    currentd.selectionId = selId;
+                                    currentd.selected = true;
+                                    selectionMngr.select(selId, true);
+                                }
+                                //end if child serie found
+                            }
+                        }
+                    }
+                    return serieFound;
+                }
                 openChildren(d.target);
                 if (!d.selected) {
                     //d3.selectAll("path.link").style("stroke-dasharray", 0);
-                    function selectChildLinks(links, targetSerie) {
-                        var serieFound = false;
-                        for (var idlink = 0; idlink < links.length; idlink++) {
-                            var currentLink = links[idlink];
-                            if (currentLink.__data__.source.name == targetSerie.name && currentLink.__data__.source.category == targetSerie.category) {
-                                //if (currentLink.__data__.source.name == linkd.target.name && currentLink.__data__.source.category == linkd.target.category){
-                                //if(currentLink.__data__.source == linkd.target){
-                                serieFound = true;
-                                currentLink.selected = true;
-                                //currentLink.style("stroke-dasharray", 5);
-                                currentLink.style.strokeDasharray = 5;
-                                var childSerieFound = false;
-                                childSerieFound = selectChildLinks(links, currentLink.__data__.target);
-                                if (!childSerieFound) {
-                                    //add child node as filter if not selected
-                                    var currentd = currentLink.__data__;
-                                    //find categorie position
-                                    var catPos = 0;
-                                    for (var i = 0; i < categories.length; i++) {
-                                        catPos = i;
-                                        if (categories[i].source.displayName == currentd.target.category)
-                                            break;
-                                    }
-                                    var cats = categories[catPos];
-                                    //find item in categorie
-                                    var itemsPos = 0;
-                                    for (var i = 0; i < cats.values.length; i++) {
-                                        if (cats.values[i] == currentd.target.name) {
-                                            itemsPos = i;
-                                            break;
-                                        }
-                                    }
-                                    if (!currentd.selected) {
-                                        var selId = hst.createSelectionIdBuilder()
-                                            .withCategory(cats, itemsPos)
-                                            .createSelectionId();
-                                        currentd.selectionId = selId;
-                                        currentd.selected = true;
-                                        selectionMngr.select(selId, true);
-                                    }
-                                    //end if child serie found
-                                }
-                            }
-                        }
-                        return serieFound;
-                    }
                     var targetSerie = d.target;
                     var links = d3.selectAll("path.link")[0];
                     var haschilds = selectChildLinks(links, targetSerie);
@@ -2318,12 +2323,14 @@ function inicializarArbol(h, w, source, hst, settings) {
                 }
                 else {
                     //d.selected = false;
+                    debugger;
                     d3.selectAll("path.link").selected = false;
                     d3.selectAll("path.link").style("stroke-dasharray", 0);
                     selectionMngr.clear();
                 }
             }
             catch (e) {
+                debugger;
                 d3.selectAll("path.link").selected = false;
                 d3.selectAll("path.link").style("stroke-dasharray", 0);
                 selectionMngr.clear();
@@ -2382,9 +2389,9 @@ function inicializarArbol(h, w, source, hst, settings) {
     }
     // Toggle children on click.
     function click(d) {
-        selectionMngr.clear();
-        d3.selectAll("path.link").selected = false;
-        d3.selectAll("path.link").style("stroke-dasharray", 0);
+        //selectionMngr.clear();
+        //d3.selectAll("path.link").selected = false;
+        //d3.selectAll("path.link").style("stroke-dasharray", 0);
         if (d.children) {
             //collapse
             d._children = d.children;
@@ -2682,8 +2689,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',

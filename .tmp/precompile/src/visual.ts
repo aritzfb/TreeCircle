@@ -60,6 +60,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
             this.target = options.element;            
             if (typeof document !== "undefined") {                
                 const new_div: HTMLElement = document.createElement("div");
+                debugger
                 new_div.id="div_arbol";
                 this.target.appendChild(new_div);
 
@@ -89,7 +90,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
                 hasCategories = !options.dataViews[0].metadata.columns[i].isMeasure;
                 if(hasCategories)break;
             } 
-            
+            debugger;
             if(hasCategories){
                 var hasExternalFilter = options.dataViews[0].categorical.categories[0]==options.dataViews[0].categorical.categories[1];
                 if(this.isResizing && options.type==36) {
