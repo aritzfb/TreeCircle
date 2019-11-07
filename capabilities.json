@@ -179,6 +179,12 @@
                         "bool":true
                     }
                 }
+                , "valueAsPercent":{
+                    "displayName" : "Value as percent (over parent)"
+                    , "type":{
+                        "bool":true
+                    }
+                }
                 , "numberDecimals":{
                     "displayName" : "Decimal positions"
                     , "type" :{

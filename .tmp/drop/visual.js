@@ -862,6 +862,7 @@ var powerbi;
                         this.nodeTextSize = 15;
                         this.magicLabels = false;
                         this.autoScaleValues = true;
+                        this.valueAsPercent = false;
                         this.numberDecimals = 2;
                         this.categoryLabelXpos = -30;
                         this.categoryLabelYpos = 0;
@@ -1424,6 +1425,11 @@ function inicializarArbol(h, w, source, hst, settings) {
         autoScaleValues = settings.treeLabels.autoScaleValues;
     }
     catch (e) { }
+    var valueAsPercent = false;
+    try {
+        valueAsPercent = settings.treeLabels.valueAsPercent;
+    }
+    catch (e) { }
     var categoryLabelXpos = 2;
     try {
         categoryLabelXpos = settings.treeLabels.categoryLabelXpos;
@@ -1664,7 +1670,14 @@ function inicializarArbol(h, w, source, hst, settings) {
                 retorno = d.name;
                 break;
             case "value":
-                retorno = formatValue(d.value, d.formatValue);
+                if (valueAsPercent) {
+                    if (d.parent)
+                        retorno = formatPercent(d.value / d.parent.value);
+                    else
+                        retorno = formatPercent(1);
+                }
+                else
+                    retorno = formatValue(d.value, d.formatValue);
                 break;
             case "target":
                 retorno = formatPercent(d.value / d.target);

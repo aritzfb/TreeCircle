@@ -40,6 +40,7 @@ module powerbi.extensibility.visual {
       public nodeTextSize: number=15;
       public magicLabels: boolean=false;
       public autoScaleValues: boolean=true;
+      public valueAsPercent: boolean=false;
       public numberDecimals: number=2;
       public categoryLabelXpos: number=-30;
       public categoryLabelYpos: number=0;
