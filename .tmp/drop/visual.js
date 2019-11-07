@@ -1646,6 +1646,14 @@ function inicializarArbol(h, w, source, hst, settings) {
         }
         else {
             retorno = parseFloat(val).toFixed(numberDecimals).toLocaleString(hst.locale);
+            //intergerPart = parseInt(val).toLocaleString(hst.locale);
+            intergerPart = parseInt(val).toLocaleString(hst.locale);
+            decimalPart = parseFloat(parseFloat(val) - parseInt(val)).toLocaleString(hst.locale);
+            if (decimalPart.length > 1) {
+                retorno = intergerPart + decimalPart.substring(1);
+            }
+            else
+                retorno = intergerPart;
         }
         return retorno;
     }
