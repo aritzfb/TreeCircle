@@ -2240,7 +2240,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             if (valor > 2 * arcRadius)
                 valor = 2 * arcRadius;
             var strokeDasharray = 0;
-            if (d.selected)
+            if (d.selected || d.target.selected)
                 strokeDasharray = 5;
             if (linksOpacity < 0 || linksOpacity > 1)
                 linksOpacity = 0.5;
@@ -2292,6 +2292,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                                         .createSelectionId();
                                     currentd.selectionId = selId;
                                     currentd.selected = true;
+                                    currentd.target.selected = true;
                                     selectionMngr.select(selId, true);
                                 }
                                 //end if child serie found
@@ -2300,6 +2301,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                     }
                     return serieFound;
                 }
+                debugger;
                 openChildren(d.target);
                 if (!d.selected) {
                     //d3.selectAll("path.link").style("stroke-dasharray", 0);
@@ -2330,12 +2332,14 @@ function inicializarArbol(h, w, source, hst, settings) {
                                 .createSelectionId();
                             d.selectionId = selId;
                             d.selected = true;
+                            d.target.selected = true;
                             selectionMngr.select(selId, true);
                         }
                         //end if child serie found
                     }
                     d3.select(this).style("stroke-dasharray", 5);
                     d.selected = true;
+                    d.target.selected = true;
                 }
                 else {
                     //d.selected = false;
@@ -2405,7 +2409,7 @@ function inicializarArbol(h, w, source, hst, settings) {
     }
     // Toggle children on click.
     function click(d) {
-        selectionMngr.clear();
+        //selectionMngr.clear();
         //d3.selectAll("path.link").selected = false;
         //d3.selectAll("path.link").style("stroke-dasharray", 0);
         if (d.children) {
