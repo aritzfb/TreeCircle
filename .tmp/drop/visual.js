@@ -909,7 +909,7 @@ var powerbi;
                         this.linksOpacity = 0.5;
                         this.nodesTooltips = true;
                         this.expandMode = false;
-                        this.arcRadius = 15;
+                        //public arcRadius: number=15;
                         this.translationsDuration = 750;
                         //public leftMarginFirstNode:number=60;
                         //public rightMarginFirstNode:number=100;
@@ -1323,11 +1323,6 @@ function inicializarArbol(h, w, source, hst, settings, idDiv) {
         treeStyle = settings.treeOptions.treeStyle;
     }
     catch (e) { }
-    var arcRadius = 15;
-    try {
-        arcRadius = settings.treeOptions.arcRadius;
-    }
-    catch (e) { }
     var progressPie = true;
     try {
         progressPie = settings.treeOptions.progressPie;
@@ -1418,6 +1413,8 @@ function inicializarArbol(h, w, source, hst, settings, idDiv) {
         linksSize = settings.treeOptions.linksSize;
     }
     catch (e) { }
+    var arcRadius = linksSize - 5;
+    //try {arcRadius = settings.treeOptions.arcRadius;} catch(e){}
     var nodesTooltips = true;
     try {
         nodesTooltips = settings.treeOptions.nodesTooltips;
@@ -2745,8 +2742,8 @@ var powerbi;
     (function (visuals) {
         var plugins;
         (function (plugins) {
-            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG = {
-                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG',
+            plugins.testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG = {
+                name: 'testTooltip4696B540F3494FE5BA002362825DDE7D_DEBUG_DEBUG',
                 displayName: 'Pie Charts Tree',
                 class: 'Visual',
                 version: '1.0.3',

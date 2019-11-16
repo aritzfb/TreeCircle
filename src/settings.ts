@@ -83,7 +83,7 @@ module powerbi.extensibility.visual {
       public nodesTooltips: boolean=true;
       public expandMode: boolean=false;
       
-      public arcRadius: number=15;
+      //public arcRadius: number=15;
       public translationsDuration: number=750;
       //public leftMarginFirstNode:number=60;
       //public rightMarginFirstNode:number=100;

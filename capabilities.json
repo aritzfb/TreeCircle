@@ -87,7 +87,7 @@
                 }
                 
                 , "linksSize" : {
-                    "displayName":"Links Size"
+                    "displayName":"Nodes & Links Size"
                     , "type":{
                         "numeric":true
                     }
@@ -140,12 +140,7 @@
                         "numeric":true
                     }
                 }
-                , "arcRadius" : {
-                    "displayName": "Arc Radius"
-                    , "type": {
-                        "numeric": true
-                    }
-                }
+                
                 , "progressPie":{
                     "displayName": "Progress Pie"
                     , "type":{
