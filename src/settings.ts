@@ -74,6 +74,7 @@ module powerbi.extensibility.visual {
     
     export class treeOptions {
       public treeStyle : treeStileOptions = treeStileOptions.horizontal;
+      public filterMode: boolean = false;
       public initialMode: initialModeOptions = initialModeOptions.expanded;
       
       public weightLinks: boolean = true;   

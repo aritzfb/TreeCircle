@@ -45,6 +45,13 @@
                         ]
                     }
                 },
+                "filterMode":{
+                    "displayName" : "Enable Fliters"
+                    , "type":{
+                        "bool":true
+                    }
+                },
+
                 "initialMode" : {
                     "displayName": "Expand Mode"
                     , "type":{

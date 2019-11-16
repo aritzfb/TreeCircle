@@ -902,6 +902,7 @@ var powerbi;
                 var treeOptions = (function () {
                     function treeOptions() {
                         this.treeStyle = treeStileOptions.horizontal;
+                        this.filterMode = false;
                         this.initialMode = initialModeOptions.expanded;
                         this.weightLinks = true;
                         this.linksSize = 20;
@@ -973,7 +974,12 @@ var powerbi;
                         this.target = options.element;
                         if (typeof document !== "undefined") {
                             var new_div = document.createElement("div");
-                            new_div.id = "div_arbol";
+                            var d = new Date().getTime().toString();
+                            var r = Math.floor(Math.random() * 1000).toString();
+                            this.idDiv = "div_arbol_" + d + r;
+                            //cambioid
+                            //new_div.id="div_arbol";
+                            new_div.id = this.idDiv;
                             this.target.appendChild(new_div);
                         }
                         //wellcome page
@@ -1006,7 +1012,7 @@ var powerbi;
                                 }
                                 if (div_height - 20 > 0)
                                     div_height = div_height - 20;
-                                inicializarArbol(div_height, div_width, options, this.host, this.settings);
+                                inicializarArbol(div_height, div_width, options, this.host, this.settings, this.idDiv);
                             }
                             else if ((options.type != 36 /*&& options.type != 2*/) /*|| (options.type==2 && !hasExternalFilter)*/) {
                                 if (options.type == 4)
@@ -1014,11 +1020,11 @@ var powerbi;
                                 else {
                                     document.getElementById("wellcome_div").style.display = "none";
                                     if (d3.select("svg")) {
-                                        d3.select("svg").remove();
+                                        //d3.select("svg").remove();
                                     }
                                     if (div_height - 20 > 0)
                                         div_height = div_height - 20;
-                                    inicializarArbol(div_height, div_width, options, this.host, this.settings);
+                                    inicializarArbol(div_height, div_width, options, this.host, this.settings, this.idDiv);
                                 }
                             }
                         }
@@ -1056,6 +1062,8 @@ var container;
 var varhst;
 var categories;
 var categorical;
+var selmng;
+var selbuild;
 function newNode() {
     return {
         "name": "",
@@ -1275,9 +1283,21 @@ function zoomed() {
     svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 //var treeStyle = "";
-function inicializarArbol(h, w, source, hst, settings) {
-    //debugger;   
-    var selectionMngr = hst.createSelectionManager();
+function inicializarArbol(h, w, source, hst, settings, idDiv) {
+    if (d3.select("svg")) {
+        d3.select("svg").remove();
+    }
+    var localIdDiv = idDiv;
+    if (!selmng) {
+        var selectionMngr = hst.createSelectionManager();
+        selmng = selectionMngr;
+        //var selectionIdBuilder = hst.createSelectionIdBuilder();
+        //selbuild=selectionIdBuilder;
+    }
+    else {
+        var selectionMngr = selmng;
+        //var selectionIdBuilder=selbuild;
+    }
     //clear filters if refresh type is filter by other visual (type 2)
     //if (source.type != 2) selectionMngr.clear();
     try {
@@ -1293,6 +1313,11 @@ function inicializarArbol(h, w, source, hst, settings) {
     this.options = source;
     //var treeStyle = "vertical";
     //try {treeStyle = settings.treeOptions.treeStyle;}catch(e){ treeStyle = "vertical";}
+    var filterMode = false;
+    try {
+        filterMode = settings.treeOptions.filterMode;
+    }
+    catch (e) { }
     var treeStyle = "horizontal";
     try {
         treeStyle = settings.treeOptions.treeStyle;
@@ -1576,7 +1601,9 @@ function inicializarArbol(h, w, source, hst, settings) {
             .size(o.size);
         //var diagonal = d3.svg.diagonal().projection(function(d) { return [d.x, d.y]; });
         var diagonal = d3.svg.diagonal().projection(function (d) { return [o.x(d), o.y(d)]; });
-        var svg = d3.select("#div_arbol")
+        //var svg = d3.select("#div_arbol")
+        var findId = "#" + localIdDiv;
+        var svg = d3.select(findId)
             .append("svg")
             .attr("width", width /*+ margin.left + margin.right*/)
             .attr("height", deeptree - margin.top + margin.bottom)
@@ -1588,7 +1615,10 @@ function inicializarArbol(h, w, source, hst, settings) {
         var tree = d3.layout.tree()
             .size([height, width]);
         var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
-        var svg = d3.select("#div_arbol").append("svg")
+        //var svg = d3.select("#div_arbol").append("svg")
+        var findId = "#" + localIdDiv;
+        //var svg = d3.select("#"+localIdDiv).append("svg")
+        var svg = d3.select(findId).append("svg")
             .attr("width", margin.right + margin.left + deeptree)
             .attr("height", height)
             .append("g")
@@ -1606,7 +1636,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         root.x0 = height / 2;
         root.y0 = 0;
     }
-    update(root, hst, selectionMngr);
+    update(root, hst, selectionMngr, localIdDiv);
     //d3.select(self.frameElement).style("height", "800px");
     //d3.select(self.frameElement).style("height", height);
     function formatPercent(val) {
@@ -1692,7 +1722,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         return retorno;
         //return d.category + ": " + d.name + ", Value: " + d.value.toLocaleString('es-ES');;
     }
-    function update(source, hst, selectionMngr) {
+    function update(source, hst, selectionMngr, localIdDiv) {
         // Compute the new tree layout.
         function collapse(d) {
             if (d.children)
@@ -1798,7 +1828,7 @@ function inicializarArbol(h, w, source, hst, settings) {
         else
             expandNodes(source);
         var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
-        updateGraph(nodes, source, hst, selectionMngr);
+        updateGraph(nodes, source, hst, selectionMngr, localIdDiv);
     }
     function getCumplimiento(d) {
         var retorno = 0;
@@ -1868,7 +1898,7 @@ function inicializarArbol(h, w, source, hst, settings) {
             retorno = Math.abs(valor / valorPadre);
         return 2 * Math.PI * retorno;
     }
-    function updateGraph(nodes, source, hst, selectionMngr) {
+    function updateGraph(nodes, source, hst, selectionMngr, localIdDiv) {
         var magiclabelsd = d3.selectAll("div")[0];
         magiclabelsd.forEach(function (d) {
             if (d)
@@ -1891,7 +1921,10 @@ function inicializarArbol(h, w, source, hst, settings) {
         // Update the nodes…
         var node = svg.selectAll("g.node")
             .data(nodes, function (d) { return d.id || (d.id = ++i); });
-        var div_tooltip = d3.select("#div_arbol").append("div").attr("class", "tooltip").style("opacity", 0);
+        //var div_tooltip = d3.select("#div_arbol")
+        var findId = "#" + localIdDiv;
+        var div_tooltip = d3.select(findId)
+            .append("div").attr("class", "tooltip").style("opacity", 0);
         //PROGRESS BAR
         if (progressPie)
             if (nodes)
@@ -2287,6 +2320,7 @@ function inicializarArbol(h, w, source, hst, settings) {
                                     }
                                 }
                                 if (!currentd.selected) {
+                                    //debugger;
                                     var selId = hst.createSelectionIdBuilder()
                                         .withCategory(cats, itemsPos)
                                         .createSelectionId();
@@ -2301,56 +2335,55 @@ function inicializarArbol(h, w, source, hst, settings) {
                     }
                     return serieFound;
                 }
-                debugger;
-                openChildren(d.target);
-                if (!d.selected) {
-                    //d3.selectAll("path.link").style("stroke-dasharray", 0);
-                    var targetSerie = d.target;
-                    var links = d3.selectAll("path.link")[0];
-                    var haschilds = selectChildLinks(links, targetSerie);
-                    if (!haschilds) {
-                        //add child node as filter if not selected
-                        //find categorie position
-                        var catPos = 0;
-                        for (var i = 0; i < categories.length; i++) {
-                            catPos = i;
-                            if (categories[i].source.displayName == d.target.category)
-                                break;
-                        }
-                        var cats = categories[catPos];
-                        //find item in categorie
-                        var itemsPos = 0;
-                        for (var i = 0; i < cats.values.length; i++) {
-                            if (cats.values[i] == d.target.name) {
-                                itemsPos = i;
-                                break;
+                if (filterMode) {
+                    openChildren(d.target);
+                    if (!d.selected) {
+                        //d3.selectAll("path.link").style("stroke-dasharray", 0);
+                        var targetSerie = d.target;
+                        var links = d3.selectAll("path.link")[0];
+                        var haschilds = selectChildLinks(links, targetSerie);
+                        if (!haschilds) {
+                            //add child node as filter if not selected
+                            //find categorie position
+                            var catPos = 0;
+                            for (var i = 0; i < categories.length; i++) {
+                                catPos = i;
+                                if (categories[i].source.displayName == d.target.category)
+                                    break;
                             }
+                            var cats = categories[catPos];
+                            //find item in categorie
+                            var itemsPos = 0;
+                            for (var i = 0; i < cats.values.length; i++) {
+                                if (cats.values[i] == d.target.name) {
+                                    itemsPos = i;
+                                    break;
+                                }
+                            }
+                            if (!d.selected) {
+                                var selId = hst.createSelectionIdBuilder()
+                                    .withCategory(cats, itemsPos)
+                                    .createSelectionId();
+                                d.selectionId = selId;
+                                d.selected = true;
+                                d.target.selected = true;
+                                selectionMngr.select(selId, true);
+                            }
+                            //end if child serie found
                         }
-                        if (!d.selected) {
-                            var selId = hst.createSelectionIdBuilder()
-                                .withCategory(cats, itemsPos)
-                                .createSelectionId();
-                            d.selectionId = selId;
-                            d.selected = true;
-                            d.target.selected = true;
-                            selectionMngr.select(selId, true);
-                        }
-                        //end if child serie found
+                        d3.select(this).style("stroke-dasharray", 5);
+                        d.selected = true;
+                        d.target.selected = true;
                     }
-                    d3.select(this).style("stroke-dasharray", 5);
-                    d.selected = true;
-                    d.target.selected = true;
-                }
-                else {
-                    //d.selected = false;
-                    //debugger;
-                    d3.selectAll("path.link").selected = false;
-                    d3.selectAll("path.link").style("stroke-dasharray", 0);
-                    selectionMngr.clear();
+                    else {
+                        //d.selected = false;
+                        d3.selectAll("path.link").selected = false;
+                        d3.selectAll("path.link").style("stroke-dasharray", 0);
+                        selectionMngr.clear();
+                    }
                 }
             }
             catch (e) {
-                //debugger;
                 d3.selectAll("path.link").selected = false;
                 d3.selectAll("path.link").style("stroke-dasharray", 0);
                 selectionMngr.clear();
@@ -2380,7 +2413,10 @@ function inicializarArbol(h, w, source, hst, settings) {
                     labellink.remove();
                 }
                 else {
-                    labellink = d3.select("#div_arbol").append("div").attr("id", idlink).style("position", "absolute");
+                    //labellink = d3.select("#div_arbol").append("div")
+                    var findId = "#" + localIdDiv;
+                    labellink = d3.select(findId).append("div")
+                        .attr("id", idlink).style("position", "absolute");
                     var htmlText = "<p class='magiclabels' style='font-size:" + nodeTextSize + "px'>" + d.target.name + "</p>";
                     labellink.html(htmlText)
                         .style("left", (event.clientX).toString() + "px")

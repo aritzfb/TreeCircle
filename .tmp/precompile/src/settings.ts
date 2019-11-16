@@ -74,6 +74,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
     
     export class treeOptions {
       public treeStyle : treeStileOptions = treeStileOptions.horizontal;
+      public filterMode: boolean = false;
       public initialMode: initialModeOptions = initialModeOptions.expanded;
       
       public weightLinks: boolean = true;   

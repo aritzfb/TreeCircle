@@ -51,6 +51,8 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
         private settings: VisualSettings;
         private textNode: Text;
         private colorPalete: IColorPalette;
+        private idDiv: string;
+        private oldOptions: VisualUpdateOptions;
 
         
         
@@ -61,7 +63,12 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
             this.target = options.element;            
             if (typeof document !== "undefined") {                
                 const new_div: HTMLElement = document.createElement("div");
-                new_div.id="div_arbol";
+                var d = new Date().getTime().toString();
+                var r = Math.floor(Math.random()*1000).toString();
+                this.idDiv="div_arbol_"+d+r;
+                //cambioid
+                //new_div.id="div_arbol";
+                new_div.id=this.idDiv;
                 this.target.appendChild(new_div);
 
                 
@@ -84,6 +91,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
         private isResizing :boolean = false;       
         public update(options: VisualUpdateOptions) {
             this.settings = Visual.parseSettings(options && options.dataViews && options.dataViews[0]);
+            
             var div_height = this.target.offsetHeight, div_width = this.target.offsetWidth;
             var hasCategories = false;
             for(var i =0; i< options.dataViews[0].metadata.columns.length; i++){
@@ -100,7 +108,7 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
                         d3.select("svg").remove();
                     }
                     if(div_height-20>0)div_height=div_height-20;
-                    inicializarArbol(div_height,div_width,options,this.host,this.settings);
+                    inicializarArbol(div_height,div_width,options,this.host,this.settings,this.idDiv);
                 }
                 else  
                 if((options.type != 36 /*&& options.type != 2*/) /*|| (options.type==2 && !hasExternalFilter)*/) {
@@ -108,10 +116,13 @@ module powerbi.extensibility.visual.testTooltip4696B540F3494FE5BA002362825DDE7D_
                     else {
                         document.getElementById("wellcome_div").style.display="none";
                         if (d3.select("svg")){
-                            d3.select("svg").remove();
+                            //d3.select("svg").remove();
                         }
                         if(div_height-20>0)div_height=div_height-20;
-                        inicializarArbol(div_height,div_width,options,this.host,this.settings);
+                        inicializarArbol(div_height,div_width,options,this.host,this.settings,this.idDiv);
+                        
+
+                            
                     }   
                 }
                 
